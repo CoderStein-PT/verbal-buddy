@@ -11,6 +11,9 @@ import { Link } from 'react-router-dom'
 export const Category = ({ category }: { category: CategoryType }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const categoryWords = useStore
+    .getState()
+    .words.filter((w) => w.categoryId === category.id)
 
   const onDelete = () => {
     useStore.setState((state) => ({
@@ -85,6 +88,15 @@ export const Category = ({ category }: { category: CategoryType }) => {
           <RiCloseFill className="w-full h-full" />
         </Button>
       </div>
+      <div className="w-8 ml-2 text-right">
+        <Text
+          className="group-hover:text-green-500"
+          variant="subtitle"
+          color="gray-light"
+        >
+          {categoryWords.length}
+        </Text>
+      </div>
     </div>
   )
 }
@@ -125,7 +137,7 @@ export const CategoriesPage = () => {
   }
 
   return (
-    <div className="mx-auto w-[320px]">
+    <div className="mx-auto w-[400px]">
       <Categories />
       <Input
         onKeyDown={onKeyDown}

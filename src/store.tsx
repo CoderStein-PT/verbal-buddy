@@ -32,6 +32,7 @@ export type CategoryType = {
 }
 
 export type PracticeStatsType = {
+  categoryId: number
   timestamp: number
   delay: number
 }

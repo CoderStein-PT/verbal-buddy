@@ -3,7 +3,7 @@ import { useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useInterval } from 'usehooks-ts'
 import moment from 'moment'
@@ -32,9 +32,20 @@ const ProgressBar = ({
   )
 }
 
-export const Word = ({ word }: { word: WordType }) => {
+export const Word = ({
+  word,
+  categoryWords
+}: {
+  word: WordType
+  categoryWords: WordType[]
+}) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const isGuessed = useMemo(
+    () => !!categoryWords.find((w) => w.text === word.text),
+    [categoryWords, word.id]
+  )
 
   const onDeleteWord = () => {
     useStore.setState((state) => ({
@@ -91,7 +102,12 @@ export const Word = ({ word }: { word: WordType }) => {
             onKeyDown={onKeyDown}
           />
         ) : (
-          <Text className="group-hover:text-green-500">{word.text}</Text>
+          <Text
+            color={isGuessed ? undefined : 'red'}
+            className="group-hover:text-green-500"
+          >
+            {word.text}
+          </Text>
         )}
       </div>
       <Button onClick={onDeleteWord} size="icon" color="red">
@@ -101,22 +117,24 @@ export const Word = ({ word }: { word: WordType }) => {
   )
 }
 
-export const Words = () => {
+export const Words = ({ categoryWords }: { categoryWords: WordType[] }) => {
   const words = useStore((state) => state.practice)
 
   return (
     <div>
       {words.map((word) => (
-        <Word key={word.id} word={word} />
+        <Word categoryWords={categoryWords} key={word.id} word={word} />
       ))}
     </div>
   )
 }
 
-const Stats = () => {
-  const stats = useStore((state) => state.practiceStats)
+const Stats = ({ categoryId }: { categoryId: number }) => {
+  const stats = useStore((state) =>
+    state.practiceStats.filter((s) => s.categoryId === categoryId)
+  )
 
-  if (!stats.length) return null
+  if (!stats?.length) return null
 
   return (
     <div className="flex flex-col">
@@ -146,6 +164,7 @@ export const PracticePage = () => {
   const practice = useStore((state) => state.practice)
   const [time, setTime] = useState(0)
   const categoryWords = words.filter((w) => w.categoryId === +categoryId)
+  const goal = Math.min(categoryWords.length, 50)
   const [guessedAll, setGuessedAll] = useState(false)
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -172,12 +191,13 @@ export const PracticePage = () => {
       ]
     }))
     event.currentTarget.value = ''
+    scrollContainerDown()
 
     const newWordsLeft = categoryWords.filter((w) =>
       useStore.getState().practice.find((p) => p.text === w.text)
     ).length
 
-    if (newWordsLeft === categoryWords.length && !guessedAll) {
+    if (newWordsLeft === goal && !guessedAll) {
       toast.success('You guessed all words!')
       setGuessedAll(true)
       setIsCounting(false)
@@ -185,7 +205,7 @@ export const PracticePage = () => {
       useStore.setState((state) => ({
         practiceStats: [
           ...state.practiceStats,
-          { timestamp: Date.now(), delay: time }
+          { timestamp: Date.now(), delay: time, categoryId: +categoryId }
         ]
       }))
     }
@@ -217,13 +237,30 @@ export const PracticePage = () => {
 
   const displayTime = moment.utc(time * 1000).format('mm:ss')
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const scrollContainerDown = () => {
+    setTimeout(() => {
+      containerRef.current?.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }, 0)
+  }
+
+  useEffect(() => {
+    scrollContainerDown()
+  }, [])
+
   return (
     <div className="flex justify-center">
       <div className="w-[320px] mx-auto">
         <Text variant="subtitle">{'Practice category'}</Text>
         <Text variant="button">{category?.name}</Text>
         <SeparatorSm className="my-4" />
-        <Words />
+        <div className="max-h-[500px] overflow-y-auto" ref={containerRef}>
+          <Words categoryWords={categoryWords} />
+        </div>
         {guessedAll ? null : (
           <Input
             onKeyDown={onKeyDown}
@@ -233,10 +270,7 @@ export const PracticePage = () => {
           />
         )}
         <div className="mt-2 ">
-          <ProgressBar
-            wordsTotal={categoryWords.length}
-            wordsLeft={wordsLeft}
-          />
+          <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
           <Text>Delay: {displayTime}</Text>
         </div>
         <div className="mt-4">
@@ -244,7 +278,7 @@ export const PracticePage = () => {
         </div>
       </div>
       <div>
-        <Stats />
+        <Stats categoryId={+categoryId} />
       </div>
     </div>
   )
