@@ -37,23 +37,16 @@ export type StoreType = {
   practice: WordType[]
   selectedWords: WordType[]
   jokes: JokeType[]
-  jokeDraft: Omit<JokeType, 'id'>
 }
 
 export const useStore = create(
-  persist<StoreType, [], []>(
+  persist<StoreType, [], [], null>(
     (set) => ({
       categories: [],
       words: [],
       practice: [],
       selectedWords: [],
-      jokes: [],
-      jokeDraft: {
-        text: '',
-        premises: [],
-        draftText: '',
-        wordIds: []
-      }
+      jokes: []
     }),
     { name: 'joke-generator' }
   )

@@ -11,20 +11,28 @@ export const Joke = ({ joke }: { joke: JokeType }) => {
     }))
   }
 
+  const words = useStore((state) => state.words)
+
+  const jokeWords = joke?.wordIds?.map((id) => words.find((w) => w.id === id))
+
   return (
     <div className="flex justify-between space-x-1">
-      <div className="w-full cursor-pointer group">
-        <Text className="group-hover:text-green-500">{joke.text}</Text>
+      <div className="min-w-0 cursor-pointer group">
+        <Text className="overflow-hidden whitespace-nowrap group-hover:text-green-500 text-ellipsis">
+          {jokeWords?.flatMap((w) => w?.text).join(', ')}
+        </Text>
       </div>
-      <Link to={`/joke/${joke.id}`}>
-        <Button size="icon">
-          <FiEdit2 className="w-full h-full" />
-        </Button>
-      </Link>
-      <div>
-        <Button onClick={onDelete} size="icon" color="red">
-          <RiCloseFill className="w-full h-full" />
-        </Button>
+      <div className="flex space-x-1 shrink-0">
+        <Link to={`/joke/${joke.id}`}>
+          <Button size="icon">
+            <FiEdit2 className="w-full h-full" />
+          </Button>
+        </Link>
+        <div>
+          <Button onClick={onDelete} size="icon" color="red">
+            <RiCloseFill className="w-full h-full" />
+          </Button>
+        </div>
       </div>
     </div>
   )
@@ -43,12 +51,12 @@ export const Jokes = () => {
 
 export const JokesPage = () => {
   return (
-    <div className="mx-auto w-[320px]">
+    <div className="mx-auto w-[600px]">
       <Text variant="button">{'Jokes'}</Text>
       <SeparatorSm className="w-full my-4" />
       <Jokes />
       <div className="mt-4">
-        <Link to="/joke/new">
+        <Link to="/jokes/new">
           <Button>{'New Joke'}</Button>
         </Link>
       </div>

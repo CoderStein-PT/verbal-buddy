@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useStore, CategoryType, WordType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
+import { findLastId } from 'utils'
 
 export const Category = ({
   category,
@@ -116,15 +117,30 @@ export const Words = ({ categoryId }: { categoryId: number }) => {
   )
 }
 
-export const JokePage = () => {
+export const CreateJokePage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null)
 
   const selectedWords = useStore((state) => state.selectedWords)
+  const jokes = useStore((state) => state.jokes)
 
   const navigate = useNavigate()
 
   const onClick = () => {
-    navigate('/joke/new/write')
+    useStore.setState((state) => ({
+      selectedWords: [],
+      jokes: [
+        ...state.jokes,
+        {
+          id: findLastId(state.jokes) + 1,
+          wordIds: selectedWords.map((w) => w.id),
+          text: '',
+          draftText: '',
+          premises: []
+        }
+      ]
+    }))
+
+    navigate(`/joke/${jokes.length + 1}`)
   }
 
   return (
@@ -154,7 +170,7 @@ export const JokePage = () => {
               onClick={onClick}
               className="w-full"
             >
-              {'Start'}
+              {'Create Joke'}
             </Button>
           </div>
         </div>

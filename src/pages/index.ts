@@ -1,8 +1,8 @@
 import { CategoriesPage } from './categories'
 import { CategoryPage } from './category'
-import { JokePage } from './joke'
+import { CreateJokePage } from './create-joke'
 import { JokesPage } from './jokes'
-import { JokeWritePage } from './joke-write'
+import { EditJokePage } from './edit-joke'
 import { PracticePage } from './practice'
 import { WordsPage } from './words'
 
@@ -38,17 +38,17 @@ export const routes: {
   },
   joke: {
     name: 'New Joke',
-    path: '/joke/new',
-    component: JokePage
+    path: '/jokes/new',
+    component: CreateJokePage
   },
   jokes: {
     name: 'Jokes',
     path: '/jokes',
     component: JokesPage
   },
-  jokeWrite: {
-    name: 'Write a Joke',
-    path: '/joke/new/write',
-    component: JokeWritePage
+  editJoke: {
+    name: 'Edit Joke',
+    path: '/joke/:id',
+    component: EditJokePage
   }
 }
