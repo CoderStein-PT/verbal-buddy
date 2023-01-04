@@ -31,12 +31,18 @@ export type CategoryType = {
   name: string
 }
 
+export type PracticeStatsType = {
+  timestamp: number
+  delay: number
+}
+
 export type StoreType = {
   categories: CategoryType[]
   words: WordType[]
   practice: WordType[]
   selectedWords: WordType[]
   jokes: JokeType[]
+  practiceStats: PracticeStatsType[]
 }
 
 export const useStore = create(
@@ -46,7 +52,8 @@ export const useStore = create(
       words: [],
       practice: [],
       selectedWords: [],
-      jokes: []
+      jokes: [],
+      practiceStats: []
     }),
     { name: 'joke-generator' }
   )

@@ -1,10 +1,12 @@
-import { Button, Input, Text } from 'components'
+import { Button, Input, Separator, SeparatorSm, Text } from 'components'
 import { useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useInterval } from 'usehooks-ts'
+import moment from 'moment'
 
 const ProgressBar = ({
   wordsLeft,
@@ -111,62 +113,138 @@ export const Words = () => {
   )
 }
 
+const Stats = () => {
+  const stats = useStore((state) => state.practiceStats)
+
+  if (!stats.length) return null
+
+  return (
+    <div className="flex flex-col">
+      <Text variant="button">{'Stats'}</Text>
+      <SeparatorSm className="my-4" />
+
+      {[...stats].reverse().map((stat) => (
+        <div key={stat.timestamp} className="flex justify-between gap-x-6">
+          <Text>{moment(stat.timestamp).format('DD.MM.YYYY HH:mm')}</Text>
+          <Text>{moment(stat.delay, 'seconds').format('mm:ss')}</Text>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export const PracticePage = () => {
   const categoryId = useParams<{ id: string }>().id
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      const newWord = event.currentTarget.value
-      if (!newWord) {
-        toast.error('Word cannot be empty')
-        return
-      }
+  const category = useStore((state) =>
+    state.categories.find((c) => c.id === +categoryId)
+  )
 
-      if (useStore.getState().practice.find((w) => w.text === newWord)) {
-        toast.error('Word already exists')
-        return
-      }
-
-      useStore.setState((state) => ({
-        practice: [
-          ...state.practice,
-          { id: findLastId(state.practice) + 1, text: newWord }
-        ]
-      }))
-      event.currentTarget.value = ''
-    }
-  }
-
+  const [isCounting, setIsCounting] = useState(true)
+  const timeoutRef = useRef<NodeJS.Timeout>()
   const words = useStore((state) => state.words)
   const practice = useStore((state) => state.practice)
-
+  const [time, setTime] = useState(0)
   const categoryWords = words.filter((w) => w.categoryId === +categoryId)
+  const [guessedAll, setGuessedAll] = useState(false)
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    setIsCounting(false)
+    clearTimeout(timeoutRef.current)
+
+    timeoutRef.current = setTimeout(() => {
+      setIsCounting(true)
+    }, 500)
+
+    if (event.key !== 'Enter') return
+
+    const newWord = event.currentTarget.value
+
+    if (!newWord) return toast.error('Word cannot be empty')
+
+    if (useStore.getState().practice.find((w) => w.text === newWord))
+      return toast.error('Word already exists')
+
+    useStore.setState((state) => ({
+      practice: [
+        ...(state.practice || []),
+        { id: findLastId(state.practice) + 1, text: newWord }
+      ]
+    }))
+    event.currentTarget.value = ''
+
+    const newWordsLeft = categoryWords.filter((w) =>
+      useStore.getState().practice.find((p) => p.text === w.text)
+    ).length
+
+    if (newWordsLeft === categoryWords.length && !guessedAll) {
+      toast.success('You guessed all words!')
+      setGuessedAll(true)
+      setIsCounting(false)
+      clearTimeout(timeoutRef.current)
+      useStore.setState((state) => ({
+        practiceStats: [
+          ...state.practiceStats,
+          { timestamp: Date.now(), delay: time }
+        ]
+      }))
+    }
+  }
 
   const wordsLeft = useMemo(
     () =>
       categoryWords.filter((w) => practice.find((p) => p.text === w.text))
         .length,
-    [practice, words]
+    [practice, categoryWords]
   )
 
   const resetPractice = () => {
     useStore.setState({ practice: [] })
+    setTime(0)
+    setIsCounting(false)
+    setTimeout(() => {
+      setIsCounting(true)
+    }, 0)
+    setGuessedAll(false)
   }
 
+  useInterval(
+    () => {
+      setTime(time + 1)
+    },
+    isCounting ? 1000 : null
+  )
+
+  const displayTime = moment.utc(time * 1000).format('mm:ss')
+
   return (
-    <div className="w-[320px] mx-auto">
-      <Words />
-      <Input
-        onKeyDown={onKeyDown}
-        type="text"
-        placeholder="New category..."
-        className="w-full mt-2"
-      />
-      <div className="mt-2">
-        <ProgressBar wordsTotal={categoryWords.length} wordsLeft={wordsLeft} />
+    <div className="flex justify-center">
+      <div className="w-[320px] mx-auto">
+        <Text variant="subtitle">{'Practice category'}</Text>
+        <Text variant="button">{category?.name}</Text>
+        <SeparatorSm className="my-4" />
+        <Words />
+        {guessedAll ? null : (
+          <Input
+            onKeyDown={onKeyDown}
+            type="text"
+            placeholder="New category..."
+            className="w-full mt-2"
+          />
+        )}
+        <div className="mt-2 ">
+          <ProgressBar
+            wordsTotal={categoryWords.length}
+            wordsLeft={wordsLeft}
+          />
+          <Text>Delay: {displayTime}</Text>
+        </div>
+        <div className="mt-4">
+          <Button onClick={resetPractice}>{'Reset'}</Button>
+        </div>
       </div>
       <div>
-        <Button onClick={resetPractice}>{'Reset'}</Button>
+        <Stats />
       </div>
     </div>
   )
