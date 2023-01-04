@@ -124,7 +124,7 @@ export const JokePage = () => {
   const navigate = useNavigate()
 
   const onClick = () => {
-    navigate('/joke/write')
+    navigate('/joke/new/write')
   }
 
   return (

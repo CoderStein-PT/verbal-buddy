@@ -15,7 +15,7 @@ const ProgressBar = ({
 }) => {
   return (
     <div className="flex items-center">
-      <div className="w-full h-2 bg-gray-200 rounded-full">
+      <div className="w-full h-4 bg-gray-500 rounded-md">
         <div
           className="h-full bg-green-500 rounded-full"
           style={{ width: `${(wordsLeft / wordsTotal) * 100}%` }}
@@ -149,6 +149,10 @@ export const PracticePage = () => {
     [practice, words]
   )
 
+  const resetPractice = () => {
+    useStore.setState({ practice: [] })
+  }
+
   return (
     <div className="w-[320px] mx-auto">
       <Words />
@@ -160,6 +164,9 @@ export const PracticePage = () => {
       />
       <div className="mt-2">
         <ProgressBar wordsTotal={categoryWords.length} wordsLeft={wordsLeft} />
+      </div>
+      <div>
+        <Button onClick={resetPractice}>{'Reset'}</Button>
       </div>
     </div>
   )

@@ -11,8 +11,8 @@ const Link = ({ children, link }) => (
 export const Layout = ({ children }: { children: React.ReactNode }) => (
   <div>
     <div className="flex px-16 pt-4 space-x-2">
-      <Link link={'/'}>{'Categories'}</Link>
-      <Link link={'/joke'}>{'Write a joke'}</Link>
+      <Link link={'/'}>{'Material'}</Link>
+      <Link link={'/jokes'}>{'Jokes'}</Link>
     </div>
     <div className="px-16 py-4">{children}</div>
     <ToastContainer

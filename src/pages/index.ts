@@ -1,6 +1,7 @@
 import { CategoriesPage } from './categories'
 import { CategoryPage } from './category'
 import { JokePage } from './joke'
+import { JokesPage } from './jokes'
 import { JokeWritePage } from './joke-write'
 import { PracticePage } from './practice'
 import { WordsPage } from './words'
@@ -36,13 +37,18 @@ export const routes: {
     component: CategoryPage
   },
   joke: {
-    name: 'Joke',
-    path: '/joke',
+    name: 'New Joke',
+    path: '/joke/new',
     component: JokePage
+  },
+  jokes: {
+    name: 'Jokes',
+    path: '/jokes',
+    component: JokesPage
   },
   jokeWrite: {
     name: 'Write a Joke',
-    path: '/joke/write',
+    path: '/joke/new/write',
     component: JokeWritePage
   }
 }

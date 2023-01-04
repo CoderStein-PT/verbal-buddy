@@ -6,6 +6,19 @@ export type DescriptionType = {
   text: string
 }
 
+export type PremiseType = {
+  id: number
+  text: string
+}
+
+export type JokeType = {
+  id: number
+  text: string
+  wordIds?: number[]
+  draftText?: string
+  premises?: PremiseType[]
+}
+
 export type WordType = {
   id: number
   text: string
@@ -23,22 +36,24 @@ export type StoreType = {
   words: WordType[]
   practice: WordType[]
   selectedWords: WordType[]
+  jokes: JokeType[]
+  jokeDraft: Omit<JokeType, 'id'>
 }
 
 export const useStore = create(
   persist<StoreType, [], []>(
     (set) => ({
-      categories: [
-        { id: 1, name: 'animals' },
-        { id: 2, name: 'food' },
-        { id: 3, name: 'people' }
-      ],
-      words: [
-        { id: 1, text: 'hello' },
-        { id: 2, text: 'world' }
-      ],
+      categories: [],
+      words: [],
       practice: [],
-      selectedWords: []
+      selectedWords: [],
+      jokes: [],
+      jokeDraft: {
+        text: '',
+        premises: [],
+        draftText: '',
+        wordIds: []
+      }
     }),
     { name: 'joke-generator' }
   )

@@ -1,9 +1,10 @@
-import { Button, Input, Text } from 'components'
+import { Button, Input, InputCore, Text } from 'components'
 import { useRef, useState } from 'react'
-import { useStore, DescriptionType, WordType } from 'store'
+import { useStore, DescriptionType, WordType, PremiseType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { toast } from 'react-toastify'
 import { findLastId } from 'utils'
+import { useNavigate } from 'react-router-dom'
 
 export const Description = ({
   word,
@@ -86,7 +87,7 @@ export const Description = ({
             className="w-full"
             ref={inputRef}
             onBlur={onChangeWordDescription}
-            defaultValue={description}
+            defaultValue={description.text}
             onKeyDown={onKeyDown}
           />
         ) : (
@@ -148,7 +149,7 @@ const SelectedWord = ({ selectedWord }: { selectedWord: WordType }) => {
       {word.descriptions?.map((description) => (
         <Description
           word={selectedWord}
-          key={description}
+          key={description.id}
           description={description}
         />
       ))}
@@ -162,14 +163,146 @@ const SelectedWord = ({ selectedWord }: { selectedWord: WordType }) => {
   )
 }
 
-export const JokeWritePage = () => {
-  const selectedWords = useStore((state) => state.selectedWords)
+const Premise = ({ premise }: { premise: PremiseType }) => {
+  const deletePremise = () => {
+    useStore.setState((state) => ({
+      jokeDraft: {
+        ...state.jokeDraft,
+        premises: state.jokeDraft.premises?.filter((p) => p.id !== premise.id)
+      }
+    }))
+  }
 
   return (
-    <div className="flex">
-      {selectedWords.map((selectedWord) => (
-        <SelectedWord key={selectedWord.id} selectedWord={selectedWord} />
+    <div className="flex justify-between">
+      <Text>{premise.text}</Text>
+      <Button size="icon" color="red" onClick={deletePremise}>
+        <RiCloseFill className="w-full h-full" />
+      </Button>
+    </div>
+  )
+}
+
+const Premises = () => {
+  const jokeDraft = useStore((state) => state.jokeDraft)
+
+  if (!jokeDraft.premises) return null
+
+  return (
+    <div className="">
+      {jokeDraft.premises.map((premise) => (
+        <Premise key={premise.id} premise={premise} />
       ))}
+    </div>
+  )
+}
+
+export const JokeWritePage = () => {
+  const selectedWords = useStore((state) => state.selectedWords)
+  const text = useStore((state) => state.jokeDraft.text)
+  const draftText = useStore((state) => state.jokeDraft.draftText)
+  const navigate = useNavigate()
+
+  const saveJoke = () => {
+    useStore.setState((state) => ({
+      jokes: [
+        ...state.jokes,
+        {
+          id: findLastId(state.jokes) + 1,
+          words: state.selectedWords,
+          draftText: state.jokeDraft.draftText,
+          premises: state.jokeDraft.premises,
+          text: state.jokeDraft.text
+        }
+      ],
+      selectedWords: [],
+      jokeDraft: { draftText: '', premises: [], text: '' }
+    }))
+    navigate('/jokes')
+  }
+
+  const onTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    useStore.setState((state) => ({
+      jokeDraft: { ...state.jokeDraft, text: event.currentTarget.value }
+    }))
+  }
+
+  const onDraftChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    useStore.setState((state) => ({
+      jokeDraft: { ...state.jokeDraft, draftText: event.currentTarget.value }
+    }))
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+
+    const newPremise = event.currentTarget.value
+
+    if (!newPremise) {
+      toast.error('Premise cannot be empty')
+      return
+    }
+
+    if (text?.includes(newPremise)) {
+      toast.error('Premise already exists')
+      return
+    }
+
+    event.currentTarget.value = ''
+
+    useStore.setState((state) => ({
+      jokeDraft: {
+        ...state.jokeDraft,
+        premises: [
+          ...(state.jokeDraft.premises || []),
+          {
+            id: findLastId(state.jokeDraft.premises || []) + 1,
+            text: newPremise
+          }
+        ]
+      }
+    }))
+  }
+
+  return (
+    <div>
+      <div className="flex">
+        {selectedWords.map((selectedWord) => (
+          <SelectedWord key={selectedWord.id} selectedWord={selectedWord} />
+        ))}
+      </div>
+      <div className="flex mt-8 space-x-4">
+        <div className="w-full">
+          <Text variant="button">{'Drafts'}</Text>
+          <InputCore
+            value={draftText}
+            onChange={onDraftChange}
+            className="h-[240px] w-full resize-none"
+            $as="textarea"
+          />
+        </div>
+        <div className="w-full">
+          <Text variant="button">{'Premises'}</Text>
+          <Premises />
+          <Input
+            onKeyDown={onKeyDown}
+            placeholder="New premise..."
+            className="w-full"
+          />
+        </div>
+      </div>
+      <div className="w-full">
+        <Text variant="button">{'Joke'}</Text>
+        <InputCore
+          value={text}
+          onChange={onTextChange}
+          className="h-[240px] w-full resize-none"
+          $as="textarea"
+        />
+      </div>
+      <div className="flex justify-end">
+        <Button onClick={saveJoke}>{'Create'}</Button>
+      </div>
     </div>
   )
 }

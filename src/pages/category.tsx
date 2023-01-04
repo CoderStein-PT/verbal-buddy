@@ -1,12 +1,12 @@
-import { Button, Input, Text } from 'components'
+import { Button, Input, Separator, SeparatorSm, Text } from 'components'
 import { useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-export const Word = ({ word }: { word: WordType }) => {
+export const Word = ({ word, index }: { word: WordType; index: number }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -54,7 +54,7 @@ export const Word = ({ word }: { word: WordType }) => {
   }
 
   return (
-    <div className="flex justify-between">
+    <div className="flex items-center justify-between">
       <div className="w-full cursor-pointer group" onClick={toggleEditMode}>
         {isEditMode ? (
           <Input
@@ -68,9 +68,20 @@ export const Word = ({ word }: { word: WordType }) => {
           <Text className="group-hover:text-green-500">{word.text}</Text>
         )}
       </div>
-      <Button onClick={onDeleteWord} size="icon" color="red">
-        <RiCloseFill className="w-full h-full" />
-      </Button>
+      <div>
+        <Button onClick={onDeleteWord} size="icon" color="red">
+          <RiCloseFill className="w-full h-full" />
+        </Button>
+      </div>
+      <div className="w-8 ml-2 text-right">
+        <Text
+          className="group-hover:text-green-500"
+          variant="subtitle"
+          color="gray-light"
+        >
+          {index}
+        </Text>
+      </div>
     </div>
   )
 }
@@ -82,8 +93,8 @@ export const Words = ({ categoryId }: { categoryId: number }) => {
     <div>
       {words
         .filter((w) => w.categoryId === categoryId)
-        .map((word) => (
-          <Word key={word.id} word={word} />
+        .map((word, index) => (
+          <Word key={word.id} index={index + 1} word={word} />
         ))}
     </div>
   )
@@ -91,6 +102,25 @@ export const Words = ({ categoryId }: { categoryId: number }) => {
 
 export const CategoryPage = () => {
   const categoryId = useParams<{ id: string }>().id
+
+  const category = useStore((state) => state.categories).find(
+    (c) => c.id === +categoryId
+  )
+
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const scrollContainerDown = () => {
+    setTimeout(() => {
+      containerRef.current?.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }, 0)
+  }
+
+  useEffect(() => {
+    scrollContainerDown()
+  }, [])
 
   if (!categoryId) return null
 
@@ -118,12 +148,18 @@ export const CategoryPage = () => {
         ]
       }))
       event.currentTarget.value = ''
+      scrollContainerDown()
     }
   }
 
   return (
-    <div className="w-[320px] mx-auto">
-      <Words categoryId={+categoryId} />
+    <div className="w-[400px] mx-auto">
+      <Text variant="subtitle">{'Category'}</Text>
+      <Text variant="button">{category?.name}</Text>
+      <SeparatorSm className="w-full my-4" />
+      <div className="max-h-[500px] overflow-y-auto" ref={containerRef}>
+        <Words categoryId={+categoryId} />
+      </div>
       <Input
         onKeyDown={onKeyDown}
         type="text"

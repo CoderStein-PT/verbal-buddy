@@ -80,9 +80,11 @@ export const Category = ({ category }: { category: CategoryType }) => {
           <FiEdit2 className="w-full h-full" />
         </Button>
       </Link>
-      <Button onClick={onDelete} size="icon" color="red">
-        <RiCloseFill className="w-full h-full" />
-      </Button>
+      <div>
+        <Button onClick={onDelete} size="icon" color="red">
+          <RiCloseFill className="w-full h-full" />
+        </Button>
+      </div>
     </div>
   )
 }
@@ -123,7 +125,7 @@ export const CategoriesPage = () => {
   }
 
   return (
-    <div className="w-[320px] mx-auto">
+    <div className="mx-auto w-[320px]">
       <Categories />
       <Input
         onKeyDown={onKeyDown}
