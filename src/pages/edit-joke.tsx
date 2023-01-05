@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { findLastId } from 'utils'
 import { useParams } from 'react-router-dom'
 import { WordEditor } from './word/word-editor'
+import { ScrollableContainer } from './word/scrollable-container'
 
 export const Description = ({
   word,
@@ -192,7 +193,7 @@ const Premise = ({
 
   return (
     <div className="flex justify-between">
-      <Text>{premise.text}</Text>
+      <Text variant="subtitle">{premise.text}</Text>
       <div>
         <Button size="icon" color="red" onClick={deletePremise}>
           <RiCloseFill className="w-full h-full" />
@@ -206,11 +207,11 @@ const Premises = ({ joke }: { joke: JokeType }) => {
   if (!joke.premises) return null
 
   return (
-    <div className="">
+    <ScrollableContainer maxHeight={200}>
       {joke.premises.map((premise) => (
         <Premise joke={joke} key={premise.id} premise={premise} />
       ))}
-    </div>
+    </ScrollableContainer>
   )
 }
 
@@ -281,7 +282,7 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
           <InputCore
             value={joke.draftText || ''}
             onChange={onDraftChange}
-            className="h-[240px] w-full resize-none"
+            className="h-[100px] w-full resize-none"
             $as="textarea"
           />
         </div>

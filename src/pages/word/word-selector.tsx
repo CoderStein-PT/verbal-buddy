@@ -2,6 +2,7 @@ import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
 import { Button, Text } from 'components'
 import { useState } from 'react'
 import { useStore, CategoryType, WordType } from 'store'
+import { ScrollableContainer } from './scrollable-container'
 
 export const Category = ({
   category,
@@ -26,7 +27,7 @@ export const Category = ({
 export const Categories = ({ setSelectedCategoryId }: any) => {
   const categories = useStore((state) => state.categories)
   return (
-    <div>
+    <ScrollableContainer>
       {categories.map((category) => (
         <Category
           key={category.id}
@@ -34,9 +35,10 @@ export const Categories = ({ setSelectedCategoryId }: any) => {
           setSelectedCategoryId={setSelectedCategoryId}
         />
       ))}
-    </div>
+    </ScrollableContainer>
   )
 }
+
 export const Word = ({
   word,
   onSelectWord,
@@ -80,7 +82,7 @@ export const Words = ({
   const words = useStore((state) => state.words)
 
   return (
-    <div className="max-h-[500px] overflow-y-auto">
+    <ScrollableContainer>
       {words
         .filter((w) => w.categoryId === categoryId)
         .map((word) => (
@@ -91,7 +93,7 @@ export const Words = ({
             word={word}
           />
         ))}
-    </div>
+    </ScrollableContainer>
   )
 }
 
@@ -134,7 +136,7 @@ export const WordSelector = ({
         {!!selectedCategoryId && (
           <Button
             color="gray"
-            size="icon"
+            size="sm"
             onClick={() => setSelectedCategoryId(null)}
           >
             <FiChevronLeft className="w-full h-full" />
@@ -144,7 +146,7 @@ export const WordSelector = ({
           {category ? category.name : 'Choose a category'}
         </Text>
       </div>
-      <div className="mt-4">
+      <div className="mt-2">
         {selectedCategoryId ? (
           <div>
             <Words

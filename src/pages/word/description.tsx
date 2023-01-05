@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import produce from 'immer'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { findLastId } from 'utils'
+import { ScrollableContainer } from './scrollable-container'
 
 const Description = ({
   word,
@@ -164,12 +165,14 @@ export const Descriptions = ({ word }: { word: WordType }) => {
   }
 
   return (
-    <div className="max-h-[500px] overflow-y-auto" ref={containerRef}>
-      <div>
-        {word?.descriptions?.map((d, index) => (
-          <Description key={d.id} word={word} description={d} index={index} />
-        ))}
-      </div>
+    <div>
+      <ScrollableContainer maxHeight={150}>
+        <div>
+          {word?.descriptions?.map((d, index) => (
+            <Description key={d.id} word={word} description={d} index={index} />
+          ))}
+        </div>
+      </ScrollableContainer>
       <Input
         onKeyDown={onKeyDown}
         type="text"
