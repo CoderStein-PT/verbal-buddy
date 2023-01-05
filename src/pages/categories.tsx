@@ -1,4 +1,4 @@
-import { Button, Input, Text } from 'components'
+import { Button, Input, SeparatorFull, Text } from 'components'
 import { useStore, CategoryType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
@@ -7,6 +7,10 @@ import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import {
+  ScrollableContainer,
+  useScrollableContainer
+} from './word/scrollable-container'
 
 export const Category = ({ category }: { category: CategoryType }) => {
   const [isEditMode, setIsEditMode] = useState(false)
@@ -101,18 +105,24 @@ export const Category = ({ category }: { category: CategoryType }) => {
   )
 }
 
-export const Categories = () => {
+export const Categories = ({
+  scrollableContainer
+}: {
+  scrollableContainer: ReturnType<typeof useScrollableContainer>
+}) => {
   const categories = useStore((state) => state.categories)
   return (
-    <div>
+    <ScrollableContainer scrollableContainer={scrollableContainer}>
       {categories.map((category) => (
         <Category key={category.id} category={category} />
       ))}
-    </div>
+    </ScrollableContainer>
   )
 }
 
 export const CategoriesPage = () => {
+  const scrollableContainer = useScrollableContainer({})
+
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       const newCategory = event.currentTarget.value
@@ -133,17 +143,21 @@ export const CategoriesPage = () => {
         ]
       }))
       event.currentTarget.value = ''
+      scrollableContainer.scrollContainerDown()
     }
   }
 
   return (
     <div className="mx-auto w-[400px]">
-      <Categories />
+      <Text variant="button">{'Categories'}</Text>
+      <SeparatorFull className="my-2" />
+      <Categories scrollableContainer={scrollableContainer} />
+      <SeparatorFull className="my-2" />
       <Input
         onKeyDown={onKeyDown}
         type="text"
         placeholder="New category..."
-        className="w-full mt-2"
+        className="w-full"
       />
     </div>
   )

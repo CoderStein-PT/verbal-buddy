@@ -40,8 +40,12 @@ export const WordEditor = ({ word }: { word: WordType }) => {
   const [activeBreadcrumbIndex, setActiveBreadcrumbIndex] = React.useState(0)
 
   const onWordClick = (word: WordType) => {
-    setBreadcrumbs([...breadcrumbs, word.id])
-    setActiveBreadcrumbIndex(breadcrumbs.length)
+    const newBreadcrumbs = [
+      ...breadcrumbs.slice(0, activeBreadcrumbIndex + 1),
+      word.id
+    ]
+    setBreadcrumbs(newBreadcrumbs)
+    setActiveBreadcrumbIndex(newBreadcrumbs.length - 1)
   }
 
   const words = useStore((state) => state.words)

@@ -52,7 +52,6 @@ export const Jokes = () => {
 export const JokesPage = () => {
   return (
     <div className="mx-auto w-[600px]">
-      <Text variant="button">{'Jokes'}</Text>
       <SeparatorSm className="w-full my-4" />
       <Jokes />
       <div className="mt-4">

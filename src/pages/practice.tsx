@@ -7,6 +7,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useInterval } from 'usehooks-ts'
 import moment from 'moment'
+import {
+  ScrollableContainer,
+  useScrollableContainer
+} from './word/scrollable-container'
+import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
+import { Link } from 'react-router-dom'
 
 const ProgressBar = ({
   wordsLeft,
@@ -91,7 +97,7 @@ export const Word = ({
   }
 
   return (
-    <div className="flex justify-between">
+    <div className="flex items-center justify-between">
       <div className="w-full cursor-pointer group" onClick={toggleEditMode}>
         {isEditMode ? (
           <Input
@@ -110,9 +116,11 @@ export const Word = ({
           </Text>
         )}
       </div>
-      <Button onClick={onDeleteWord} size="icon" color="red">
-        <RiCloseFill className="w-full h-full" />
-      </Button>
+      <div>
+        <Button onClick={onDeleteWord} size="icon" color="red">
+          <RiCloseFill className="w-full h-full" />
+        </Button>
+      </div>
     </div>
   )
 }
@@ -168,6 +176,8 @@ export const PracticePage = () => {
   const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
   const [guessedAll, setGuessedAll] = useState(false)
 
+  const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
+
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     setIsCounting(false)
     clearTimeout(timeoutRef.current)
@@ -192,7 +202,7 @@ export const PracticePage = () => {
       ]
     }))
     event.currentTarget.value = ''
-    scrollContainerDown()
+    scrollableContainer.scrollContainerDown()
 
     const newWordsLeft = categoryWords.filter((w) =>
       useStore.getState().practice.find((p) => p.text === w.text)
@@ -238,35 +248,19 @@ export const PracticePage = () => {
 
   const displayTime = moment.utc(time * 1000).format('mm:ss')
 
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const scrollContainerDown = () => {
-    setTimeout(() => {
-      containerRef.current?.scrollTo({
-        top: containerRef.current.scrollHeight,
-        behavior: 'smooth'
-      })
-    }, 0)
-  }
-
-  useEffect(() => {
-    scrollContainerDown()
-  }, [])
-
   return (
     <div className="flex justify-center">
       <div className="w-[320px] mx-auto">
-        <Text variant="subtitle">{'Practice category'}</Text>
         <Text variant="button">{category?.name}</Text>
         <SeparatorSm className="my-4" />
-        <div className="max-h-[500px] overflow-y-auto" ref={containerRef}>
+        <ScrollableContainer scrollableContainer={scrollableContainer}>
           <Words categoryWords={categoryWords} />
-        </div>
+        </ScrollableContainer>
         {guessedAll ? null : (
           <Input
             onKeyDown={onKeyDown}
             type="text"
-            placeholder="New category..."
+            placeholder="New word..."
             className="w-full mt-2"
           />
         )}

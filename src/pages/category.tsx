@@ -7,6 +7,11 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { Link } from 'react-router-dom'
+import {
+  ScrollableContainer,
+  useScrollableContainer
+} from './word/scrollable-container'
+import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
 
 export const Word = ({ word, index }: { word: WordType; index: number }) => {
   const [isEditMode, setIsEditMode] = useState(false)
@@ -123,20 +128,7 @@ export const CategoryPage = () => {
     (c) => c.id === +categoryId
   )
 
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const scrollContainerDown = () => {
-    setTimeout(() => {
-      containerRef.current?.scrollTo({
-        top: containerRef.current.scrollHeight,
-        behavior: 'smooth'
-      })
-    }, 0)
-  }
-
-  useEffect(() => {
-    scrollContainerDown()
-  }, [])
+  const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
 
   if (!categoryId) return null
 
@@ -168,18 +160,17 @@ export const CategoryPage = () => {
         ]
       }))
       event.currentTarget.value = ''
-      scrollContainerDown()
+      scrollableContainer.scrollContainerDown()
     }
   }
 
   return (
     <div className="w-[400px] mx-auto">
-      <Text variant="subtitle">{'Category'}</Text>
       <Text variant="button">{category?.name}</Text>
       <SeparatorSm className="w-full my-4" />
-      <div className="max-h-[500px] overflow-y-auto" ref={containerRef}>
+      <ScrollableContainer scrollableContainer={scrollableContainer}>
         <Words categoryId={+categoryId} />
-      </div>
+      </ScrollableContainer>
       <Input
         onKeyDown={onKeyDown}
         type="text"
