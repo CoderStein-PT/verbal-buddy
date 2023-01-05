@@ -8,10 +8,12 @@ import { findLastId } from 'utils'
 
 const RelatedWord = ({
   word,
-  relatedWord
+  relatedWord,
+  onClick
 }: {
   word: WordType
   relatedWord: WordType
+  onClick: (word: WordType) => void
 }) => {
   const onRemoveRelatedWord = () => {
     useStore.setState((s) =>
@@ -29,9 +31,15 @@ const RelatedWord = ({
 
   return (
     <div className="flex items-center justify-between">
-      <Text variant="subtitle" className="group-hover:text-green-500">
-        {relatedWord.text}
-      </Text>
+      <div className="w-full cursor-pointer group">
+        <Text
+          variant="subtitle"
+          className="group-hover:text-green-500"
+          onClick={() => onClick(relatedWord)}
+        >
+          {relatedWord.text}
+        </Text>
+      </div>
       <div className="flex space-x-1">
         <div>
           <Button
@@ -48,7 +56,13 @@ const RelatedWord = ({
   )
 }
 
-export const RelatedWordsList = ({ word }: { word: WordType }) => {
+export const RelatedWordsList = ({
+  word,
+  onWordClick
+}: {
+  word: WordType
+  onWordClick: () => any
+}) => {
   const words = useStore.getState().words
 
   return (
@@ -57,6 +71,7 @@ export const RelatedWordsList = ({ word }: { word: WordType }) => {
         <RelatedWord
           key={relatedWord.id}
           word={word}
+          onClick={onWordClick}
           relatedWord={words.find((w) => w.id === +relatedWord.wordId)}
         />
       ))}
@@ -64,7 +79,13 @@ export const RelatedWordsList = ({ word }: { word: WordType }) => {
   )
 }
 
-export const RelatedWords = ({ word }: { word: WordType }) => {
+export const RelatedWords = ({
+  word,
+  onWordClick
+}: {
+  word: WordType
+  onWordClick: () => any
+}) => {
   const [showWords, setShowWords] = useState(false)
   const words = useStore.getState().words
   const wordSelector = useWordSelector({
@@ -95,7 +116,7 @@ export const RelatedWords = ({ word }: { word: WordType }) => {
         <WordSelector wordSelector={wordSelector} />
       ) : (
         <>
-          <RelatedWordsList word={word} />
+          <RelatedWordsList onWordClick={onWordClick} word={word} />
           <div className="flex justify-end">
             <Button
               onClick={() => setShowWords(true)}
