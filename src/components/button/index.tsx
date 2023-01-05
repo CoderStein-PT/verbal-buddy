@@ -4,11 +4,20 @@ import { Loading, Text } from 'components'
 
 const sizeClasses = {
   round: 'p-2 rounded-full',
-  sm: 'py-1 px-4 rounded-md',
+  sm: 'py-1 px-3 rounded-lg',
   base: 'py-2 px-6 rounded-xl',
   lg: 'py-3 px-6 rounded-2xl',
   xl: 'py-4 px-8 text-lg rounded-2xl',
-  icon: 'p-1 rounded-full'
+  icon: 'p-0.5 rounded-full'
+}
+
+const textSizeVariants = {
+  sm: 'subtitle',
+  base: 'button',
+  lg: 'button',
+  xl: 'button',
+  round: 'button',
+  icon: 'subtitle'
 }
 
 const colorClasses = {
@@ -37,7 +46,11 @@ export const Button = React.forwardRef<any, any>(
       {isLoading ? (
         <Loading />
       ) : (
-        <Text color="no" className="ease-out" variant="button">
+        <Text
+          color="no"
+          className="ease-out"
+          variant={textSizeVariants[props.size]}
+        >
           {children}
         </Text>
       )}

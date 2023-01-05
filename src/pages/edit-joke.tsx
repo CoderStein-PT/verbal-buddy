@@ -11,6 +11,7 @@ import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { toast } from 'react-toastify'
 import { findLastId } from 'utils'
 import { useParams } from 'react-router-dom'
+import { WordEditor } from './word/word-editor'
 
 export const Description = ({
   word,
@@ -271,7 +272,7 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
     <div>
       <div className="flex">
         {joke?.wordIds?.map((id) => (
-          <Word key={id} word={words.find((w) => w.id === id)} />
+          <WordEditor key={id} word={words.find((w) => w.id === id)} />
         ))}
       </div>
       <div className="flex mt-8 space-x-4">

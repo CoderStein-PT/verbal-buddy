@@ -1,5 +1,5 @@
 import { Button, Input, SeparatorSm, Text } from 'components'
-import { DescriptionType, useStore, WordType } from 'store'
+import { DescriptionType, RelatedWordType, useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
 import { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -7,7 +7,7 @@ import produce from 'immer'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { findLastId } from 'utils'
 
-export const Description = ({
+const Description = ({
   word,
   description,
   index
@@ -83,7 +83,9 @@ export const Description = ({
             onKeyDown={onKeyDown}
           />
         ) : (
-          <Text className="group-hover:text-green-500">{description.text}</Text>
+          <Text variant="subtitle" className="group-hover:text-green-500">
+            {description.text}
+          </Text>
         )}
       </div>
       <div className="flex space-x-1">
@@ -98,7 +100,7 @@ export const Description = ({
           </Button>
         </div>
       </div>
-      <div className="w-8 ml-2 text-right">
+      <div className="w-5 ml-2 text-right">
         <Text
           className="group-hover:text-green-500"
           variant="subtitle"
@@ -111,7 +113,7 @@ export const Description = ({
   )
 }
 
-const Descriptions = ({ word }: { word: WordType }) => {
+export const Descriptions = ({ word }: { word: WordType }) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const scrollContainerDown = () => {
@@ -176,29 +178,4 @@ const Descriptions = ({ word }: { word: WordType }) => {
       />
     </div>
   )
-}
-
-export const WordPageCore = ({ word }: { word: WordType }) => {
-  return (
-    <div className="w-[400px] mx-auto">
-      <Text variant="subtitle">{'Word'}</Text>
-      <Text variant="button">{word.text}</Text>
-      <SeparatorSm className="w-full my-4" />
-      <div>
-        <Descriptions word={word} />
-      </div>
-    </div>
-  )
-}
-
-export const WordPage = () => {
-  const wordId = useParams<{ id: string }>().id
-
-  const word = useStore((state) =>
-    wordId ? state.words.find((c) => c.id === +wordId) : null
-  )
-
-  if (!word) return null
-
-  return <WordPageCore word={word} />
 }
