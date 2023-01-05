@@ -1,4 +1,4 @@
-import { Button, SeparatorFull, SeparatorSm, Text } from 'components'
+import { Button, SeparatorFull, Text } from 'components'
 import { WordType } from 'store'
 import { Descriptions } from './description'
 import { RelatedWords } from './related-words'

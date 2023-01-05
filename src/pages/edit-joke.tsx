@@ -278,15 +278,6 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
       </div>
       <div className="flex mt-8 space-x-4">
         <div className="w-full">
-          <Text variant="button">{'Drafts'}</Text>
-          <InputCore
-            value={joke.draftText || ''}
-            onChange={onDraftChange}
-            className="h-[100px] w-full resize-none"
-            $as="textarea"
-          />
-        </div>
-        <div className="w-full">
           <Text variant="button">{'Premises'}</Text>
           <Premises joke={joke} />
           <Input
@@ -295,15 +286,24 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
             className="w-full"
           />
         </div>
-      </div>
-      <div className="w-full">
-        <Text variant="button">{'Joke'}</Text>
-        <InputCore
-          value={joke.text || ''}
-          onChange={onTextChange}
-          className="h-[240px] w-full resize-none"
-          $as="textarea"
-        />
+        <div className="w-full">
+          <Text variant="button">{'Drafts'}</Text>
+          <InputCore
+            value={joke.draftText || ''}
+            onChange={onDraftChange}
+            className="h-[240px] w-full resize-none"
+            $as="textarea"
+          />
+        </div>
+        <div className="w-full">
+          <Text variant="button">{'Joke'}</Text>
+          <InputCore
+            value={joke.text || ''}
+            onChange={onTextChange}
+            className="h-[240px] w-full resize-none"
+            $as="textarea"
+          />
+        </div>
       </div>
     </div>
   )
