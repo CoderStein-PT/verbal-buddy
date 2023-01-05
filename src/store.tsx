@@ -1,3 +1,4 @@
+import { PresetType } from 'presets/types'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -40,6 +41,7 @@ export type PracticeStatsType = {
 export type SettingsType = {
   randomWords: number
   practiceMaxWords: number
+  myPresets: PresetType[]
 }
 
 export type StoreType = {
@@ -63,7 +65,8 @@ export const useStore = create(
       practiceStats: [],
       settings: {
         randomWords: 3,
-        practiceMaxWords: 50
+        practiceMaxWords: 50,
+        myPresets: []
       }
     }),
     { name: 'joke-generator' }
