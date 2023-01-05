@@ -5,7 +5,7 @@ import { JokesPage } from './jokes'
 import { EditJokePage } from './edit-joke'
 import { SettingsPage } from './settings'
 import { PracticePage } from './practice'
-import { WordsPage } from './words'
+import { WordPage } from './word'
 
 export type IRoute = {
   name: string
@@ -17,10 +17,10 @@ export type IRoute = {
 export const routes: {
   [key: string]: IRoute
 } = {
-  words: {
-    name: 'Words',
-    path: '/words',
-    component: WordsPage
+  word: {
+    name: 'Word',
+    path: '/word/:id',
+    component: WordPage
   },
   home: {
     name: 'Home',

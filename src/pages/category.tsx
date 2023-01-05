@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
+import { Link } from 'react-router-dom'
 
 export const Word = ({ word, index }: { word: WordType; index: number }) => {
   const [isEditMode, setIsEditMode] = useState(false)
@@ -68,10 +70,24 @@ export const Word = ({ word, index }: { word: WordType; index: number }) => {
           <Text className="group-hover:text-green-500">{word.text}</Text>
         )}
       </div>
-      <div>
-        <Button onClick={onDeleteWord} size="icon" color="red">
-          <RiCloseFill className="w-full h-full" />
-        </Button>
+      <div className="flex space-x-1">
+        <div>
+          <Link to={`/word/${word.id}`}>
+            <Button title="Add descriptions" size="icon">
+              <FiEdit2 className="w-full h-full" />
+            </Button>
+          </Link>
+        </div>
+        <div>
+          <Button
+            onClick={onDeleteWord}
+            title="Delete word"
+            size="icon"
+            color="red"
+          >
+            <RiCloseFill className="w-full h-full" />
+          </Button>
+        </div>
       </div>
       <div className="w-8 ml-2 text-right">
         <Text
