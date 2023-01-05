@@ -17,7 +17,12 @@ const Preset = ({
   const [applied, setApplied] = useState(false)
 
   const applyPreset = () => {
-    useStore.setState((state) => ({ ...state, ...preset.data }))
+    useStore.setState((state) => ({
+      ...state,
+      ...preset.data,
+      practiceStats: [],
+      selectedWords: []
+    }))
     toast.success('Preset applied!')
     setApplied(true)
     setTimeout(() => setApplied(false), 3000)
