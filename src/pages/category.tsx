@@ -1,4 +1,4 @@
-import { Button, Input, Separator, SeparatorSm, Text } from 'components'
+import { Button, Input, SeparatorSm, Text } from 'components'
 import { useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
@@ -132,8 +132,12 @@ export const CategoryPage = () => {
         return
       }
 
-      if (useStore.getState().words.find((w) => w.text === newWord)) {
-        toast.error('Word already exists')
+      if (
+        useStore
+          .getState()
+          .words.find((w) => w.text === newWord && w.categoryId === +categoryId)
+      ) {
+        toast.error('Word in this category already exists')
         return
       }
 

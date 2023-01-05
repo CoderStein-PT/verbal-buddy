@@ -164,7 +164,8 @@ export const PracticePage = () => {
   const practice = useStore((state) => state.practice)
   const [time, setTime] = useState(0)
   const categoryWords = words.filter((w) => w.categoryId === +categoryId)
-  const goal = Math.min(categoryWords.length, 50)
+  const settings = useStore((state) => state.settings)
+  const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
   const [guessedAll, setGuessedAll] = useState(false)
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {

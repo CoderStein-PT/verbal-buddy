@@ -100,9 +100,11 @@ export const Description = ({
           <Text className="group-hover:text-green-500">{description.text}</Text>
         )}
       </div>
-      <Button onClick={onDeleteWordDescription} size="icon" color="red">
-        <RiCloseFill className="w-full h-full" />
-      </Button>
+      <div>
+        <Button onClick={onDeleteWordDescription} size="icon" color="red">
+          <RiCloseFill className="w-full h-full" />
+        </Button>
+      </div>
     </div>
   )
 }
@@ -190,9 +192,11 @@ const Premise = ({
   return (
     <div className="flex justify-between">
       <Text>{premise.text}</Text>
-      <Button size="icon" color="red" onClick={deletePremise}>
-        <RiCloseFill className="w-full h-full" />
-      </Button>
+      <div>
+        <Button size="icon" color="red" onClick={deletePremise}>
+          <RiCloseFill className="w-full h-full" />
+        </Button>
+      </div>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { CategoryPage } from './category'
 import { CreateJokePage } from './create-joke'
 import { JokesPage } from './jokes'
 import { EditJokePage } from './edit-joke'
+import { SettingsPage } from './settings'
 import { PracticePage } from './practice'
 import { WordsPage } from './words'
 
@@ -50,5 +51,10 @@ export const routes: {
     name: 'Edit Joke',
     path: '/joke/:id',
     component: EditJokePage
+  },
+  settings: {
+    name: 'Settings',
+    path: '/settings',
+    component: SettingsPage
   }
 }

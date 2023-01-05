@@ -2,6 +2,7 @@ import { Button, Text } from 'components'
 import { useState } from 'react'
 import { useStore, CategoryType, WordType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
+import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
 import { useNavigate } from 'react-router-dom'
 import { findLastId } from 'utils'
 
@@ -107,7 +108,7 @@ export const Words = ({ categoryId }: { categoryId: number }) => {
   const words = useStore((state) => state.words)
 
   return (
-    <div>
+    <div className="max-h-[500px] overflow-y-auto">
       {words
         .filter((w) => w.categoryId === categoryId)
         .map((word) => (
@@ -119,6 +120,12 @@ export const Words = ({ categoryId }: { categoryId: number }) => {
 
 export const CreateJokePage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+
+  const category = useStore((state) =>
+    state.categories.find((c) => c.id === selectedCategoryId)
+  )
+
+  const words = useStore((state) => state.words)
 
   const selectedWords = useStore((state) => state.selectedWords)
   const jokes = useStore((state) => state.jokes)
@@ -143,22 +150,55 @@ export const CreateJokePage = () => {
     navigate(`/joke/${jokes.length + 1}`)
   }
 
+  const settings = useStore((state) => state.settings)
+
+  const selectRandomWords = () => {
+    // if a category is selected, select random words from that category
+    // if not selected, select random words from all categories
+    const newwords = selectedCategoryId
+      ? words.filter((w) => w.categoryId === selectedCategoryId)
+      : words
+
+    const randomWords: WordType[] = []
+
+    for (let i = 0; i < settings.randomWords; i++) {
+      const randomIndex = Math.floor(Math.random() * newwords.length)
+      randomWords.push(newwords[randomIndex])
+    }
+
+    useStore.setState({ selectedWords: randomWords })
+  }
+
   return (
     <div className="flex">
       <div className="w-[320px] mx-auto">
-        <Text variant="h5">{'Choose a word'}</Text>
+        <div className="flex space-x-2">
+          {!!selectedCategoryId && (
+            <Button
+              color="gray"
+              size="icon"
+              onClick={() => setSelectedCategoryId(null)}
+            >
+              <FiChevronLeft className="w-full h-full" />
+            </Button>
+          )}
+          <Text variant="button">
+            {category ? category.name : 'Choose a category'}
+          </Text>
+        </div>
+
         <div className="mt-4">
           {selectedCategoryId ? (
             <div>
-              <Button onClick={() => setSelectedCategoryId(null)}>
-                {'Back'}
-              </Button>
               <Words categoryId={selectedCategoryId} />
             </div>
           ) : (
             <Categories setSelectedCategoryId={setSelectedCategoryId} />
           )}
         </div>
+        <Button onClick={selectRandomWords} className="w-full mt-4">
+          {'Select random words'}
+        </Button>
       </div>
       <div className="w-[320px] mx-auto">
         <Text variant="h5">{'Selected words'}</Text>

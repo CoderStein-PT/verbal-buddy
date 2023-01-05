@@ -4,6 +4,7 @@ import { Loading, Text } from 'components'
 
 const sizeClasses = {
   round: 'p-2 rounded-full',
+  sm: 'py-1 px-4 rounded-md',
   base: 'py-2 px-6 rounded-xl',
   lg: 'py-3 px-6 rounded-2xl',
   xl: 'py-4 px-8 text-lg rounded-2xl',
