@@ -1,4 +1,4 @@
-import { Button, Text } from 'components'
+import { Button, Row, ScrollableContainer, Text } from 'components'
 import { RelatedWordType, useStore, WordType } from 'store'
 import produce from 'immer'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
@@ -23,10 +23,10 @@ const RelatedWord = ({
     useStore.setState((s) =>
       produce(s, (state) => {
         const wordIndex = state.words.findIndex((w) => w.id === word.id)
-        const relatedWords = state.words[wordIndex].relatedWords
-        if (!relatedWords) return
+        const currentWord = state.words[wordIndex]
+        if (!currentWord.relatedWords) return
 
-        state.words[wordIndex].relatedWords = relatedWords.filter(
+        currentWord.relatedWords = currentWord.relatedWords.filter(
           (rw) => rw.wordId !== relatedWord.id
         )
       })
@@ -36,62 +36,65 @@ const RelatedWord = ({
   if (!actualWord) return null
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="w-full cursor-pointer group">
-        <Text
-          variant="subtitle"
-          className="group-hover:text-green-500"
-          onClick={() => onClick(actualWord)}
-        >
-          {actualWord.text}
-        </Text>
-      </div>
-      <div className="flex space-x-1">
-        <div>
-          <Button
-            onClick={onRemoveRelatedWord}
-            title="Delete description"
-            size="icon"
-            color="red"
-          >
-            <RiCloseFill className="w-full h-full" />
-          </Button>
-        </div>
-      </div>
-    </div>
+    <Row
+      text={actualWord.text}
+      onClick={() => onClick(actualWord)}
+      actions={[
+        {
+          title: 'Delete',
+          onClick: onRemoveRelatedWord,
+          color: 'red',
+          icon: RiCloseFill
+        }
+      ]}
+    />
   )
 }
 
 export const RelatedWordsList = ({
   word,
-  onWordClick
+  onWordClick,
+  height,
+  maxHeight
 }: {
   word: WordType
   onWordClick: (word: WordType) => void
+  height?: number
+  maxHeight?: number
 }) => {
   const words = useStore((s) => s.words)
 
   return (
-    <div className="space-y-1">
-      {word?.relatedWords?.map((relatedWord) => (
-        <RelatedWord
-          key={relatedWord.id}
-          word={word}
-          onClick={onWordClick}
-          relatedWord={relatedWord}
-          words={words}
-        />
-      ))}
-    </div>
+    <ScrollableContainer height={height} maxHeight={maxHeight}>
+      {word.relatedWords?.length ? (
+        word.relatedWords?.map((relatedWord) => (
+          <RelatedWord
+            key={relatedWord.id}
+            word={word}
+            onClick={onWordClick}
+            relatedWord={relatedWord}
+            words={words}
+          />
+        ))
+      ) : (
+        <Text className="text-center" variant="subtitle" color="gray-light">
+          {'No relations yet 🧐'}
+        </Text>
+      )}
+    </ScrollableContainer>
   )
 }
 
 export const RelatedWords = ({
   word,
-  onWordClick
+  onWordClick,
+  height,
+  maxHeight
 }: {
   word: WordType
   onWordClick: (word: WordType) => void
+  height?: number
+  maxHeight?: number
 }) => {
   const [showWords, setShowWords] = useState(false)
   const words = useStore.getState().words
@@ -120,11 +123,24 @@ export const RelatedWords = ({
   return (
     <div>
       {showWords ? (
-        <WordSelector wordSelector={wordSelector} />
+        <div className="px-2">
+          <WordSelector
+            height={height}
+            maxHeight={maxHeight}
+            wordSelector={wordSelector}
+          />
+        </div>
       ) : (
         <>
-          <RelatedWordsList onWordClick={onWordClick} word={word} />
-          <div className="flex justify-end">
+          <div className="px-2">
+            <RelatedWordsList
+              height={height}
+              maxHeight={maxHeight}
+              onWordClick={onWordClick}
+              word={word}
+            />
+          </div>
+          <div className="flex flex-col">
             <Button
               onClick={() => setShowWords(true)}
               size="sm"

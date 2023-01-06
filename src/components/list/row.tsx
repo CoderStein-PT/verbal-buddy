@@ -67,7 +67,7 @@ export const Row = ({
   }
 
   return (
-    <div className="flex items-center justify-between space-x-1">
+    <div className="flex items-center justify-between space-x-1 group">
       <div
         className="w-full overflow-hidden cursor-pointer group"
         onClick={onClick}
@@ -91,7 +91,7 @@ export const Row = ({
           </Text>
         )}
       </div>
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center space-x-1 transition opacity-0 duration-500-150 group-hover:opacity-100 hover:duration-150">
         {actions?.map((action, index) => (
           <ActionButton
             key={index}

@@ -1,5 +1,11 @@
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
-import { Button, Text, ScrollableContainer } from 'components'
+import {
+  Button,
+  Text,
+  ScrollableContainer,
+  ListContainer,
+  SeparatorFull
+} from 'components'
 import { useState } from 'react'
 import { useStore, CategoryType, WordType } from 'store'
 
@@ -23,10 +29,18 @@ export const Category = ({
   )
 }
 
-export const Categories = ({ setSelectedCategoryId }: any) => {
+export const Categories = ({
+  setSelectedCategoryId,
+  height,
+  maxHeight
+}: {
+  setSelectedCategoryId: any
+  height?: number
+  maxHeight?: number
+}) => {
   const categories = useStore((state) => state.categories)
   return (
-    <ScrollableContainer>
+    <ScrollableContainer height={height} maxHeight={maxHeight}>
       {categories.map((category) => (
         <Category
           key={category.id}
@@ -72,16 +86,20 @@ export const Word = ({
 export const Words = ({
   categoryId,
   selectedWords,
-  onSelectWord
+  onSelectWord,
+  height,
+  maxHeight
 }: {
   categoryId: number
   selectedWords: WordType[]
   onSelectWord: any
+  height?: number
+  maxHeight?: number
 }) => {
   const words = useStore((state) => state.words)
 
   return (
-    <ScrollableContainer>
+    <ScrollableContainer height={height} maxHeight={maxHeight}>
       {words
         .filter((w) => w.categoryId === categoryId)
         .map((word) => (
@@ -114,9 +132,13 @@ export const useWordSelector = ({
 }
 
 export const WordSelector = ({
-  wordSelector
+  wordSelector,
+  height,
+  maxHeight
 }: {
   wordSelector: ReturnType<typeof useWordSelector>
+  height?: number
+  maxHeight?: number
 }) => {
   const {
     selectedCategoryId,
@@ -130,8 +152,8 @@ export const WordSelector = ({
   )
 
   return (
-    <div>
-      <div className="flex space-x-2">
+    <ListContainer>
+      <div className="flex px-2 space-x-2">
         {!!selectedCategoryId && (
           <Button
             color="gray"
@@ -145,19 +167,26 @@ export const WordSelector = ({
           {category ? category.name : 'Choose a category'}
         </Text>
       </div>
-      <div className="mt-2">
+      <SeparatorFull />
+      <div className="px-2 mt-2">
         {selectedCategoryId ? (
           <div>
             <Words
               onSelectWord={onSelectWord}
               categoryId={selectedCategoryId}
               selectedWords={selectedWords}
+              height={height}
+              maxHeight={maxHeight}
             />
           </div>
         ) : (
-          <Categories setSelectedCategoryId={setSelectedCategoryId} />
+          <Categories
+            height={height}
+            maxHeight={maxHeight}
+            setSelectedCategoryId={setSelectedCategoryId}
+          />
         )}
       </div>
-    </div>
+    </ListContainer>
   )
 }

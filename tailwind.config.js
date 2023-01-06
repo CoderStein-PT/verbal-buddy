@@ -6,6 +6,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        title: "'Rowdies', cursive"
+      },
       colors: {
         primary: colors.green
       },

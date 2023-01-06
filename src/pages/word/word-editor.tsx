@@ -1,4 +1,4 @@
-import { Button, SeparatorFull, Text } from 'components'
+import { Button, ListContainer, SeparatorFull, Text } from 'components'
 import { useStore, WordType } from 'store'
 import { Descriptions } from './description'
 import { RelatedWords } from './related-words'
@@ -17,7 +17,7 @@ const Header = ({
   words: WordType[]
 }) => {
   return (
-    <div className="overflow-x-auto">
+    <div className="px-2 overflow-x-auto">
       <Text variant="button" className="whitespace-nowrap">
         {breadcrumbs.map((breadcrumb, index) => (
           <span
@@ -35,7 +35,15 @@ const Header = ({
   )
 }
 
-export const WordEditor = ({ word }: { word: WordType }) => {
+export const WordEditor = ({
+  word,
+  height,
+  maxHeight
+}: {
+  word: WordType
+  height?: number
+  maxHeight?: number
+}) => {
   const [breadcrumbs, setBreadcrumbs] = React.useState<number[]>([word.id])
   const [activeBreadcrumbIndex, setActiveBreadcrumbIndex] = React.useState(0)
 
@@ -57,7 +65,7 @@ export const WordEditor = ({ word }: { word: WordType }) => {
   if (!activeWord) return null
 
   return (
-    <div>
+    <ListContainer>
       <Header
         {...{
           breadcrumbs,
@@ -67,8 +75,8 @@ export const WordEditor = ({ word }: { word: WordType }) => {
         }}
       />
       <Tab.Group>
-        <SeparatorFull className="my-2" />
-        <Tab.List className="flex space-x-1">
+        <SeparatorFull />
+        <Tab.List className="flex px-2 mt-2 space-x-1">
           <Tab as={React.Fragment}>
             {({ selected }) => (
               <Button size="sm" color={selected ? 'gray' : undefined}>
@@ -87,13 +95,22 @@ export const WordEditor = ({ word }: { word: WordType }) => {
         <SeparatorFull className="my-2" />
         <Tab.Panels>
           <Tab.Panel>
-            <Descriptions word={activeWord} />
+            <Descriptions
+              height={height}
+              maxHeight={maxHeight}
+              word={activeWord}
+            />
           </Tab.Panel>
           <Tab.Panel>
-            <RelatedWords onWordClick={onWordClick} word={activeWord} />
+            <RelatedWords
+              height={height}
+              maxHeight={maxHeight}
+              onWordClick={onWordClick}
+              word={activeWord}
+            />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-    </div>
+    </ListContainer>
   )
 }

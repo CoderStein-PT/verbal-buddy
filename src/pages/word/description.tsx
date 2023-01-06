@@ -2,7 +2,8 @@ import {
   Input,
   Row,
   ScrollableContainer,
-  useScrollableContainer
+  useScrollableContainer,
+  Text
 } from 'components'
 import { DescriptionType, useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
@@ -79,8 +80,17 @@ const Description = ({
   )
 }
 
-export const Descriptions = ({ word }: { word: WordType }) => {
+export const Descriptions = ({
+  word,
+  height,
+  maxHeight
+}: {
+  word: WordType
+  height?: number
+  maxHeight?: number
+}) => {
   const scrollableContainer = useScrollableContainer({})
+
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
 
@@ -91,11 +101,9 @@ export const Descriptions = ({ word }: { word: WordType }) => {
       return
     }
 
-    if (
-      useStore
-        .getState()
-        .words.find((w) => w.text === text && w.id === +word.id)
-    ) {
+    const words = useStore.getState().words
+
+    if (words.find((w) => w.text === text && w.id === +word.id)) {
       toast.error('Description already exists')
       return
     }
@@ -103,15 +111,12 @@ export const Descriptions = ({ word }: { word: WordType }) => {
     useStore.setState((s) =>
       produce(s, (state) => {
         const wordIndex = state.words.findIndex((w) => w.id === +word.id)
-        const descriptions = state.words[wordIndex].descriptions
-        const newDescription = {
-          id: findLastId(descriptions || []) + 1,
-          text
-        }
+        const currentWord = state.words[wordIndex]
+        const descriptions = currentWord.descriptions
+        const id = findLastId(currentWord.descriptions || []) + 1
+        const newDescription = { id, text }
 
-        state.words[wordIndex].descriptions = descriptions
-          ? [...descriptions, newDescription]
-          : [newDescription]
+        currentWord.descriptions = [...(descriptions || []), newDescription]
       })
     )
 
@@ -121,21 +126,34 @@ export const Descriptions = ({ word }: { word: WordType }) => {
 
   return (
     <div>
-      <ScrollableContainer
-        maxHeight={150}
-        scrollableContainer={scrollableContainer}
-      >
-        <div>
-          {word?.descriptions?.map((d, index) => (
-            <Description
-              key={d.id}
-              word={word}
-              description={d}
-              index={index + 1}
-            />
-          ))}
-        </div>
-      </ScrollableContainer>
+      <div className="px-2">
+        <ScrollableContainer
+          height={height}
+          maxHeight={maxHeight}
+          scrollableContainer={scrollableContainer}
+        >
+          <div>
+            {word.descriptions?.length ? (
+              word.descriptions.map((d, index) => (
+                <Description
+                  key={d.id}
+                  word={word}
+                  description={d}
+                  index={index + 1}
+                />
+              ))
+            ) : (
+              <Text
+                className="text-center"
+                variant="subtitle"
+                color="gray-light"
+              >
+                {'No descriptions yet 🧐'}
+              </Text>
+            )}
+          </div>
+        </ScrollableContainer>
+      </div>
       <Input
         onKeyDown={onKeyDown}
         type="text"

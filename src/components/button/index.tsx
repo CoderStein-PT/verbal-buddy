@@ -50,7 +50,7 @@ export const Button = React.forwardRef<any, PropsWithChildren<ButtonProps>>(
         <Text
           color="none"
           className="ease-out"
-          variant={props.size ? textSizeVariants[props.size] : undefined}
+          variant={textSizeVariants[props.size || 'base']}
         >
           {children}
         </Text>

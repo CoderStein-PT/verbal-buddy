@@ -7,7 +7,7 @@ import { useWordSelector, WordSelector } from '../word/word-selector'
 import produce from 'immer'
 import tw from 'tailwind-styled-components'
 
-const Column = tw.div`w-[400px] flex-shrink-0 flex-grow-0 relative`
+const Column = tw.div`w-1/3 flex-shrink-0 flex-grow-0 relative`
 
 const AddNewWord = ({
   joke,
@@ -27,8 +27,8 @@ const AddNewWord = ({
     onSelectWord: (word) => {
       setClicked(false)
 
-      useStore.setState((state) =>
-        produce(state, (draft) => {
+      useStore.setState((s) =>
+        produce(s, (draft) => {
           const currentJoke = draft.jokes.find((j) => j.id === joke.id)
 
           if (!currentJoke?.wordIds) return
@@ -42,14 +42,18 @@ const AddNewWord = ({
   return (
     <div className="w-full h-full">
       {clicked ? (
-        <WordSelector wordSelector={wordSelector} />
+        <WordSelector height={280} wordSelector={wordSelector} />
       ) : (
         <div
           onClick={onClick}
-          className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-700 border-dashed rounded-lg cursor-pointer"
+          className="flex flex-col items-center justify-center w-full h-full transition border-2 border-gray-700 border-dashed rounded-lg cursor-pointer hover:border-primary-500 group"
         >
-          <HiPlus className="w-12 h-12 text-gray-700" />
-          <Text color="gray-light" variant="subtitle">
+          <HiPlus className="w-12 h-12 text-gray-700 transition group-hover:text-primary-500" />
+          <Text
+            color="gray-light"
+            variant="button"
+            className="group-hover:text-primary-500"
+          >
             {'Add new word'}
           </Text>
         </div>
@@ -70,7 +74,7 @@ export const WordManager = ({ joke }: { joke: JokeType }) => {
       <div className="flex space-x-4">
         {wordsToLoop.map((word) => (
           <Column key={word?.id}>
-            <WordEditor word={word} />
+            <WordEditor height={200} word={word} />
           </Column>
         ))}
         <Column>
