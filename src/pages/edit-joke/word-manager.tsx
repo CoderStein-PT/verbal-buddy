@@ -69,12 +69,28 @@ export const WordManager = ({ joke }: { joke: JokeType }) => {
       ?.map((id) => words.find((w) => w.id === id))
       .filter((e) => e) as WordType[]) || []
 
+  const onDeleteClick = (word: WordType) => {
+    useStore.setState((s) =>
+      produce(s, (draft) => {
+        const currentJoke = draft.jokes.find((j) => j.id === joke.id)
+
+        if (!currentJoke?.wordIds) return
+
+        currentJoke.wordIds = currentJoke.wordIds.filter((id) => id !== word.id)
+      })
+    )
+  }
+
   return (
     <div className="overflow-x-auto">
       <div className="flex space-x-4">
         {wordsToLoop.map((word) => (
           <Column key={word?.id}>
-            <WordEditor height={200} word={word} />
+            <WordEditor
+              height={200}
+              word={word}
+              onDeleteClick={() => onDeleteClick(word)}
+            />
           </Column>
         ))}
         <Column>

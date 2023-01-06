@@ -36,7 +36,8 @@ export const Row = ({
   onChange,
   index,
   actions,
-  ellipsis
+  ellipsis,
+  isSelected
 }: {
   text?: string
   onClick?: () => void
@@ -44,6 +45,7 @@ export const Row = ({
   index?: number
   actions?: ActionType[]
   ellipsis?: boolean
+  isSelected?: boolean
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -83,9 +85,10 @@ export const Row = ({
         ) : (
           <Text
             title={text}
-            className={`group-hover:text-green-500 ${
+            className={`${isSelected ? '' : 'group-hover:text-green-500'} ${
               ellipsis ? 'text-ellipsis overflow-hidden whitespace-nowrap' : ''
             }`}
+            color={isSelected ? 'gray-light' : undefined}
           >
             {text}
           </Text>

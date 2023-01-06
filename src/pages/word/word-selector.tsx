@@ -4,7 +4,8 @@ import {
   Text,
   ScrollableContainer,
   ListContainer,
-  SeparatorFull
+  SeparatorFull,
+  Row
 } from 'components'
 import { useState } from 'react'
 import { useStore, CategoryType, WordType } from 'store'
@@ -55,13 +56,15 @@ export const Categories = ({
 export const Word = ({
   word,
   onSelectWord,
-  selectedWords
+  selectedWords,
+  index
 }: {
   word: WordType
   onSelectWord: any
   selectedWords: WordType[]
+  index?: number
 }) => {
-  const isSelected = selectedWords.find((w) => w.id === word.id)
+  const isSelected = !!selectedWords.find((w) => w.id === word.id)
 
   const onClick = () => {
     if (isSelected) return
@@ -70,16 +73,12 @@ export const Word = ({
   }
 
   return (
-    <div className="flex justify-between space-x-1">
-      <div className="w-full cursor-pointer group" onClick={onClick}>
-        <Text
-          className={isSelected ? '' : 'group-hover:text-green-500'}
-          color={isSelected ? 'gray-light' : undefined}
-        >
-          {word.text}
-        </Text>
-      </div>
-    </div>
+    <Row
+      text={word.text}
+      isSelected={isSelected}
+      onClick={onClick}
+      index={index}
+    />
   )
 }
 
@@ -96,20 +95,21 @@ export const Words = ({
   height?: number
   maxHeight?: number
 }) => {
-  const words = useStore((state) => state.words)
+  const words = useStore((state) =>
+    state.words.filter((w) => w.categoryId === categoryId)
+  )
 
   return (
     <ScrollableContainer height={height} maxHeight={maxHeight}>
-      {words
-        .filter((w) => w.categoryId === categoryId)
-        .map((word) => (
-          <Word
-            onSelectWord={onSelectWord}
-            selectedWords={selectedWords}
-            key={word.id}
-            word={word}
-          />
-        ))}
+      {words.map((word, index) => (
+        <Word
+          onSelectWord={onSelectWord}
+          selectedWords={selectedWords}
+          key={word.id}
+          word={word}
+          index={index + 1}
+        />
+      ))}
     </ScrollableContainer>
   )
 }

@@ -4,17 +4,20 @@ import { Descriptions } from './description'
 import { RelatedWords } from './related-words'
 import { Tab } from '@headlessui/react'
 import React from 'react'
+import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 
 const Header = ({
   breadcrumbs,
   activeBreadcrumbIndex,
   setActiveBreadcrumbIndex,
-  words
+  words,
+  onDeleteClick
 }: {
   breadcrumbs: number[]
   activeBreadcrumbIndex: number
   setActiveBreadcrumbIndex: (index: number) => void
   words: WordType[]
+  onDeleteClick?: () => void
 }) => {
   return (
     <div className="px-2 overflow-x-auto">
@@ -23,7 +26,11 @@ const Header = ({
           <span
             key={breadcrumb}
             className={`cursor-pointer
-      ${activeBreadcrumbIndex === index && 'text-green-500'}`}
+      ${
+        activeBreadcrumbIndex === index &&
+        !(index === 0 && breadcrumbs.length === 1) &&
+        'text-green-500'
+      }`}
             onClick={() => setActiveBreadcrumbIndex(index)}
           >
             {index > 0 && ' - '}
@@ -31,6 +38,18 @@ const Header = ({
           </span>
         ))}
       </Text>
+      {!!onDeleteClick && (
+        <div className="absolute top-1 right-1">
+          <Button
+            title="Delete Word"
+            size="icon"
+            color="red"
+            onClick={onDeleteClick}
+          >
+            <RiCloseFill />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
@@ -38,11 +57,13 @@ const Header = ({
 export const WordEditor = ({
   word,
   height,
-  maxHeight
+  maxHeight,
+  onDeleteClick
 }: {
   word: WordType
   height?: number
   maxHeight?: number
+  onDeleteClick?: () => void
 }) => {
   const [breadcrumbs, setBreadcrumbs] = React.useState<number[]>([word.id])
   const [activeBreadcrumbIndex, setActiveBreadcrumbIndex] = React.useState(0)
@@ -71,7 +92,8 @@ export const WordEditor = ({
           breadcrumbs,
           activeBreadcrumbIndex,
           setActiveBreadcrumbIndex,
-          words
+          words,
+          onDeleteClick
         }}
       />
       <Tab.Group>
