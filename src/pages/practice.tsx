@@ -184,6 +184,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const words = useStore((state) => state.words)
   const practice = useStore((state) => state.practice)
   const [time, setTime] = useState(0)
+  const [avgDelayBetweenWords, setAvgDelayBetweenWords] = useState(0)
   const categoryWords = words.filter((w) => w.categoryId === category.id)
   const settings = useStore((state) => state.settings)
   const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
@@ -229,7 +230,12 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
       useStore.setState((state) => ({
         practiceStats: [
           ...state.practiceStats,
-          { timestamp: Date.now(), delay: time, categoryId: category.id }
+          {
+            timestamp: Date.now(),
+            delay: time,
+            categoryId: category.id,
+            avgDelayBetweenWords
+          }
         ]
       }))
     }
@@ -260,6 +266,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   )
 
   const displayTime = moment.utc(time * 1000).format('mm:ss')
+  const displayAvgDelayBetweenWords = moment
+    .utc(avgDelayBetweenWords * 1000)
+    .format('mm:ss')
 
   return (
     <div className="flex justify-center">
@@ -267,9 +276,17 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
         <div className="w-[400px] mx-auto">
           <div className="flex items-center justify-between">
             <Text variant="button">{category?.name}</Text>
-            <Text variant="h4" className="text-right">
-              {displayTime}
-            </Text>
+            <div className="flex items-end space-x-2">
+              <Text variant="h4" className="text-right">
+                {displayTime}
+              </Text>
+              {/* display a small red dot if the user is not currently typing */}
+              <div
+                className={`w-2 h-2 rounded-full ${
+                  isCounting ? 'bg-green-500' : 'bg-red-500'
+                }`}
+              />
+            </div>
           </div>
           <SeparatorFull className="my-2" />
           <ScrollableContainer scrollableContainer={scrollableContainer}>
@@ -290,6 +307,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
           <div className="flex flex-col mt-2">
             <Button onClick={resetPractice}>{'Reset'}</Button>
           </div>
+          <Text variant="subtitle" className="text-right">
+            Average Delay: {displayAvgDelayBetweenWords}
+          </Text>
         </div>
       </div>
       <div className="w-[280px] flex-shrink-0">

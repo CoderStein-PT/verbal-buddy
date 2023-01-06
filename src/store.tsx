@@ -42,6 +42,7 @@ export type PracticeStatsType = {
   categoryId: number
   timestamp: number
   delay: number
+  avgDelayBetweenWords: number
 }
 
 export type SettingsType = {
