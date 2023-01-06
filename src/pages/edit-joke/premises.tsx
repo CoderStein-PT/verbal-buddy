@@ -1,6 +1,7 @@
 import { Row, ScrollableContainer } from 'components'
 import { useStore, PremiseType, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
+import produce from 'immer'
 
 const Premise = ({
   premise,
@@ -12,16 +13,17 @@ const Premise = ({
   index: number
 }) => {
   const deletePremise = () => {
-    useStore.setState((state) => ({
-      jokes: state.jokes.map((j) =>
-        j.id === joke.id
-          ? {
-              ...j,
-              premises: j.premises?.filter((p) => p.id !== premise.id)
-            }
-          : j
-      )
-    }))
+    useStore.setState((s) =>
+      produce(s, (draft) => {
+        const currentJoke = draft.jokes.find((j) => j.id === joke.id)
+
+        if (!currentJoke?.premises) return
+
+        currentJoke.premises = currentJoke.premises.filter(
+          (p) => p.id !== premise.id
+        )
+      })
+    )
   }
 
   return (

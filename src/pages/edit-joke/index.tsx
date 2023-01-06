@@ -1,4 +1,10 @@
-import { Input, InputCore, SeparatorFull, Text } from 'components'
+import {
+  Input,
+  InputCore,
+  ListContainer,
+  SeparatorFull,
+  Text
+} from 'components'
 import { useStore, JokeType } from 'store'
 import { toast } from 'react-toastify'
 import { findLastId } from 'utils'
@@ -64,15 +70,21 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
       <WordManager joke={joke} />
       <div className="flex mt-8 space-x-4">
         <div className="w-1/3">
-          <Text variant="button">{'Premises'}</Text>
-          <SeparatorFull className="my-2" />
-          <Premises joke={joke} />
-          <SeparatorFull className="my-2" />
-          <Input
-            onKeyDown={onKeyDown}
-            placeholder="New premise..."
-            className="w-full"
-          />
+          <ListContainer>
+            <div className="px-2">
+              <Text variant="button">{'Premises'}</Text>
+            </div>
+            <SeparatorFull />
+            <div className="px-2">
+              <Premises joke={joke} />
+            </div>
+            <SeparatorFull className="mb-2" />
+            <Input
+              onKeyDown={onKeyDown}
+              placeholder="New premise..."
+              className="w-full"
+            />
+          </ListContainer>
         </div>
         <div className="w-1/3">
           <Text variant="button">{'Drafts'}</Text>
