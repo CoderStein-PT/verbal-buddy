@@ -143,17 +143,36 @@ export const Words = ({
 }
 
 const StatRow = ({ stat }: { stat: PracticeStatsType }) => {
+  const time = moment.utc(stat.delay).format('mm:ss')
+  const avg = moment.utc(stat.avgDelayBetweenWords).format('mm:ss')
+
   return (
-    <div
-      key={stat.timestamp}
-      className="flex items-center justify-between gap-x-6"
-    >
-      <Text>{moment(stat.timestamp).format('DD.MM.YYYY HH:mm')}</Text>
-      <Text variant="button">
-        {moment.utc(stat.delay * 1000).format('mm:ss')}
-      </Text>
-    </div>
+    <tr key={stat.timestamp}>
+      <td className="">
+        <Text>{moment(stat.timestamp).format('DD.MM.YYYY HH:mm')}</Text>
+      </td>
+      <td className="text-right">
+        <Text variant="subtitle">{avg}</Text>
+      </td>
+      <td className="text-right">
+        <Text variant="subtitle">{stat.wordsCount || 0}</Text>
+      </td>
+      <td className="text-right">
+        <Text variant="button">{time}</Text>
+      </td>
+    </tr>
   )
+}
+
+const getIsBetterOrWorse = (prev: number, next: number, tolerance: number) => {
+  // calculate difference with tolerance
+  const diff = Math.abs(prev - next) / prev
+
+  if (diff < tolerance) return 'same'
+  if (next > prev) return 'better'
+  if (next < prev) return 'worse'
+
+  return 'same'
 }
 
 const Stats = ({ categoryId }: { categoryId: number }) => {
@@ -168,11 +187,27 @@ const Stats = ({ categoryId }: { categoryId: number }) => {
       <Text variant="button">{'Stats'}</Text>
       <SeparatorFull className="my-2" />
       <ScrollableContainer>
-        <div className="divide-y divide-gray-700 divide-dashed">
+        <table className="w-full divide-y divide-gray-700 divide-dashed">
+          <thead>
+            <tr>
+              <th className="py-2 text-left">
+                <Text variant="subtitle">{'Date'}</Text>
+              </th>
+              <th className="py-2 text-right">
+                <Text variant="subtitle">{'Avg'}</Text>
+              </th>
+              <th className="py-2 text-right">
+                <Text variant="subtitle">{'Words'}</Text>
+              </th>
+              <th className="py-2 text-right">
+                <Text variant="subtitle">{'Time'}</Text>
+              </th>
+            </tr>
+          </thead>
           {[...stats].reverse().map((stat) => (
             <StatRow stat={stat} key={stat.timestamp} />
           ))}
-        </div>
+        </table>
       </ScrollableContainer>
     </div>
   )
@@ -184,7 +219,6 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const words = useStore((state) => state.words)
   const practice = useStore((state) => state.practice)
   const [time, setTime] = useState(0)
-  // delays to calculate average delay between typing words
   const [delays, setDelays] = useState<number[]>([])
   const categoryWords = words.filter((w) => w.categoryId === category.id)
   const settings = useStore((state) => state.settings)
@@ -205,7 +239,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
     timeoutRef.current = setTimeout(() => {
       setIsCounting(true)
-    }, 1000)
+    }, settings.practiceDelayTolerance * 1000)
 
     if (event.key !== 'Enter') return
 
@@ -250,7 +284,8 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
             timestamp: Date.now(),
             delay: time,
             categoryId: category.id,
-            avgDelayBetweenWords: getAverageDelay(delays)
+            avgDelayBetweenWords: getAverageDelay(delays),
+            wordsCount: goal
           }
         ]
       }))
@@ -283,7 +318,6 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   )
 
   const displayTime = moment.utc(time).format('mm:ss')
-  const avgDelay = moment.utc(getAverageDelay(delays)).format('mm:ss')
 
   return (
     <div className="flex justify-center">
@@ -321,12 +355,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
           <div className="flex flex-col mt-2">
             <Button onClick={resetPractice}>{'Reset'}</Button>
           </div>
-          <Text variant="subtitle" className="text-right">
-            Average Delay: {avgDelay}
-          </Text>
         </div>
       </div>
-      <div className="w-[280px] flex-shrink-0">
+      <div className="w-[400px] flex-shrink-0">
         <Stats categoryId={category.id} />
       </div>
     </div>

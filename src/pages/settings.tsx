@@ -128,6 +128,14 @@ export const SettingsPage = () => {
     }))
   }
 
+  const onChangePracticeDelayTolerance = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, practiceDelayTolerance: +e.target.value }
+    }))
+  }
+
   return (
     <div className="w-[400px] mx-auto space-y-4">
       <div className="flex flex-col">
@@ -148,6 +156,21 @@ export const SettingsPage = () => {
           type="number"
           value={settings.randomWords}
           onChange={onChangeRandomWords}
+        />
+      </div>
+      <div className="flex flex-col">
+        <Label>
+          {
+            'Practice delay tolerance (stop the timer when you type for this amount of seconds)'
+          }
+        </Label>
+        <Input
+          min={0}
+          max={10}
+          step={0.1}
+          type="number"
+          value={settings.practiceDelayTolerance || 1}
+          onChange={onChangePracticeDelayTolerance}
         />
       </div>
       <SeparatorSm />

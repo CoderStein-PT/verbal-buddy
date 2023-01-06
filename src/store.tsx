@@ -43,12 +43,14 @@ export type PracticeStatsType = {
   timestamp: number
   delay: number
   avgDelayBetweenWords: number
+  wordsCount: number
 }
 
 export type SettingsType = {
   randomWords: number
   practiceMaxWords: number
   myPresets: PresetType[]
+  practiceDelayTolerance: number
 }
 
 export type StoreType = {
@@ -73,7 +75,8 @@ export const useStore = create(
       settings: {
         randomWords: 3,
         practiceMaxWords: 50,
-        myPresets: []
+        myPresets: [],
+        practiceDelayTolerance: 1
       }
     }),
     { name: 'joke-generator' }
