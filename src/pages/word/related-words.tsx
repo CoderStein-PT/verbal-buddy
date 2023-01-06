@@ -1,5 +1,5 @@
 import { Button, Text } from 'components'
-import { useStore, WordType } from 'store'
+import { RelatedWordType, useStore, WordType } from 'store'
 import produce from 'immer'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useWordSelector, WordSelector } from './word-selector'
@@ -9,12 +9,16 @@ import { findLastId } from 'utils'
 const RelatedWord = ({
   word,
   relatedWord,
-  onClick
+  onClick,
+  words
 }: {
   word: WordType
-  relatedWord: WordType
+  words: WordType[]
+  relatedWord: RelatedWordType
   onClick: (word: WordType) => void
 }) => {
+  const actualWord = words.find((w) => w.id === +relatedWord.wordId)
+
   const onRemoveRelatedWord = () => {
     useStore.setState((s) =>
       produce(s, (state) => {
@@ -29,15 +33,17 @@ const RelatedWord = ({
     )
   }
 
+  if (!actualWord) return null
+
   return (
     <div className="flex items-center justify-between">
       <div className="w-full cursor-pointer group">
         <Text
           variant="subtitle"
           className="group-hover:text-green-500"
-          onClick={() => onClick(relatedWord)}
+          onClick={() => onClick(actualWord)}
         >
-          {relatedWord.text}
+          {actualWord.text}
         </Text>
       </div>
       <div className="flex space-x-1">
@@ -61,9 +67,9 @@ export const RelatedWordsList = ({
   onWordClick
 }: {
   word: WordType
-  onWordClick: () => any
+  onWordClick: (word: WordType) => void
 }) => {
-  const words = useStore.getState().words
+  const words = useStore((s) => s.words)
 
   return (
     <div className="space-y-1">
@@ -72,7 +78,8 @@ export const RelatedWordsList = ({
           key={relatedWord.id}
           word={word}
           onClick={onWordClick}
-          relatedWord={words.find((w) => w.id === +relatedWord.wordId)}
+          relatedWord={relatedWord}
+          words={words}
         />
       ))}
     </div>
@@ -84,7 +91,7 @@ export const RelatedWords = ({
   onWordClick
 }: {
   word: WordType
-  onWordClick: () => any
+  onWordClick: (word: WordType) => void
 }) => {
   const [showWords, setShowWords] = useState(false)
   const words = useStore.getState().words

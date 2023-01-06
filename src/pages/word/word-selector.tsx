@@ -1,8 +1,7 @@
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
-import { Button, Text } from 'components'
+import { Button, Text, ScrollableContainer } from 'components'
 import { useState } from 'react'
 import { useStore, CategoryType, WordType } from 'store'
-import { ScrollableContainer } from './scrollable-container'
 
 export const Category = ({
   category,

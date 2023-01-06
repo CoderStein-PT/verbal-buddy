@@ -1,63 +1,59 @@
-import { Button, SeparatorSm, Text } from 'components'
+import { Button, Row, SeparatorFull, ScrollableContainer } from 'components'
 import { useStore, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-export const Joke = ({ joke }: { joke: JokeType }) => {
+export const Joke = ({ joke, index }: { joke: JokeType; index: number }) => {
+  const words = useStore((state) => state.words)
+  const jokeWords = joke?.wordIds?.map((id) => words.find((w) => w.id === id))
+  const text = jokeWords?.flatMap((w) => w?.text).join(', ')
+
   const onDelete = () => {
+    const confirmation = window.confirm(
+      `Are you sure you want to delete category "${text}"?`
+    )
+    if (!confirmation) return
+
     useStore.setState((state) => ({
       jokes: state.jokes.filter((j) => j.id !== joke.id)
     }))
   }
 
-  const words = useStore((state) => state.words)
-
-  const jokeWords = joke?.wordIds?.map((id) => words.find((w) => w.id === id))
+  const navigate = useNavigate()
 
   return (
-    <div className="flex justify-between space-x-1">
-      <div className="min-w-0 cursor-pointer group">
-        <Text className="overflow-hidden whitespace-nowrap group-hover:text-green-500 text-ellipsis">
-          {jokeWords?.flatMap((w) => w?.text).join(', ')}
-        </Text>
-      </div>
-      <div className="flex space-x-1 shrink-0">
-        <Link to={`/joke/${joke.id}`}>
-          <Button size="icon">
-            <FiEdit2 className="w-full h-full" />
-          </Button>
-        </Link>
-        <div>
-          <Button onClick={onDelete} size="icon" color="red">
-            <RiCloseFill className="w-full h-full" />
-          </Button>
-        </div>
-      </div>
-    </div>
+    <Row
+      text={text}
+      onClick={() => navigate(`/joke/${joke.id}`)}
+      index={index}
+      actions={[
+        { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
+      ]}
+    />
   )
 }
 
 export const Jokes = () => {
   const jokes = useStore((state) => state.jokes)
   return (
-    <div>
-      {jokes.map((joke) => (
-        <Joke key={joke.id} joke={joke} />
+    <ScrollableContainer>
+      {jokes.map((joke, index) => (
+        <Joke key={joke.id} joke={joke} index={index + 1} />
       ))}
-    </div>
+    </ScrollableContainer>
   )
 }
 
 export const JokesPage = () => {
+  const navigate = useNavigate()
+
   return (
     <div className="mx-auto w-[600px]">
-      <SeparatorSm className="w-full my-4" />
+      <SeparatorFull className="my-4" />
       <Jokes />
+      <SeparatorFull className="my-4" />
       <div className="mt-4">
-        <Link to="/jokes/new">
-          <Button>{'New Joke'}</Button>
-        </Link>
+        <Button onClick={() => navigate('/jokes/new')}>{'New Joke'}</Button>
       </div>
     </div>
   )

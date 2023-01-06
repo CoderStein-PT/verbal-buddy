@@ -1,114 +1,84 @@
-import { Button, Input, SeparatorFull, Text } from 'components'
+import {
+  Input,
+  Row,
+  SeparatorFull,
+  Text,
+  ScrollableContainer,
+  ScrollableContainerType,
+  useScrollableContainer
+} from 'components'
 import { useStore, CategoryType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
-import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import {
-  ScrollableContainer,
-  useScrollableContainer
-} from './word/scrollable-container'
+import { useNavigate } from 'react-router-dom'
 
 export const Category = ({ category }: { category: CategoryType }) => {
-  const [isEditMode, setIsEditMode] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const navigate = useNavigate()
   const categoryWords = useStore
     .getState()
     .words.filter((w) => w.categoryId === category.id)
 
   const onDelete = () => {
+    const confirmation = window.confirm(
+      `Are you sure you want to delete category "${category.name}"?`
+    )
+    if (!confirmation) return
+
     useStore.setState((state) => ({
       categories: state.categories.filter((c) => c.id !== category.id)
     }))
   }
 
-  const toggleEditMode = () => {
-    setIsEditMode(!isEditMode)
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 0)
-  }
-
-  const onChangeCategory = () => {
-    setIsEditMode(false)
-    const newCategory = inputRef?.current?.value
-
-    if (!newCategory) {
+  const onChange = (text: string | undefined) => {
+    if (!text) {
       toast.error('Category cannot be empty')
       return
     }
 
-    if (
-      useStore
-        .getState()
-        .categories.find((c) => c.name === newCategory && c.id !== category.id)
-    ) {
+    const categories = useStore.getState().categories
+
+    if (categories.find((c) => c.name === text && c.id !== category.id)) {
       toast.error('Category already exists')
       return
     }
 
-    useStore.setState((state) => ({
-      categories: state.categories.map((c) =>
-        c.id === category.id ? { ...c, name: newCategory } : c
+    useStore.setState({
+      categories: categories.map((c) =>
+        c.id === category.id ? { ...c, name: text } : c
       )
-    }))
+    })
   }
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
-    onChangeCategory()
+  const onClick = () => {
+    navigate(`/category/${category.id}`)
+  }
+
+  const onPracticeClick = () => {
+    navigate(`/practice/${category.id}`)
   }
 
   return (
-    <div className="flex justify-between space-x-1">
-      <div className="w-full cursor-pointer group" onClick={toggleEditMode}>
-        {isEditMode ? (
-          <Input
-            className="w-full"
-            ref={inputRef}
-            onBlur={onChangeCategory}
-            defaultValue={category.name}
-            onKeyDown={onKeyDown}
-          />
-        ) : (
-          <Text className="group-hover:text-green-500">{category.name}</Text>
-        )}
-      </div>
-      <Link to={`/practice/${category.id}`}>
-        <Button size="icon">
-          <AiFillFire className="w-full h-full" />
-        </Button>
-      </Link>
-      <Link to={`/category/${category.id}`}>
-        <Button size="icon">
-          <FiEdit2 className="w-full h-full" />
-        </Button>
-      </Link>
-      <div>
-        <Button onClick={onDelete} size="icon" color="red">
-          <RiCloseFill className="w-full h-full" />
-        </Button>
-      </div>
-      <div className="w-8 ml-2 text-right">
-        <Text
-          className="group-hover:text-green-500"
-          variant="subtitle"
-          color="gray-light"
-        >
-          {categoryWords.length}
-        </Text>
-      </div>
-    </div>
+    <Row
+      text={category.name}
+      onChange={onChange}
+      onClick={onClick}
+      index={categoryWords.length}
+      actions={[
+        { title: 'Practice', onClick: onPracticeClick, icon: AiFillFire },
+        { title: 'Edit', onClick: 'edit', icon: FiEdit2 },
+        { title: 'Delete', onClick: onDelete, icon: RiCloseFill, color: 'red' }
+      ]}
+    />
   )
 }
 
 export const Categories = ({
   scrollableContainer
 }: {
-  scrollableContainer: ReturnType<typeof useScrollableContainer>
+  scrollableContainer: ScrollableContainerType
 }) => {
   const categories = useStore((state) => state.categories)
   return (

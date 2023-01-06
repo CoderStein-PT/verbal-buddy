@@ -11,5 +11,9 @@ export const WordPage = () => {
 
   if (!word) return null
 
-  return <WordEditor word={word} />
+  return (
+    <div className="w-[400px] mx-auto">
+      <WordEditor word={word} />
+    </div>
+  )
 }

@@ -1,176 +1,133 @@
-import { Button, Input, SeparatorSm, Text } from 'components'
-import { useStore, WordType } from 'store'
+import {
+  Input,
+  Row,
+  SeparatorFull,
+  Text,
+  ScrollableContainer,
+  ScrollableContainerType,
+  useScrollableContainer
+} from 'components'
+import { CategoryType, useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
-import { Link } from 'react-router-dom'
-import {
-  ScrollableContainer,
-  useScrollableContainer
-} from './word/scrollable-container'
-import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
+import { useNavigate } from 'react-router-dom'
 
 export const Word = ({ word, index }: { word: WordType; index: number }) => {
-  const [isEditMode, setIsEditMode] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const navigate = useNavigate()
 
-  const onDeleteWord = () => {
-    useStore.setState((state) => ({
-      words: state.words.filter((w) => w.id !== word.id)
+  const onDelete = () => {
+    useStore.setState((s) => ({
+      words: s.words.filter((w) => w.id !== word.id)
     }))
   }
 
-  const toggleEditMode = () => {
-    setIsEditMode(!isEditMode)
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 0)
-  }
-
-  const onChangeWord = () => {
-    setIsEditMode(false)
-    const newWord = inputRef?.current?.value
-
-    if (!newWord) {
+  const onChange = (text: string | undefined) => {
+    if (!text) {
       toast.error('Word cannot be empty')
       return
     }
 
-    if (
-      useStore
-        .getState()
-        .words.find((w) => w.text === newWord && w.id !== word.id)
-    ) {
+    const words = useStore.getState().words
+
+    if (words.find((w) => w.text === text && w.id !== word.id)) {
       toast.error('Word already exists')
       return
     }
 
-    useStore.setState((state) => ({
-      words: state.words.map((w) =>
-        w.id === word.id ? { ...w, text: newWord } : w
-      )
-    }))
+    useStore.setState({
+      words: words.map((w) => (w.id === word.id ? { ...w, text } : w))
+    })
   }
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
-    onChangeWord()
+  const onEditClick = () => {
+    navigate(`/word/${word.id}`)
   }
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="w-full cursor-pointer group" onClick={toggleEditMode}>
-        {isEditMode ? (
-          <Input
-            className="w-full"
-            ref={inputRef}
-            onBlur={onChangeWord}
-            defaultValue={word.text}
-            onKeyDown={onKeyDown}
-          />
-        ) : (
-          <Text className="group-hover:text-green-500">{word.text}</Text>
-        )}
-      </div>
-      <div className="flex space-x-1">
-        <div>
-          <Link to={`/word/${word.id}`}>
-            <Button title="Add descriptions" size="icon">
-              <FiEdit2 className="w-full h-full" />
-            </Button>
-          </Link>
-        </div>
-        <div>
-          <Button
-            onClick={onDeleteWord}
-            title="Delete word"
-            size="icon"
-            color="red"
-          >
-            <RiCloseFill className="w-full h-full" />
-          </Button>
-        </div>
-      </div>
-      <div className="w-8 ml-2 text-right">
-        <Text
-          className="group-hover:text-green-500"
-          variant="subtitle"
-          color="gray-light"
-        >
-          {index}
-        </Text>
-      </div>
-    </div>
+    <Row
+      text={word.text}
+      onChange={onChange}
+      index={index}
+      onClick={onEditClick}
+      actions={[
+        { title: 'Edit', icon: FiEdit2, onClick: 'edit' },
+        { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
+      ]}
+    />
   )
 }
 
-export const Words = ({ categoryId }: { categoryId: number }) => {
+export const Words = ({
+  categoryId,
+  scrollableContainer
+}: {
+  categoryId: number
+  scrollableContainer: ScrollableContainerType
+}) => {
   const words = useStore((state) => state.words)
 
   return (
-    <div>
+    <ScrollableContainer scrollableContainer={scrollableContainer}>
       {words
         .filter((w) => w.categoryId === categoryId)
         .map((word, index) => (
           <Word key={word.id} index={index + 1} word={word} />
         ))}
-    </div>
+    </ScrollableContainer>
   )
 }
 
 export const CategoryPage = () => {
   const categoryId = useParams<{ id: string }>().id
-
-  const category = useStore((state) => state.categories).find(
-    (c) => c.id === +categoryId
-  )
-
-  const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
+  const categories = useStore((state) => state.categories)
 
   if (!categoryId) return null
+  const category = categories.find((c) => c.id === +categoryId)
+
+  if (!category) return null
+
+  return <CategoryPageCore category={category} />
+}
+
+export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
+  const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      const newWord = event.currentTarget.value
-      if (!newWord) {
-        toast.error('Word cannot be empty')
-        return
-      }
+    if (event.key !== 'Enter') return
 
-      if (
-        useStore
-          .getState()
-          .words.find((w) => w.text === newWord && w.categoryId === +categoryId)
-      ) {
-        toast.error('Word in this category already exists')
-        return
-      }
-
-      useStore.setState((state) => ({
-        words: [
-          ...state.words,
-          {
-            id: findLastId(state.words) + 1,
-            text: newWord,
-            categoryId: +categoryId
-          }
-        ]
-      }))
-      event.currentTarget.value = ''
-      scrollableContainer.scrollContainerDown()
+    const text = event.currentTarget.value
+    if (!text) {
+      toast.error('Word cannot be empty')
+      return
     }
+
+    const words = useStore.getState().words
+
+    if (words.find((w) => w.text === text && w.categoryId === category.id)) {
+      toast.error('Word in this category already exists')
+      return
+    }
+
+    const id = findLastId(words) + 1
+    const newWord = { id, text, categoryId: category.id }
+
+    useStore.setState({ words: [...words, newWord] })
+    event.currentTarget.value = ''
+    scrollableContainer.scrollContainerDown()
   }
 
   return (
     <div className="w-[400px] mx-auto">
       <Text variant="button">{category?.name}</Text>
-      <SeparatorSm className="w-full my-4" />
-      <ScrollableContainer scrollableContainer={scrollableContainer}>
-        <Words categoryId={+categoryId} />
-      </ScrollableContainer>
+      <SeparatorFull className="w-full my-2" />
+      <Words
+        scrollableContainer={scrollableContainer}
+        categoryId={category.id}
+      />
+      <SeparatorFull className="my-2" />
       <Input
         onKeyDown={onKeyDown}
         type="text"

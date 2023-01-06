@@ -1,12 +1,14 @@
-import { Button, Input, SeparatorSm, Text } from 'components'
-import { DescriptionType, RelatedWordType, useStore, WordType } from 'store'
+import {
+  Input,
+  Row,
+  ScrollableContainer,
+  useScrollableContainer
+} from 'components'
+import { DescriptionType, useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
-import { useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import produce from 'immer'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { findLastId } from 'utils'
-import { ScrollableContainer } from './scrollable-container'
 
 const Description = ({
   word,
@@ -17,31 +19,21 @@ const Description = ({
   description: DescriptionType
   index: number
 }) => {
-  const [isEditMode, setIsEditMode] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
-
   const onDeleteDescription = () => {
-    useStore.setState(
-      produce((state) => {
+    useStore.setState((s) =>
+      produce(s, (state) => {
         const wordIndex = state.words.findIndex((w) => w.id === word.id)
-        state.words[wordIndex].descriptions = state.words[
-          wordIndex
-        ].descriptions.filter((d) => d.id !== description.id)
+        const descriptions = state.words[wordIndex].descriptions
+        if (!descriptions) return
+
+        state.words[wordIndex].descriptions = descriptions.filter(
+          (d) => d.id !== description.id
+        )
       })
     )
   }
 
-  const toggleEditMode = () => {
-    setIsEditMode(!isEditMode)
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 0)
-  }
-
-  const onChangeDescription = () => {
-    setIsEditMode(false)
-    const text = inputRef?.current?.value
-
+  const onChangeDescription = (text: string | undefined) => {
     if (!text) {
       toast.error('Description cannot be empty')
       return
@@ -56,76 +48,39 @@ const Description = ({
       return
     }
 
-    useStore.setState(
-      produce((state) => {
+    useStore.setState((s) =>
+      produce(s, (state) => {
         const wordIndex = state.words.findIndex((w) => w.id === word.id)
-        const descriptionIndex = state.words[wordIndex].descriptions.findIndex(
+        const descriptions = state.words[wordIndex].descriptions
+        if (!descriptions) return
+
+        const descriptionIndex = descriptions.findIndex(
           (d) => d.id === description.id
         )
-        state.words[wordIndex].descriptions[descriptionIndex].text = text
+        descriptions[descriptionIndex].text = text
       })
     )
   }
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
-    onChangeDescription()
-  }
-
   return (
-    <div className="flex items-center justify-between">
-      <div className="w-full cursor-pointer group" onClick={toggleEditMode}>
-        {isEditMode ? (
-          <Input
-            className="w-full"
-            ref={inputRef}
-            onBlur={onChangeDescription}
-            defaultValue={description.text}
-            onKeyDown={onKeyDown}
-          />
-        ) : (
-          <Text variant="subtitle" className="group-hover:text-green-500">
-            {description.text}
-          </Text>
-        )}
-      </div>
-      <div className="flex space-x-1">
-        <div>
-          <Button
-            onClick={onDeleteDescription}
-            title="Delete description"
-            size="icon"
-            color="red"
-          >
-            <RiCloseFill className="w-full h-full" />
-          </Button>
-        </div>
-      </div>
-      <div className="w-5 ml-2 text-right">
-        <Text
-          className="group-hover:text-green-500"
-          variant="subtitle"
-          color="gray-light"
-        >
-          {index}
-        </Text>
-      </div>
-    </div>
+    <Row
+      text={description.text}
+      onChange={onChangeDescription}
+      index={index}
+      actions={[
+        {
+          title: 'Delete',
+          icon: RiCloseFill,
+          onClick: onDeleteDescription,
+          color: 'red'
+        }
+      ]}
+    />
   )
 }
 
 export const Descriptions = ({ word }: { word: WordType }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const scrollContainerDown = () => {
-    setTimeout(() => {
-      containerRef.current?.scrollTo({
-        top: containerRef.current.scrollHeight,
-        behavior: 'smooth'
-      })
-    }, 0)
-  }
-
+  const scrollableContainer = useScrollableContainer({})
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
 
@@ -161,15 +116,23 @@ export const Descriptions = ({ word }: { word: WordType }) => {
     )
 
     event.currentTarget.value = ''
-    scrollContainerDown()
+    scrollableContainer.scrollContainerDown()
   }
 
   return (
     <div>
-      <ScrollableContainer maxHeight={150}>
+      <ScrollableContainer
+        maxHeight={150}
+        scrollableContainer={scrollableContainer}
+      >
         <div>
           {word?.descriptions?.map((d, index) => (
-            <Description key={d.id} word={word} description={d} index={index} />
+            <Description
+              key={d.id}
+              word={word}
+              description={d}
+              index={index + 1}
+            />
           ))}
         </div>
       </ScrollableContainer>

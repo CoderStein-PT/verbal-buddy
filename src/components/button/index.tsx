@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import tw from 'tailwind-styled-components'
-import { Loading, Text } from 'components'
+import { Loading, Text, TextProps } from 'components'
 
 const sizeClasses = {
   round: 'p-2 rounded-full',
@@ -11,7 +11,7 @@ const sizeClasses = {
   icon: 'p-0.5 rounded-full'
 }
 
-const textSizeVariants = {
+const textSizeVariants: Record<string, TextProps['variant']> = {
   sm: 'subtitle',
   base: 'button',
   lg: 'button',
@@ -27,10 +27,11 @@ const colorClasses = {
   red: 'text-gray-800 bg-red-100 border border-red-300 hover:bg-red-200 dark:bg-transparent dark:text-red-500 dark:border-red-500 dark:hover:bg-red-500 dark:hover:text-white dark:hover:shadow-red-light'
 }
 
-export type ButtonProps = {
+export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   size?: keyof typeof sizeClasses
   color?: keyof typeof colorClasses
   disabled?: boolean
+  isLoading?: boolean
 }
 
 export const ButtonCore = tw.button<ButtonProps>`
@@ -40,16 +41,16 @@ export const ButtonCore = tw.button<ButtonProps>`
 `
 
 // eslint-disable-next-line
-export const Button = React.forwardRef<any, any>(
+export const Button = React.forwardRef<any, PropsWithChildren<ButtonProps>>(
   ({ children, isLoading, ...props }, ref) => (
-    <ButtonCore {...props}>
+    <ButtonCore ref={ref} {...props}>
       {isLoading ? (
         <Loading />
       ) : (
         <Text
-          color="no"
+          color="none"
           className="ease-out"
-          variant={textSizeVariants[props.size]}
+          variant={props.size ? textSizeVariants[props.size] : undefined}
         >
           {children}
         </Text>

@@ -66,13 +66,15 @@ export const SelectedWord = ({ word }: { word: WordType }) => {
   }
 
   return (
-    <div className="flex justify-between space-x-1">
+    <div className="flex items-center justify-between space-x-1">
       <div className="w-full cursor-pointer group" onClick={onClick}>
         <Text className="group-hover:text-green-500">{word.text}</Text>
       </div>
-      <Button onClick={onDeleteWord} size="icon" color="red">
-        <RiCloseFill className="w-full h-full" />
-      </Button>
+      <div className="">
+        <Button onClick={onDeleteWord} size="icon" color="red">
+          <RiCloseFill className="w-full h-full" />
+        </Button>
+      </div>
     </div>
   )
 }

@@ -41,6 +41,15 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     navigate(-1)
   }
 
+  const showBackButton = useMemo(() => {
+    if (!route) return false
+    return (
+      route.path !== '/' &&
+      route.path !== '/settings' &&
+      route.path !== '/jokes'
+    )
+  }, [route])
+
   return (
     <div>
       <div className="flex items-center px-16 pt-4 space-x-2">
@@ -48,7 +57,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <Link link={'/jokes'}>{'Jokes'}</Link>
         <Link link={'/settings'}>{'Settings'}</Link>
         <div>
-          {route?.path !== '/' && (
+          {showBackButton && (
             <Button color="gray" onClick={navigateBack}>
               <FiChevronLeft className="w-full h-full" />
             </Button>

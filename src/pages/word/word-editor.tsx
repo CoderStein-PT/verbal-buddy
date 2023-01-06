@@ -54,8 +54,10 @@ export const WordEditor = ({ word }: { word: WordType }) => {
     (w) => w.id === breadcrumbs[activeBreadcrumbIndex]
   )
 
+  if (!activeWord) return null
+
   return (
-    <div className="w-[400px] mx-auto">
+    <div>
       <Header
         {...{
           breadcrumbs,

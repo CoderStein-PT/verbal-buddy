@@ -3,7 +3,9 @@ import tw from 'tailwind-styled-components'
 
 export const InputCore = tw.input`px-2 border border-gray-400 text-white bg-gray-900 rounded-md outline-none`
 
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>
+
 // eslint-disable-next-line
-export const Input = React.forwardRef(({ className = '', ...props }, ref) => {
-  return <InputCore type="text" ref={ref} className={className} {...props} />
+export const Input = React.forwardRef<any, InputProps>(({ ...props }, ref) => {
+  return <InputCore type="text" ref={ref} {...props} />
 })

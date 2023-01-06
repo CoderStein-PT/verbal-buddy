@@ -1,18 +1,19 @@
-import { Button, Input, Separator, SeparatorSm, Text } from 'components'
-import { useStore, WordType } from 'store'
+import {
+  Button,
+  Input,
+  SeparatorSm,
+  Text,
+  ScrollableContainer,
+  useScrollableContainer
+} from 'components'
+import { CategoryType, useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useInterval } from 'usehooks-ts'
 import moment from 'moment'
-import {
-  ScrollableContainer,
-  useScrollableContainer
-} from './word/scrollable-container'
-import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
-import { Link } from 'react-router-dom'
 
 const ProgressBar = ({
   wordsLeft,
@@ -152,26 +153,20 @@ const Stats = ({ categoryId }: { categoryId: number }) => {
       {[...stats].reverse().map((stat) => (
         <div key={stat.timestamp} className="flex justify-between gap-x-6">
           <Text>{moment(stat.timestamp).format('DD.MM.YYYY HH:mm')}</Text>
-          <Text>{moment(stat.delay, 'seconds').format('mm:ss')}</Text>
+          <Text>{moment.utc(stat.delay * 1000).format('mm:ss')}</Text>
         </div>
       ))}
     </div>
   )
 }
 
-export const PracticePage = () => {
-  const categoryId = useParams<{ id: string }>().id
-
-  const category = useStore((state) =>
-    state.categories.find((c) => c.id === +categoryId)
-  )
-
+export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const [isCounting, setIsCounting] = useState(true)
   const timeoutRef = useRef<NodeJS.Timeout>()
   const words = useStore((state) => state.words)
   const practice = useStore((state) => state.practice)
   const [time, setTime] = useState(0)
-  const categoryWords = words.filter((w) => w.categoryId === +categoryId)
+  const categoryWords = words.filter((w) => w.categoryId === category.id)
   const settings = useStore((state) => state.settings)
   const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
   const [guessedAll, setGuessedAll] = useState(false)
@@ -216,7 +211,7 @@ export const PracticePage = () => {
       useStore.setState((state) => ({
         practiceStats: [
           ...state.practiceStats,
-          { timestamp: Date.now(), delay: time, categoryId: +categoryId }
+          { timestamp: Date.now(), delay: time, categoryId: category.id }
         ]
       }))
     }
@@ -273,8 +268,20 @@ export const PracticePage = () => {
         </div>
       </div>
       <div>
-        <Stats categoryId={+categoryId} />
+        <Stats categoryId={category.id} />
       </div>
     </div>
   )
+}
+
+export const PracticePage = () => {
+  const categoryId = useParams<{ id: string }>().id || -1
+
+  const category = useStore((state) =>
+    state.categories.find((c) => c.id === +categoryId)
+  )
+
+  if (!category) return null
+
+  return <PracticePageCore category={category} />
 }

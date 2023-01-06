@@ -32,6 +32,8 @@ export const useScrollableContainer = ({
   return { containerRef, scrollContainerDown }
 }
 
+export type ScrollableContainerType = ReturnType<typeof useScrollableContainer>
+
 // eslint-disable-next-line react/display-name
 export const ScrollableContainer = ({
   children,
@@ -40,7 +42,7 @@ export const ScrollableContainer = ({
 }: {
   children: React.ReactNode
   maxHeight?: number
-  scrollableContainer: ReturnType<typeof useScrollableContainer>
+  scrollableContainer?: ScrollableContainerType
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
 
@@ -71,7 +73,11 @@ export const ScrollableContainer = ({
       )}
       <div
         className="relative overflow-y-auto"
-        ref={mergeRefs([containerRef, scrollableContainer?.containerRef])}
+        ref={
+          scrollableContainer
+            ? mergeRefs([containerRef, scrollableContainer?.containerRef])
+            : containerRef
+        }
         onScroll={onScroll}
         style={{
           maxHeight: maxHeight + 'px'
