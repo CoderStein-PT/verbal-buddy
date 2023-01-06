@@ -1,13 +1,13 @@
 import {
   Button,
   Input,
-  SeparatorSm,
   Text,
   ScrollableContainer,
   useScrollableContainer,
-  Row
+  Row,
+  SeparatorFull
 } from 'components'
-import { CategoryType, useStore, WordType } from 'store'
+import { CategoryType, PracticeStatsType, useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo, useRef, useState } from 'react'
@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom'
 import { useInterval } from 'usehooks-ts'
 import moment from 'moment'
 import produce from 'immer'
+import { HiPlus } from '@react-icons/all-files/hi/HiPlus'
 
 const ProgressBar = ({
   wordsLeft,
@@ -25,13 +26,13 @@ const ProgressBar = ({
 }) => {
   return (
     <div className="flex items-center">
-      <div className="w-full h-4 bg-gray-500 rounded-md">
+      <div className="relative w-full h-5 overflow-hidden bg-gray-800 border border-gray-600 rounded-lg">
         <div
-          className="h-full bg-green-500 rounded-full"
-          style={{ width: `${(wordsLeft / wordsTotal) * 100}%` }}
+          className="relative h-full transition duration-300 origin-left bg-primary-500"
+          style={{ transform: `scaleX(${wordsLeft / wordsTotal})` }}
         />
       </div>
-      <div className="ml-2 text-xs font-semibold text-gray-700">
+      <div className="ml-2 font-semibold text-gray-700">
         <Text>
           {wordsLeft}/{wordsTotal}
         </Text>
@@ -42,10 +43,14 @@ const ProgressBar = ({
 
 export const Word = ({
   word,
-  categoryWords
+  categoryWords,
+  index,
+  category
 }: {
   word: WordType
   categoryWords: WordType[]
+  index?: number
+  category: CategoryType
 }) => {
   const isGuessed = useMemo(
     () => !!categoryWords.find((w) => w.text === word.text),
@@ -81,18 +86,72 @@ export const Word = ({
       text={word.text}
       color={isGuessed ? undefined : 'red'}
       onChange={onChangeWord}
+      index={index}
+      actions={
+        isGuessed
+          ? []
+          : [
+              {
+                icon: HiPlus,
+                title: 'Add to category',
+                onClick: () => {
+                  useStore.setState((state) =>
+                    produce(state, (draft) => {
+                      draft.words.push({
+                        id: findLastId(draft.words) + 1,
+                        text: word.text,
+                        categoryId: category.id
+                      })
+                    })
+                  )
+                }
+              }
+            ]
+      }
     />
   )
 }
 
-export const Words = ({ categoryWords }: { categoryWords: WordType[] }) => {
+export const Words = ({
+  categoryWords,
+  category
+}: {
+  categoryWords: WordType[]
+  category: CategoryType
+}) => {
   const words = useStore((state) => state.practice)
 
   return (
     <div>
-      {words.map((word) => (
-        <Word categoryWords={categoryWords} key={word.id} word={word} />
-      ))}
+      {!!words.length ? (
+        words.map((word, index) => (
+          <Word
+            categoryWords={categoryWords}
+            key={word.id}
+            word={word}
+            index={index + 1}
+            category={category}
+          />
+        ))
+      ) : (
+        <Text color="gray-light" className="text-center">
+          {'Start typing words you know 🔥'}
+        </Text>
+      )}
+    </div>
+  )
+}
+
+const StatRow = ({ stat }: { stat: PracticeStatsType }) => {
+  return (
+    <div
+      key={stat.timestamp}
+      className="flex items-center justify-between gap-x-6"
+    >
+      <Text>{moment(stat.timestamp).format('DD.MM.YYYY HH:mm')}</Text>
+      <Text variant="button">
+        {moment.utc(stat.delay * 1000).format('mm:ss')}
+      </Text>
     </div>
   )
 }
@@ -107,14 +166,14 @@ const Stats = ({ categoryId }: { categoryId: number }) => {
   return (
     <div className="flex flex-col">
       <Text variant="button">{'Stats'}</Text>
-      <SeparatorSm className="my-4" />
-
-      {[...stats].reverse().map((stat) => (
-        <div key={stat.timestamp} className="flex justify-between gap-x-6">
-          <Text>{moment(stat.timestamp).format('DD.MM.YYYY HH:mm')}</Text>
-          <Text>{moment.utc(stat.delay * 1000).format('mm:ss')}</Text>
+      <SeparatorFull className="my-2" />
+      <ScrollableContainer>
+        <div className="divide-y divide-gray-700 divide-dashed">
+          {[...stats].reverse().map((stat) => (
+            <StatRow stat={stat} key={stat.timestamp} />
+          ))}
         </div>
-      ))}
+      </ScrollableContainer>
     </div>
   )
 }
@@ -204,29 +263,36 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-[320px] mx-auto">
-        <Text variant="button">{category?.name}</Text>
-        <SeparatorSm className="my-4" />
-        <ScrollableContainer scrollableContainer={scrollableContainer}>
-          <Words categoryWords={categoryWords} />
-        </ScrollableContainer>
-        {guessedAll ? null : (
-          <Input
-            onKeyDown={onKeyDown}
-            type="text"
-            placeholder="New word..."
-            className="w-full mt-2"
-          />
-        )}
-        <div className="mt-2 ">
-          <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
-          <Text>Delay: {displayTime}</Text>
-        </div>
-        <div className="mt-4">
-          <Button onClick={resetPractice}>{'Reset'}</Button>
+      <div className="w-full pl-64">
+        <div className="w-[400px] mx-auto">
+          <div className="flex items-center justify-between">
+            <Text variant="button">{category?.name}</Text>
+            <Text variant="h4" className="text-right">
+              {displayTime}
+            </Text>
+          </div>
+          <SeparatorFull className="my-2" />
+          <ScrollableContainer scrollableContainer={scrollableContainer}>
+            <Words category={category} categoryWords={categoryWords} />
+          </ScrollableContainer>
+          {guessedAll ? null : (
+            <Input
+              onKeyDown={onKeyDown}
+              type="text"
+              placeholder="New word..."
+              autoFocus
+              className="w-full mt-2 text-2xl"
+            />
+          )}
+          <div className="mt-4">
+            <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
+          </div>
+          <div className="flex flex-col mt-2">
+            <Button onClick={resetPractice}>{'Reset'}</Button>
+          </div>
         </div>
       </div>
-      <div>
+      <div className="w-[280px] flex-shrink-0">
         <Stats categoryId={category.id} />
       </div>
     </div>
