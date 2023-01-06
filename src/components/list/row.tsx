@@ -1,4 +1,4 @@
-import { Input, Button, Text, ButtonProps } from 'components'
+import { Input, Button, Text, ButtonProps, TextProps } from 'components'
 import { useState, useRef } from 'react'
 
 const ActionButton = ({
@@ -37,7 +37,8 @@ export const Row = ({
   index,
   actions,
   ellipsis,
-  isSelected
+  isSelected,
+  color = undefined
 }: {
   text?: string
   onClick?: () => void
@@ -46,6 +47,7 @@ export const Row = ({
   actions?: ActionType[]
   ellipsis?: boolean
   isSelected?: boolean
+  color?: TextProps['color']
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -88,7 +90,7 @@ export const Row = ({
             className={`${isSelected ? '' : 'group-hover:text-green-500'} ${
               ellipsis ? 'text-ellipsis overflow-hidden whitespace-nowrap' : ''
             }`}
-            color={isSelected ? 'gray-light' : undefined}
+            color={isSelected ? 'gray-light' : color}
           >
             {text}
           </Text>
