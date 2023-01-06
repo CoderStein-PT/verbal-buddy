@@ -191,19 +191,21 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
   const [guessedAll, setGuessedAll] = useState(false)
 
+  const initialTimestamp = useRef(Date.now())
+  const [lastTypingTimestamp, setLastTypingTimestamp] = useState(Date.now())
+
   const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     setIsCounting(false)
     clearTimeout(timeoutRef.current)
+    if (isCounting) {
+      setLastTypingTimestamp(Date.now())
+    }
 
     timeoutRef.current = setTimeout(() => {
       setIsCounting(true)
     }, 1000)
-
-    if (isCounting) {
-      setDelays((delays) => [...delays, time])
-    }
 
     if (event.key !== 'Enter') return
 
@@ -220,6 +222,14 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
         { id: findLastId(state.practice) + 1, text: newWord }
       ]
     }))
+
+    if (categoryWords.find((w) => w.text === newWord)) {
+      setDelays((delays) => [
+        ...delays,
+        lastTypingTimestamp - initialTimestamp.current
+      ])
+    }
+
     event.currentTarget.value = ''
     scrollableContainer.scrollContainerDown()
 

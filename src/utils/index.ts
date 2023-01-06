@@ -14,7 +14,5 @@ export const getAverageDelay = (delays: number[]) => {
     return b
   }, 0)
 
-  console.log(delays, convertedDelays)
-
   return convertedDelays.reduce((a, b) => a + b, 0) / convertedDelays.length
 }
