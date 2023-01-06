@@ -8,7 +8,7 @@ import {
   SeparatorFull
 } from 'components'
 import { CategoryType, PracticeStatsType, useStore, WordType } from 'store'
-import { findLastId } from 'utils'
+import { findLastId, getAverageDelay } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -184,7 +184,8 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const words = useStore((state) => state.words)
   const practice = useStore((state) => state.practice)
   const [time, setTime] = useState(0)
-  const [avgDelayBetweenWords, setAvgDelayBetweenWords] = useState(0)
+  // delays to calculate average delay between typing words
+  const [delays, setDelays] = useState<number[]>([])
   const categoryWords = words.filter((w) => w.categoryId === category.id)
   const settings = useStore((state) => state.settings)
   const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
@@ -198,7 +199,11 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
     timeoutRef.current = setTimeout(() => {
       setIsCounting(true)
-    }, 500)
+    }, 1000)
+
+    if (isCounting) {
+      setDelays((delays) => [...delays, time])
+    }
 
     if (event.key !== 'Enter') return
 
@@ -227,6 +232,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
       setGuessedAll(true)
       setIsCounting(false)
       clearTimeout(timeoutRef.current)
+
       useStore.setState((state) => ({
         practiceStats: [
           ...state.practiceStats,
@@ -234,7 +240,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
             timestamp: Date.now(),
             delay: time,
             categoryId: category.id,
-            avgDelayBetweenWords
+            avgDelayBetweenWords: getAverageDelay(delays)
           }
         ]
       }))
@@ -256,19 +262,18 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
       setIsCounting(true)
     }, 0)
     setGuessedAll(false)
+    setDelays([])
   }
 
   useInterval(
     () => {
-      setTime(time + 1)
+      setTime(time + 100)
     },
-    isCounting ? 1000 : null
+    isCounting ? 100 : null
   )
 
-  const displayTime = moment.utc(time * 1000).format('mm:ss')
-  const displayAvgDelayBetweenWords = moment
-    .utc(avgDelayBetweenWords * 1000)
-    .format('mm:ss')
+  const displayTime = moment.utc(time).format('mm:ss')
+  const avgDelay = moment.utc(getAverageDelay(delays)).format('mm:ss')
 
   return (
     <div className="flex justify-center">
@@ -280,7 +285,6 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
               <Text variant="h4" className="text-right">
                 {displayTime}
               </Text>
-              {/* display a small red dot if the user is not currently typing */}
               <div
                 className={`w-2 h-2 rounded-full ${
                   isCounting ? 'bg-green-500' : 'bg-red-500'
@@ -308,7 +312,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
             <Button onClick={resetPractice}>{'Reset'}</Button>
           </div>
           <Text variant="subtitle" className="text-right">
-            Average Delay: {displayAvgDelayBetweenWords}
+            Average Delay: {avgDelay}
           </Text>
         </div>
       </div>
