@@ -68,6 +68,7 @@ export type SettingsType = {
   practiceDelayTolerance: number
   practiceCountdown: number
   practiceStartRightAway: boolean
+  guessMaxWords: number
 }
 
 export type StoreType = {
@@ -90,13 +91,15 @@ export const useStore = create(
       selectedWords: [],
       jokes: [],
       practiceStats: [],
+      guessStats: [],
       settings: {
         randomWords: 3,
         practiceMaxWords: 10,
         myPresets: [],
         practiceDelayTolerance: 1,
         practiceCountdown: 3,
-        practiceStartRightAway: false
+        practiceStartRightAway: false,
+        guessMaxWords: 10
       }
     }),
     { name: 'joke-generator' }

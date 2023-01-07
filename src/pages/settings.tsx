@@ -169,6 +169,12 @@ export const SettingsPage = () => {
     }))
   }
 
+  const onChangeGuessMaxWords = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, guessMaxWords: +e.target.value }
+    }))
+  }
+
   return (
     <div className="w-[400px] mx-auto">
       <ScrollableContainer maxHeight={680}>
@@ -185,7 +191,24 @@ export const SettingsPage = () => {
             />
             <Explanation
               title={
-                'Number of random words to select from the list to create random jokes'
+                'Number of random words to select from the list to create random jokes.'
+              }
+            />
+          </div>
+          <SeparatorFull />
+          <Text variant="button">{'Guess Games'}</Text>
+          <div className="relative flex flex-col">
+            <Label>{'Guess max words'}</Label>
+            <Input
+              min={10}
+              max={10000}
+              type="number"
+              value={settings.guessMaxWords}
+              onChange={onChangeGuessMaxWords}
+            />
+            <Explanation
+              title={
+                "Maximum number of words to play in Guess Games. Avoid practicing too many words at once if you're not ready."
               }
             />
           </div>
@@ -202,7 +225,7 @@ export const SettingsPage = () => {
             />
             <Explanation
               title={
-                "Maximum number of words to practice. This is to avoid practicing too many words at once if you're not ready"
+                "Maximum number of words to practice. Avoid practicing too many words at once if you're not ready."
               }
             />
           </div>

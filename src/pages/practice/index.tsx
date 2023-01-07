@@ -1,5 +1,4 @@
 import {
-  Button,
   Text,
   ScrollableContainer,
   useScrollableContainer,
@@ -9,7 +8,7 @@ import { CategoryType, useStore } from 'store'
 import { convertDelays, findLastId, getAverageDelay } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo, useState } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { Stats } from './stats'
 import { Words } from './words'
 import { Timer } from './timer'
