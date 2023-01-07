@@ -44,6 +44,7 @@ export type PracticeStatsType = {
   delay: number
   avgDelayBetweenWords: number
   wordsCount: number
+  incorrectWordsCount: number
 }
 
 export type SettingsType = {
