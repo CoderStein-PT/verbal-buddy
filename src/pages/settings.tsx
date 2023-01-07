@@ -5,7 +5,8 @@ import {
   Label,
   SeparatorSm,
   SeparatorFull,
-  Switch
+  Switch,
+  ScrollableContainer
 } from 'components'
 import { presets } from 'presets'
 import { PresetType } from 'presets/types'
@@ -169,90 +170,96 @@ export const SettingsPage = () => {
   }
 
   return (
-    <div className="w-[400px] mx-auto space-y-4">
-      <Text variant="button">{'Main'}</Text>
-      <div className="relative flex flex-col">
-        <Label>{'Random words selector'}</Label>
-        <Input
-          min={1}
-          max={10}
-          type="number"
-          value={settings.randomWords}
-          onChange={onChangeRandomWords}
-        />
-        <Explanation
-          title={
-            'Number of random words to select from the list to create random jokes'
-          }
-        />
-      </div>
-      <div className="relative flex flex-col">
-        <Label>{'Practice max words'}</Label>
-        <Input
-          min={10}
-          max={10000}
-          type="number"
-          value={settings.practiceMaxWords}
-          onChange={onChangePracticeMaxWords}
-        />
-        <Explanation
-          title={
-            "Maximum number of words to practice. This is to avoid practicing too many words at once if you're not ready"
-          }
-        />
-      </div>
-      <div className="relative flex flex-col">
-        <Label>{'Practice delay tolerance'}</Label>
-        <Input
-          min={0}
-          max={10}
-          step={0.1}
-          type="number"
-          value={settings.practiceDelayTolerance || 1}
-          onChange={onChangePracticeDelayTolerance}
-        />
-        <Explanation
-          title={
-            'Stops the timer when you type for this amount of seconds so stats are not affected by typing pauses'
-          }
-        />
-      </div>
-      <div className="relative flex flex-col">
-        <Label>{'Start the timer right away'}</Label>
-        <Switch
-          checked={settings.practiceStartRightAway}
-          onChange={onChangeStartRightAway}
-        />
-        <Explanation
-          title={
-            'Starts the timer right away when you start a practice session if ON'
-          }
-        />
-      </div>
-      <div className="relative flex flex-col">
-        <Label>{'Practice countdown'}</Label>
-        <Input
-          min={0}
-          max={10}
-          step={0.1}
-          type="number"
-          value={settings.practiceCountdown || 3}
-          onChange={onChangePracticeCountdown}
-        />
-        <Explanation
-          title={'Gives you a bit of time to prepare (in seconds)'}
-        />
-      </div>
-      <SeparatorFull />
-      <div className="relative">
-        <Text variant="button">{'Presets'}</Text>
-        <Explanation
-          title={
-            'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
-          }
-        />
-        <Presets />
-      </div>
+    <div className="w-[400px] mx-auto">
+      <ScrollableContainer maxHeight={680}>
+        <div className="space-y-4">
+          <Text variant="button">{'Jokes'}</Text>
+          <div className="relative flex flex-col">
+            <Label>{'Random words selector'}</Label>
+            <Input
+              min={1}
+              max={10}
+              type="number"
+              value={settings.randomWords}
+              onChange={onChangeRandomWords}
+            />
+            <Explanation
+              title={
+                'Number of random words to select from the list to create random jokes'
+              }
+            />
+          </div>
+          <SeparatorFull />
+          <Text variant="button">{'Practice'}</Text>
+          <div className="relative flex flex-col">
+            <Label>{'Practice max words'}</Label>
+            <Input
+              min={10}
+              max={10000}
+              type="number"
+              value={settings.practiceMaxWords}
+              onChange={onChangePracticeMaxWords}
+            />
+            <Explanation
+              title={
+                "Maximum number of words to practice. This is to avoid practicing too many words at once if you're not ready"
+              }
+            />
+          </div>
+          <div className="relative flex flex-col">
+            <Label>{'Practice delay tolerance'}</Label>
+            <Input
+              min={0}
+              max={10}
+              step={0.1}
+              type="number"
+              value={settings.practiceDelayTolerance || 1}
+              onChange={onChangePracticeDelayTolerance}
+            />
+            <Explanation
+              title={
+                'Stops the timer when you type for this amount of seconds so stats are not affected by typing pauses'
+              }
+            />
+          </div>
+          <div className="relative flex flex-col">
+            <Label>{'Start the timer right away'}</Label>
+            <Switch
+              checked={settings.practiceStartRightAway}
+              onChange={onChangeStartRightAway}
+            />
+            <Explanation
+              title={
+                'Starts the timer right away when you start a practice session if ON'
+              }
+            />
+          </div>
+          <div className="relative flex flex-col">
+            <Label>{'Practice countdown'}</Label>
+            <Input
+              min={0}
+              max={10}
+              step={0.1}
+              type="number"
+              value={settings.practiceCountdown || 3}
+              onChange={onChangePracticeCountdown}
+            />
+            <Explanation
+              title={'Gives you a bit of time to prepare (in seconds)'}
+            />
+          </div>
+          <SeparatorFull />
+          <div className="relative">
+            <Text variant="button">{'Presets'}</Text>
+            <Explanation
+              title={
+                'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
+              }
+            />
+            <Presets />
+          </div>
+        </div>
+      </ScrollableContainer>
     </div>
   )
 }
