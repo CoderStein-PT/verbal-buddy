@@ -152,7 +152,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   }
 
   const displayTime = moment.utc(time).format('mm:ss')
-  const displayCountdown = moment.utc(countdown * 1000).format('s')
+  const displayCountdown = moment.utc(countdown * 1000).format('ss')
 
   return (
     <div className="flex justify-center">
