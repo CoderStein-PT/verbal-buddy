@@ -86,6 +86,8 @@ export const Stats = ({ categoryId }: { categoryId: number }) => {
 
   if (!stats?.length) return null
 
+  const reversedStats = [...stats].reverse()
+
   return (
     <div className="flex flex-col">
       <Text variant="button">{'Stats'}</Text>
@@ -112,11 +114,11 @@ export const Stats = ({ categoryId }: { categoryId: number }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700 divide-dashed">
-            {[...stats].reverse().map((stat, idx) => (
+            {reversedStats.map((stat, idx) => (
               <StatRow
                 stat={stat}
                 key={stat.timestamp}
-                previousStat={stats[idx - 1]}
+                previousStat={reversedStats[idx + 1]}
               />
             ))}
           </tbody>

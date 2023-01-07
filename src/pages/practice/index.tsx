@@ -9,31 +9,22 @@ import {
 import { CategoryType, useStore } from 'store'
 import { convertDelays, findLastId, getAverageDelay } from 'utils'
 import { toast } from 'react-toastify'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { useInterval } from 'usehooks-ts'
-import moment from 'moment'
 import { Stats } from './stats'
 import { ProgressBar } from './progress-bar'
 import { Words } from './words'
 import { Timer } from './timer'
 import { Explanation } from './explanation'
+import { useGame } from './use-game'
 
 export const PracticePageCore = ({ category }: { category: CategoryType }) => {
-  const timeoutRef = useRef<NodeJS.Timeout>()
   const words = useStore((state) => state.words)
   const practice = useStore((state) => state.practice)
 
-  const [countdown, setCountdown] = useState(0)
-  const [isCounting, setIsCounting] = useState(false)
-  const [time, setTime] = useState(0)
-  const [delays, setDelays] = useState<number[]>([])
-  const [guessedAll, setGuessedAll] = useState(false)
-  const [started, setStarted] = useState(false)
-  const [pressedStart, setPressedStart] = useState(false)
-  const initialTimestamp = useRef(Date.now())
-  const [lastTypingTimestamp, setLastTypingTimestamp] = useState(Date.now())
+  const game = useGame()
 
+  const [delays, setDelays] = useState<number[]>([])
   const categoryWords = words.filter((w) => w.categoryId === category.id)
   const settings = useStore((state) => state.settings)
   const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
@@ -47,17 +38,15 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     [practice, categoryWords]
   )
 
-  const checkIfGuessedAll = () => {
+  const checkIfFinished = () => {
     const newWordsLeft = categoryWords.filter((w) =>
       useStore.getState().practice.find((p) => p.text === w.text)
     ).length
 
-    if (newWordsLeft !== goal || guessedAll) return
+    if (newWordsLeft !== goal || game.finished) return
 
+    game.finish()
     toast.success('You guessed all words!')
-    setGuessedAll(true)
-    setIsCounting(false)
-    clearTimeout(timeoutRef.current)
 
     const incorrectWordsCount = categoryWords.filter(
       (w) => !practice.find((p) => p.text === w.text)
@@ -68,7 +57,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
         ...state.practiceStats,
         {
           timestamp: Date.now(),
-          delay: time,
+          delay: game.time,
           categoryId: category.id,
           avgDelayBetweenWords: getAverageDelay(delays),
           wordsCount: goal,
@@ -80,15 +69,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   }
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    setIsCounting(false)
-    clearTimeout(timeoutRef.current)
-    if (isCounting) {
-      setLastTypingTimestamp(Date.now())
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      setIsCounting(true)
-    }, settings.practiceDelayTolerance * 1000)
+    game.onKeyDown()
 
     if (event.key !== 'Enter') return
 
@@ -107,100 +88,71 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     }))
 
     if (categoryWords.find((w) => w.text === newWord)) {
-      const newDelay = lastTypingTimestamp - initialTimestamp.current
+      const newDelay = game.lastTypingTimestamp - game.initialTimestamp.current
       setDelays((delays) => [...delays, newDelay])
     }
 
     event.currentTarget.value = ''
     scrollableContainer.scrollDown()
 
-    checkIfGuessedAll()
+    checkIfFinished()
   }
 
   const resetPractice = () => {
     useStore.setState({ practice: [] })
-    setTime(0)
-    setIsCounting(false)
-    setGuessedAll(false)
     setDelays([])
-    setStarted(false)
-    setPressedStart(false)
-    setCountdown(0)
+    game.reset()
   }
-
-  useInterval(
-    () => {
-      setTime(time + 100)
-    },
-    isCounting ? 100 : null
-  )
-
-  useInterval(
-    () => {
-      setCountdown(countdown - 1)
-
-      if (countdown === 1) {
-        setStarted(true)
-        setIsCounting(true)
-        initialTimestamp.current = Date.now()
-        setLastTypingTimestamp(Date.now())
-      }
-    },
-    pressedStart && countdown > 0 && !started ? 1000 : null
-  )
 
   const startCountdown = () => {
     resetPractice()
-    setCountdown(settings.practiceCountdown)
-    setPressedStart(true)
+    game.startCountdown()
   }
-
-  const displayCountdown = moment.utc(countdown * 1000).format('ss')
 
   return (
     <div className="flex justify-center">
       <div className="w-full pl-96">
         <div className="w-[400px] mx-auto">
           <div className="">
-            <Timer time={time} isCounting={isCounting} />
+            <Timer time={game.time} isCounting={game.isCounting} />
           </div>
           <SeparatorFull className="my-2" />
-          {started ? (
+          {game.started ? (
             <ScrollableContainer scrollableContainer={scrollableContainer}>
               <Words
-                checkIfGuessedAll={checkIfGuessedAll}
+                checkIfFinished={checkIfFinished}
                 category={category}
                 categoryWords={categoryWords}
               />
             </ScrollableContainer>
-          ) : !!countdown ? (
+          ) : !!game.countdown ? (
             <Text variant="h4" className="text-center">
-              {displayCountdown}
+              {game.displayCountdown}
             </Text>
           ) : (
             <Explanation category={category} />
           )}
-          {!pressedStart || guessedAll ? null : (
+          {!game.pressedStart || game.finished ? null : (
             <Input
-              onKeyDown={started ? onKeyDown : undefined}
+              onKeyDown={game.started ? onKeyDown : undefined}
               type="text"
               placeholder="New word..."
               autoFocus
               className="w-full mt-2 text-2xl"
             />
           )}
-          {started && (
+          {game.started && (
             <div className="mt-4">
               <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
             </div>
           )}
           <div className="flex flex-col mt-2 space-y-2">
-            {started && (
+            {game.started && (
               <Button onClick={resetPractice} color="gray">
                 {'Reset'}
               </Button>
             )}
-            {pressedStart && !guessedAll ? null : (
+            {game.pressedStart && !game.finished ? null : (
               <Button onClick={startCountdown}>{'Start'}</Button>
             )}
           </div>

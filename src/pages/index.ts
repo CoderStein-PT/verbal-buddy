@@ -18,16 +18,8 @@ export type IRoute = {
 export const routes: {
   [key: string]: IRoute
 } = {
-  word: {
-    name: 'Word',
-    path: '/word/:id',
-    component: WordPage
-  },
-  home: {
-    name: 'Home',
-    path: '/',
-    component: CategoriesPage
-  },
+  word: { name: 'Word', path: '/word/:id', component: WordPage },
+  home: { name: 'Home', path: '/', component: CategoriesPage },
   practice: {
     name: 'Practice',
     path: '/practice/:id',
@@ -38,29 +30,9 @@ export const routes: {
     path: '/category/:id',
     component: CategoryPage
   },
-  joke: {
-    name: 'New Joke',
-    path: '/jokes/new',
-    component: CreateJokePage
-  },
-  jokes: {
-    name: 'Jokes',
-    path: '/jokes',
-    component: JokesPage
-  },
-  editJoke: {
-    name: 'Edit Joke',
-    path: '/joke/:id',
-    component: EditJokePage
-  },
-  guess: {
-    name: 'Guess',
-    path: '/guess',
-    component: GuessPage
-  },
-  settings: {
-    name: 'Settings',
-    path: '/settings',
-    component: SettingsPage
-  }
+  joke: { name: 'New Joke', path: '/jokes/new', component: CreateJokePage },
+  jokes: { name: 'Jokes', path: '/jokes', component: JokesPage },
+  editJoke: { name: 'Edit Joke', path: '/joke/:id', component: EditJokePage },
+  guess: { name: 'Guess', path: '/guess', component: GuessPage },
+  settings: { name: 'Settings', path: '/settings', component: SettingsPage }
 }

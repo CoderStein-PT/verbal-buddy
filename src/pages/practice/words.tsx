@@ -5,16 +5,16 @@ import { Word } from './word'
 export const Words = ({
   categoryWords,
   category,
-  checkIfGuessedAll
+  checkIfFinished
 }: {
   categoryWords: WordType[]
   category: CategoryType
-  checkIfGuessedAll: () => void
+  checkIfFinished: () => void
 }) => {
   const words = useStore((state) => state.practice)
 
   const onWordAdded = () => {
-    checkIfGuessedAll()
+    checkIfFinished()
   }
 
   return (
