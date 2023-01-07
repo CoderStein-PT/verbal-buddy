@@ -18,16 +18,19 @@ import { ProgressBar } from './progress-bar'
 import { Words } from './words'
 
 export const PracticePageCore = ({ category }: { category: CategoryType }) => {
-  const [isCounting, setIsCounting] = useState(true)
+  const [isCounting, setIsCounting] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout>()
   const words = useStore((state) => state.words)
   const practice = useStore((state) => state.practice)
+  const [countdown, setCountdown] = useState(0)
   const [time, setTime] = useState(0)
   const [delays, setDelays] = useState<number[]>([])
   const categoryWords = words.filter((w) => w.categoryId === category.id)
   const settings = useStore((state) => state.settings)
   const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
   const [guessedAll, setGuessedAll] = useState(false)
+  const [started, setStarted] = useState(false)
+  const [pressedStart, setPressedStart] = useState(false)
 
   const initialTimestamp = useRef(Date.now())
   const [lastTypingTimestamp, setLastTypingTimestamp] = useState(Date.now())
@@ -128,7 +131,27 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     isCounting ? 100 : null
   )
 
+  useInterval(
+    () => {
+      setCountdown(countdown - 1)
+
+      if (countdown === 0) {
+        setStarted(true)
+        setIsCounting(true)
+        initialTimestamp.current = Date.now()
+        setLastTypingTimestamp(Date.now())
+      }
+    },
+    countdown > 0 ? 1000 : null
+  )
+
+  const startCountdown = () => {
+    setCountdown(settings.practiceCountdown)
+    setPressedStart(true)
+  }
+
   const displayTime = moment.utc(time).format('mm:ss')
+  const displayCountdown = moment.utc(countdown * 1000).format('ss')
 
   return (
     <div className="flex justify-center">
@@ -136,28 +159,36 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
         <div className="w-[400px] mx-auto">
           <div className="flex items-center justify-between">
             <Text variant="button">{category?.name}</Text>
-            <div className="flex items-end space-x-2">
-              <Text variant="h4" className="text-right">
-                {displayTime}
-              </Text>
-              <div
-                className={`w-2 h-2 rounded-full ${
-                  isCounting ? 'bg-green-500' : 'bg-red-500'
-                }`}
-              />
-            </div>
+            {isCounting && (
+              <div className="flex items-end space-x-2">
+                <Text variant="h4" className="text-right">
+                  {displayTime}
+                </Text>
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isCounting ? 'bg-green-500' : 'bg-red-500'
+                  }`}
+                />
+              </div>
+            )}
           </div>
           <SeparatorFull className="my-2" />
           <ScrollableContainer scrollableContainer={scrollableContainer}>
-            <Words
-              checkIfGuessedAll={checkIfGuessedAll}
-              category={category}
-              categoryWords={categoryWords}
-            />
+            {started ? (
+              <Words
+                checkIfGuessedAll={checkIfGuessedAll}
+                category={category}
+                categoryWords={categoryWords}
+              />
+            ) : (
+              <Text variant="h4" className="text-right">
+                {displayCountdown}
+              </Text>
+            )}
           </ScrollableContainer>
-          {guessedAll ? null : (
+          {!pressedStart || guessedAll ? null : (
             <Input
-              onKeyDown={onKeyDown}
+              onKeyDown={started ? onKeyDown : undefined}
               type="text"
               placeholder="New word..."
               autoFocus
@@ -168,9 +199,14 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
             <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
           </div>
           <div className="flex flex-col mt-2">
-            <Button onClick={resetPractice} color="gray">
-              {'Reset'}
-            </Button>
+            {started && (
+              <Button onClick={resetPractice} color="gray">
+                {'Reset'}
+              </Button>
+            )}
+            {pressedStart && !guessedAll ? null : (
+              <Button onClick={startCountdown}>{'Start'}</Button>
+            )}
           </div>
         </div>
       </div>

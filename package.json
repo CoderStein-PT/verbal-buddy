@@ -23,6 +23,7 @@
     "react-merge-refs": "^2.0.1",
     "react-router-dom": "^6.6.1",
     "react-toastify": "^9.1.1",
+    "react-tooltip": "^5.4.0",
     "tailwind-styled-components": "^2.2.0",
     "zustand": "^4.2.0"
   },

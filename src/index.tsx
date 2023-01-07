@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client'
 import 'tailwindcss/tailwind.css'
-import './styles/custom.css'
 import 'react-toastify/dist/ReactToastify.min.css'
+import 'react-tooltip/dist/react-tooltip.css'
+import './styles/custom.css'
 import { App } from 'app'
 
 const container = document.getElementById('root') as HTMLDivElement

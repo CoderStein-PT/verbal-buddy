@@ -1,4 +1,12 @@
-import { Text, Button, Input, Label, SeparatorSm } from 'components'
+import {
+  Text,
+  Button,
+  Input,
+  Label,
+  SeparatorSm,
+  SeparatorFull,
+  Switch
+} from 'components'
 import { presets } from 'presets'
 import { PresetType } from 'presets/types'
 import { useStore } from 'store'
@@ -6,6 +14,8 @@ import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { findLastId } from 'utils'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
+import { FaQuestionCircle } from '@react-icons/all-files/fa/FaQuestionCircle'
+import { TooltipWrapper } from 'react-tooltip'
 
 const Preset = ({
   preset,
@@ -65,6 +75,14 @@ const Preset = ({
     </div>
   )
 }
+
+const Explanation = ({ title }: { title: string }) => (
+  <div className="absolute top-0 right-0 cursor-pointer">
+    <TooltipWrapper content={title} place="right">
+      <FaQuestionCircle className="text-gray-400" />
+    </TooltipWrapper>
+  </div>
+)
 
 const Presets = () => {
   const myPresets = useStore((state) => state.settings.myPresets) || []
@@ -136,19 +154,24 @@ export const SettingsPage = () => {
     }))
   }
 
+  const onChangePracticeCountdown = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, practiceCountdown: +e.target.value }
+    }))
+  }
+
+  const onChangeStartRightAway = (checked: boolean) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, practiceStartRightAway: checked }
+    }))
+  }
+
   return (
     <div className="w-[400px] mx-auto space-y-4">
-      <div className="flex flex-col">
-        <Label>{'Practice max words'}</Label>
-        <Input
-          min={10}
-          max={10000}
-          type="number"
-          value={settings.practiceMaxWords}
-          onChange={onChangePracticeMaxWords}
-        />
-      </div>
-      <div className="flex flex-col">
+      <Text variant="button">{'Main'}</Text>
+      <div className="relative flex flex-col">
         <Label>{'Random words selector'}</Label>
         <Input
           min={1}
@@ -157,13 +180,29 @@ export const SettingsPage = () => {
           value={settings.randomWords}
           onChange={onChangeRandomWords}
         />
-      </div>
-      <div className="flex flex-col">
-        <Label>
-          {
-            'Practice delay tolerance (stop the timer when you type for this amount of seconds)'
+        <Explanation
+          title={
+            'Number of random words to select from the list to create random jokes'
           }
-        </Label>
+        />
+      </div>
+      <div className="relative flex flex-col">
+        <Label>{'Practice max words'}</Label>
+        <Input
+          min={10}
+          max={10000}
+          type="number"
+          value={settings.practiceMaxWords}
+          onChange={onChangePracticeMaxWords}
+        />
+        <Explanation
+          title={
+            "Maximum number of words to practice. This is to avoid practicing too many words at once if you're not ready"
+          }
+        />
+      </div>
+      <div className="relative flex flex-col">
+        <Label>{'Practice delay tolerance'}</Label>
         <Input
           min={0}
           max={10}
@@ -172,10 +211,46 @@ export const SettingsPage = () => {
           value={settings.practiceDelayTolerance || 1}
           onChange={onChangePracticeDelayTolerance}
         />
+        <Explanation
+          title={
+            'Stops the timer when you type for this amount of seconds so stats are not affected by typing pauses'
+          }
+        />
       </div>
-      <SeparatorSm />
-      <div>
+      <div className="relative flex flex-col">
+        <Label>{'Start the timer right away'}</Label>
+        <Switch
+          checked={settings.practiceStartRightAway}
+          onChange={onChangeStartRightAway}
+        />
+        <Explanation
+          title={
+            'Starts the timer right away when you start a practice session if ON'
+          }
+        />
+      </div>
+      <div className="relative flex flex-col">
+        <Label>{'Practice countdown'}</Label>
+        <Input
+          min={0}
+          max={10}
+          step={0.1}
+          type="number"
+          value={settings.practiceCountdown || 3}
+          onChange={onChangePracticeCountdown}
+        />
+        <Explanation
+          title={'Gives you a bit of time to prepare (in seconds)'}
+        />
+      </div>
+      <SeparatorFull />
+      <div className="relative">
         <Text variant="button">{'Presets'}</Text>
+        <Explanation
+          title={
+            'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
+          }
+        />
         <Presets />
       </div>
     </div>

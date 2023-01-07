@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { routes } from './pages'
+import { routes, IRoute } from './pages'
 import { Layout } from 'components'
 
-const Page = ({ route }) => {
+const Page = ({ route }: { route: IRoute }) => {
   return <route.component />
 }
 
