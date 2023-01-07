@@ -5,7 +5,8 @@ import {
   Text,
   ScrollableContainer,
   ScrollableContainerType,
-  useScrollableContainer
+  useScrollableContainer,
+  Button
 } from 'components'
 import { useStore, CategoryType } from 'store'
 import { findLastId } from 'utils'
@@ -13,7 +14,7 @@ import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const Category = ({ category }: { category: CategoryType }) => {
   const navigate = useNavigate()
@@ -81,11 +82,23 @@ export const Categories = ({
   scrollableContainer: ScrollableContainerType
 }) => {
   const categories = useStore((state) => state.categories)
+
   return (
     <ScrollableContainer scrollableContainer={scrollableContainer}>
-      {categories.map((category) => (
-        <Category key={category.id} category={category} />
-      ))}
+      {categories?.length ? (
+        categories.map((category) => (
+          <Category key={category.id} category={category} />
+        ))
+      ) : (
+        <div className="flex flex-col justify-center space-y-4">
+          <Text color="gray-light" variant="h6" className="text-center">
+            {'No categories yet 🧐'}
+          </Text>
+          <Link to="/settings" className="flex flex-col w-full">
+            <Button>{'Use presets'}</Button>
+          </Link>
+        </div>
+      )}
     </ScrollableContainer>
   )
 }

@@ -3,16 +3,47 @@ export const findLastId = (array: any[]) => {
   return Math.max(...array.map((item) => item.id))
 }
 
-export const getAverageDelay = (delays: number[]) => {
+export const convertDelays = (delays: number[]) => {
   const convertedDelays: number[] = []
 
-  if (!delays.length) return 0
+  if (!delays.length) return []
 
   delays.reduce((a, b) => {
     convertedDelays.push(b - a)
 
     return b
   }, 0)
+
+  return convertedDelays
+}
+
+// if the graph total points number exceeds the maxPoints, it will return a new graph with reduced number of points but with the same shape
+export const capGraphPointsFrequency = (
+  // the delays is already converted
+  delays: number[],
+  maxPoints: number
+) => {
+  if (!delays.length) return []
+
+  const pointsFrequency = Math.ceil(delays.length / maxPoints)
+
+  const cappedDelays: number[] = []
+
+  for (let i = 0; i < delays.length; i += pointsFrequency) {
+    const pointsToAverage = delays.slice(i, i + pointsFrequency)
+    const average =
+      pointsToAverage.reduce((a, b) => a + b, 0) / pointsToAverage.length
+
+    cappedDelays.push(average)
+  }
+
+  return cappedDelays
+}
+
+export const getAverageDelay = (delays: number[]) => {
+  const convertedDelays = convertDelays(delays)
+
+  if (!delays.length) return 0
 
   return convertedDelays.reduce((a, b) => a + b, 0) / convertedDelays.length
 }

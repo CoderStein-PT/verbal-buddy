@@ -45,6 +45,7 @@ export type PracticeStatsType = {
   avgDelayBetweenWords: number
   wordsCount: number
   incorrectWordsCount: number
+  delays: number[]
 }
 
 export type SettingsType = {
@@ -77,7 +78,7 @@ export const useStore = create(
       practiceStats: [],
       settings: {
         randomWords: 3,
-        practiceMaxWords: 50,
+        practiceMaxWords: 10,
         myPresets: [],
         practiceDelayTolerance: 1,
         practiceCountdown: 3,

@@ -7,7 +7,7 @@ import {
   SeparatorFull
 } from 'components'
 import { CategoryType, useStore } from 'store'
-import { findLastId, getAverageDelay } from 'utils'
+import { convertDelays, findLastId, getAverageDelay } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
@@ -69,7 +69,8 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
           categoryId: category.id,
           avgDelayBetweenWords: getAverageDelay(delays),
           wordsCount: goal,
-          incorrectWordsCount: incorrectWordsCount
+          incorrectWordsCount: incorrectWordsCount,
+          delays: convertDelays(delays)
         }
       ]
     }))
@@ -156,21 +157,19 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full pl-64">
+      <div className="w-full pl-96">
         <div className="w-[400px] mx-auto">
           <div className="flex items-center justify-end">
-            {
-              <div className="relative flex items-end pl-2 pr-3 space-x-2 border border-gray-700 rounded-xl">
-                <Text variant="h4" className="text-right">
-                  {displayTime}
-                </Text>
-                <div
-                  className={`w-2 h-2 rounded-full absolute bottom-1 right-1 ${
-                    isCounting ? 'bg-green-500' : 'bg-red-500'
-                  }`}
-                />
-              </div>
-            }
+            <div className="relative flex items-end pl-2 pr-3 space-x-2 border border-gray-700 rounded-xl">
+              <Text variant="h4" className="text-right">
+                {displayTime}
+              </Text>
+              <div
+                className={`w-2 h-2 rounded-full absolute bottom-1 right-1 ${
+                  isCounting ? 'bg-green-500' : 'bg-red-500'
+                }`}
+              />
+            </div>
           </div>
           <SeparatorFull className="my-2" />
           {started ? (
@@ -271,7 +270,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
           </div>
         </div>
       </div>
-      <div className="w-[400px] flex-shrink-0">
+      <div className="w-[420px] flex-shrink-0">
         <Stats categoryId={category.id} />
       </div>
     </div>

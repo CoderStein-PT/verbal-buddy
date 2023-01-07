@@ -1,7 +1,34 @@
 import { Text, ScrollableContainer, SeparatorFull, TextProps } from 'components'
 import { PracticeStatsType, useStore } from 'store'
-import { BetterOrWorse, getIsBetterOrWorse } from 'utils'
+import {
+  BetterOrWorse,
+  capGraphPointsFrequency,
+  getIsBetterOrWorse
+} from 'utils'
 import moment from 'moment'
+import { BarChart, Bar, ResponsiveContainer } from 'recharts'
+
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: { position: 'top' as const }
+  }
+}
+
+const DelayGraph = ({ delays }: { delays: number[] }) => {
+  const data = capGraphPointsFrequency(delays, 12).map((d, idx) => ({
+    name: idx,
+    pv: d
+  }))
+
+  return (
+    <ResponsiveContainer width={100} height={20}>
+      <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+        <Bar dataKey="pv" fill="rgb(70,80,100)" barSize={10} />
+      </BarChart>
+    </ResponsiveContainer>
+  )
+}
 
 const StatRow = ({
   stat,
@@ -32,6 +59,9 @@ const StatRow = ({
       <td className="flex items-center space-x-1">
         <Text>{moment(stat.timestamp).format('DD.MM.YYYY')}</Text>
         <Text variant="subtitle">{moment(stat.timestamp).format('HH:mm')}</Text>
+      </td>
+      <td className="text-right">
+        {!!stat.delays && <DelayGraph delays={stat.delays} />}
       </td>
       <td className="text-right">
         <Text color={progressColors[avgProgress]} variant="subtitle">
@@ -66,6 +96,9 @@ export const Stats = ({ categoryId }: { categoryId: number }) => {
             <tr>
               <th className="text-left">
                 <Text variant="subtitle">{'Date'}</Text>
+              </th>
+              <th className="text-left">
+                <Text variant="subtitle">{'Avg Graph'}</Text>
               </th>
               <th className="text-right">
                 <Text variant="subtitle">{'Avg'}</Text>
