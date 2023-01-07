@@ -23,7 +23,7 @@ const ActionButton = ({
   )
 }
 
-type ActionType = {
+export type ActionType = {
   title?: string
   onClick?: 'edit' | (() => void)
   icon: React.FunctionComponent

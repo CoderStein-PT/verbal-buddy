@@ -5,13 +5,14 @@ import {
   Text,
   ScrollableContainer,
   ScrollableContainerType,
-  useScrollableContainer
+  useScrollableContainer,
+  Button
 } from 'components'
 import { CategoryType, useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { useNavigate } from 'react-router-dom'
 
@@ -81,19 +82,19 @@ export const Words = ({
 }
 
 export const CategoryPage = () => {
-  const categoryId = useParams<{ id: string }>().id
+  const categoryId = useParams<{ id: string }>().id || -1
   const categories = useStore((state) => state.categories)
 
-  if (!categoryId) return null
   const category = categories.find((c) => c.id === +categoryId)
 
-  if (!category) return null
+  if (!category) return <Navigate to="/" />
 
   return <CategoryPageCore category={category} />
 }
 
 export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
+  const navigate = useNavigate()
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
@@ -116,7 +117,19 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
 
     useStore.setState({ words: [...words, newWord] })
     event.currentTarget.value = ''
-    scrollableContainer.scrollContainerDown()
+    scrollableContainer.scrollDown()
+  }
+
+  const resetCategoryWords = () => {
+    if (!window.confirm('Are you sure?')) return
+
+    useStore.setState((s) => ({
+      words: s.words.filter((w) => w.categoryId !== category.id)
+    }))
+  }
+
+  const onPracticeClick = () => {
+    navigate(`/practice/${category.id}`)
   }
 
   return (
@@ -131,9 +144,16 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
       <Input
         onKeyDown={onKeyDown}
         type="text"
+        autoFocus
         placeholder="New word..."
         className="w-full mt-2"
       />
+      <div className="flex justify-end mt-2 space-x-2">
+        <Button onClick={onPracticeClick}>{'Practice'}</Button>
+        <Button color="gray" onClick={resetCategoryWords}>
+          {'Reset'}
+        </Button>
+      </div>
     </div>
   )
 }

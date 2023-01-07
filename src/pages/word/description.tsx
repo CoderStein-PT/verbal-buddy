@@ -121,7 +121,7 @@ export const Descriptions = ({
     )
 
     event.currentTarget.value = ''
-    scrollableContainer.scrollContainerDown()
+    scrollableContainer.scrollDown()
   }
 
   return (

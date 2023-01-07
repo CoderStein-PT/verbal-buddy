@@ -10,7 +10,7 @@ import { CategoryType, useStore } from 'store'
 import { findLastId, getAverageDelay } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { useInterval } from 'usehooks-ts'
 import moment from 'moment'
 import { Stats } from './stats'
@@ -105,7 +105,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     }
 
     event.currentTarget.value = ''
-    scrollableContainer.scrollContainerDown()
+    scrollableContainer.scrollDown()
 
     checkIfGuessedAll()
   }
@@ -168,7 +168,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
             <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
           </div>
           <div className="flex flex-col mt-2">
-            <Button onClick={resetPractice}>{'Reset'}</Button>
+            <Button onClick={resetPractice} color="gray">
+              {'Reset'}
+            </Button>
           </div>
         </div>
       </div>
@@ -186,7 +188,27 @@ export const PracticePage = () => {
     state.categories.find((c) => c.id === +categoryId)
   )
 
-  if (!category) return null
+  const categoryWords = useStore((state) =>
+    state.words.filter((w) => w.categoryId === +categoryId)
+  )
+
+  if (!category) return <Navigate to="/" />
+
+  if (!categoryWords.length) {
+    return (
+      <div className="text-center">
+        <div>
+          <Text variant="h4">{'No words to practice'}</Text>
+          <Text>{'To practice, add some words to the category'}</Text>
+          <div className="flex justify-center mt-2">
+            <Link to={`/category/${categoryId}`}>
+              <Button className="ml-2">{'Add words'}</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return <PracticePageCore category={category} />
 }

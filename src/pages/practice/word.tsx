@@ -1,10 +1,11 @@
-import { Row } from 'components'
+import { ActionType, Row } from 'components'
 import { CategoryType, useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo } from 'react'
 import produce from 'immer'
 import { HiPlus } from '@react-icons/all-files/hi/HiPlus'
+import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 
 export const Word = ({
   word,
@@ -58,8 +59,14 @@ export const Word = ({
         })
       })
     )
-    onWordAdded()
+    setTimeout(() => {
+      onWordAdded()
+    }, 100)
   }
+
+  const actions: ActionType[] = !isGuessed
+    ? [{ icon: HiPlus, title: 'Add to category', onClick: onAddWord }]
+    : []
 
   return (
     <Row
@@ -67,11 +74,10 @@ export const Word = ({
       color={isGuessed ? undefined : 'red'}
       onChange={onChangeWord}
       index={index}
-      actions={
-        isGuessed
-          ? []
-          : [{ icon: HiPlus, title: 'Add to category', onClick: onAddWord }]
-      }
+      actions={[
+        ...actions,
+        { icon: FiEdit2, title: 'Edit word', onClick: 'edit' }
+      ]}
     />
   )
 }

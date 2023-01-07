@@ -14,7 +14,7 @@ export const useScrollableContainer = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const scrollContainerDown = () => {
+  const scrollDown = () => {
     setTimeout(() => {
       containerRef.current?.scrollTo({
         top: containerRef.current.scrollHeight,
@@ -26,10 +26,10 @@ export const useScrollableContainer = ({
   useEffect(() => {
     if (!scrollOnLoad) return
 
-    scrollContainerDown()
+    scrollDown()
   }, [scrollOnLoad])
 
-  return { containerRef, scrollContainerDown }
+  return { containerRef, scrollDown }
 }
 
 export type ScrollableContainerType = ReturnType<typeof useScrollableContainer>

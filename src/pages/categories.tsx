@@ -113,7 +113,7 @@ export const CategoriesPage = () => {
         ]
       }))
       event.currentTarget.value = ''
-      scrollableContainer.scrollContainerDown()
+      scrollableContainer.scrollDown()
     }
   }
 
