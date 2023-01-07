@@ -1,6 +1,5 @@
 import {
   Button,
-  Input,
   Text,
   ScrollableContainer,
   useScrollableContainer,
@@ -12,11 +11,12 @@ import { toast } from 'react-toastify'
 import { useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Stats } from './stats'
-import { ProgressBar } from './progress-bar'
 import { Words } from './words'
 import { Timer } from './timer'
 import { Explanation } from './explanation'
 import { useGame } from './use-game'
+import { Footer } from './footer'
+import { Placeholder } from './placeholder'
 
 export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const words = useStore((state) => state.words)
@@ -76,16 +76,15 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     const newWord = event.currentTarget.value
 
     if (!newWord) return toast.error('Word cannot be empty')
+    const practice = useStore.getState().practice
 
-    if (useStore.getState().practice.find((w) => w.text === newWord))
+    if (practice.find((w) => w.text === newWord))
       return toast.error('Word already exists')
 
-    useStore.setState((state) => ({
-      practice: [
-        ...(state.practice || []),
-        { id: findLastId(state.practice) + 1, text: newWord }
-      ]
-    }))
+    useStore.setState(() => {
+      const newPractice = { id: findLastId(practice) + 1, text: newWord }
+      return { practice: [...(practice || []), newPractice] }
+    })
 
     if (categoryWords.find((w) => w.text === newWord)) {
       const newDelay = game.lastTypingTimestamp - game.initialTimestamp.current
@@ -132,30 +131,14 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
           ) : (
             <Explanation category={category} />
           )}
-          {!game.pressedStart || game.finished ? null : (
-            <Input
-              onKeyDown={game.started ? onKeyDown : undefined}
-              type="text"
-              placeholder="New word..."
-              autoFocus
-              className="w-full mt-2 text-2xl"
-            />
-          )}
-          {game.started && (
-            <div className="mt-4">
-              <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
-            </div>
-          )}
-          <div className="flex flex-col mt-2 space-y-2">
-            {game.started && (
-              <Button onClick={resetPractice} color="gray">
-                {'Reset'}
-              </Button>
-            )}
-            {game.pressedStart && !game.finished ? null : (
-              <Button onClick={startCountdown}>{'Start'}</Button>
-            )}
-          </div>
+          <Footer
+            game={game}
+            startCountdown={startCountdown}
+            goal={goal}
+            wordsLeft={wordsLeft}
+            onKeyDown={onKeyDown}
+            resetPractice={resetPractice}
+          />
         </div>
       </div>
       <div className="w-[420px] flex-shrink-0">
@@ -178,21 +161,7 @@ export const PracticePage = () => {
 
   if (!category) return <Navigate to="/" />
 
-  if (!categoryWords.length) {
-    return (
-      <div className="text-center">
-        <div>
-          <Text variant="h4">{'No words to practice'}</Text>
-          <Text>{'To practice, add some words to the category'}</Text>
-          <div className="flex justify-center mt-2">
-            <Link to={`/category/${categoryId}`}>
-              <Button className="ml-2">{'Add words'}</Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  if (!categoryWords.length) return <Placeholder categoryId={category.id} />
 
   return <PracticePageCore category={category} />
 }
