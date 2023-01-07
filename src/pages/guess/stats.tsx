@@ -1,5 +1,5 @@
 import { Text, ScrollableContainer, SeparatorFull, TextProps } from 'components'
-import { PracticeStatsType, useStore } from 'store'
+import { GuessDelayType, GuessStats, useStore } from 'store'
 import {
   BetterOrWorse,
   capGraphPointsFrequency,
@@ -8,8 +8,11 @@ import {
 import moment from 'moment'
 import { BarChart, Bar, ResponsiveContainer } from 'recharts'
 
-const DelayGraph = ({ delays }: { delays: number[] }) => {
-  const data = capGraphPointsFrequency(delays, 12).map((d, idx) => ({
+const DelayGraph = ({ delays }: { delays: GuessDelayType[] }) => {
+  const data = capGraphPointsFrequency(
+    delays.map((d) => d.delay),
+    12
+  ).map((d, idx) => ({
     name: idx,
     pv: d
   }))
@@ -27,10 +30,10 @@ const StatRow = ({
   stat,
   previousStat
 }: {
-  stat: PracticeStatsType
-  previousStat: PracticeStatsType | undefined
+  stat: GuessStats
+  previousStat: GuessStats | undefined
 }) => {
-  const time = moment.utc(stat.delay).format('mm:ss')
+  const time = moment.utc(stat.totalTime).format('mm:ss')
   const avg = moment.utc(stat.avgDelayBetweenWords).format('mm:ss')
 
   const progressColors: Record<BetterOrWorse, TextProps['color']> = {
@@ -45,7 +48,11 @@ const StatRow = ({
     0.05
   )
 
-  const timeProgress = getIsBetterOrWorse(stat.delay, previousStat?.delay, 0.05)
+  const timeProgress = getIsBetterOrWorse(
+    stat.totalTime,
+    previousStat?.totalTime,
+    0.05
+  )
 
   return (
     <tr key={stat.timestamp}>
@@ -72,10 +79,8 @@ const StatRow = ({
     </tr>
   )
 }
-export const Stats = ({ categoryId }: { categoryId: number }) => {
-  const stats = useStore((state) =>
-    state.practiceStats.filter((s) => s.categoryId === categoryId)
-  )
+export const Stats = () => {
+  const stats = useStore((state) => state.guessStats)
 
   if (!stats?.length) return null
 

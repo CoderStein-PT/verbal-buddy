@@ -1,20 +1,13 @@
-import {
-  Button,
-  Row,
-  SeparatorFull,
-  Text,
-  ScrollableContainer
-} from 'components'
-import { useStore, JokeType, DescriptionType, WordType } from 'store'
-import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { useNavigate } from 'react-router-dom'
-import { useMemo, useRef, useState } from 'react'
-import { getAverageDelay, getRandomWord } from 'utils'
+import { Row, Text, ScrollableContainer } from 'components'
+import { useStore, DescriptionType, WordType, GuessDelayType } from 'store'
+import { useMemo, useState } from 'react'
+import { convertDelays, getAverageDelay, getRandomWord } from 'utils'
 import { Timer } from 'pages/practice/timer'
 import { Placeholder } from './placeholder'
 import { Footer } from 'pages/practice/footer'
 import { useGame } from 'pages/practice/use-game'
 import { Explanation } from './explanation'
+import { Stats } from './stats'
 
 const Description = ({
   description,
@@ -50,7 +43,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [guessedWords, setGuessedWords] = useState<WordType[]>([])
   const goal = Math.min(words.length, settings.guessMaxWords)
   const game = useGame()
-  const [delays, setDelays] = useState<number[]>([])
+  const [delays, setDelays] = useState<GuessDelayType[]>([])
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     game.onKeyDown()
@@ -64,7 +57,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     setGuessedWords(newGuessedWords)
 
     event.currentTarget.value = ''
-    setDelays((prev) => [...prev, game.time])
+    const newDelay = game.lastTypingTimestamp - game.initialTimestamp.current
+    const newDelays = [...delays, { delay: newDelay, word }]
+    setDelays(newDelays)
 
     if (newGuessedWords.length !== goal) {
       const newRandomWord = getRandomWord({
@@ -77,6 +72,15 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
       return
     }
 
+    const flattenedDelays = newDelays.map((d) => d.delay)
+
+    const convertedDelays = convertDelays(flattenedDelays)
+
+    const newConvertedDelays = convertedDelays.map((delay, index) => ({
+      delay,
+      word: newDelays[index].word
+    }))
+
     game.finish()
     useStore.setState({
       guessStats: [
@@ -84,9 +88,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
         {
           timestamp: Date.now(),
           totalTime: game.time,
-          avgDelayBetweenWords: getAverageDelay(delays),
+          avgDelayBetweenWords: getAverageDelay(flattenedDelays),
           wordsCount: newGuessedWords.length,
-          delays: newGuessedWords.map((word, i) => ({ delay: delays[i], word }))
+          delays: newConvertedDelays
         }
       ]
     })
@@ -104,29 +108,36 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   }
 
   return (
-    <div className="mx-auto w-[600px]">
-      <div className="flex justify-end">
-        <Timer time={2000} />
+    <div className="flex justify-center">
+      <div className="w-full pl-96">
+        <div className="w-[400px] mx-auto">
+          <div className="flex justify-end">
+            <Timer time={game.time} isCounting={game.isCounting} />
+          </div>
+          {game.started ? (
+            <ScrollableContainer>
+              <Descriptions word={word} />
+            </ScrollableContainer>
+          ) : !!game.countdown ? (
+            <Text variant="h4" className="text-center">
+              {game.displayCountdown}
+            </Text>
+          ) : (
+            <Explanation />
+          )}
+          <Footer
+            game={game}
+            goal={goal}
+            onChange={onChange}
+            resetPractice={resetPractice}
+            wordsLeft={guessedWords.length}
+            startCountdown={startCountdown}
+          />
+        </div>
       </div>
-      {game.started ? (
-        <ScrollableContainer>
-          <Descriptions word={word} />
-        </ScrollableContainer>
-      ) : !!game.countdown ? (
-        <Text variant="h4" className="text-center">
-          {game.displayCountdown}
-        </Text>
-      ) : (
-        <Explanation />
-      )}
-      <Footer
-        game={game}
-        goal={goal}
-        onChange={onChange}
-        resetPractice={resetPractice}
-        wordsLeft={guessedWords.length}
-        startCountdown={startCountdown}
-      />
+      <div className="w-[420px] flex-shrink-0">
+        <Stats />
+      </div>
     </div>
   )
 }
