@@ -48,6 +48,19 @@ export type PracticeStatsType = {
   delays: number[]
 }
 
+export type GuessDelayType = {
+  delay: number
+  word: WordType
+}
+
+export type GuessStats = {
+  timestamp: number
+  totalTime: number
+  avgDelayBetweenWords: number
+  wordsCount: number
+  delays: GuessDelayType[]
+}
+
 export type SettingsType = {
   randomWords: number
   practiceMaxWords: number
@@ -64,6 +77,7 @@ export type StoreType = {
   selectedWords: WordType[]
   jokes: JokeType[]
   practiceStats: PracticeStatsType[]
+  guessStats: GuessStats[]
   settings: SettingsType
 }
 

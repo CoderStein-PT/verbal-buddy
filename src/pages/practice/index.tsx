@@ -16,24 +16,27 @@ import moment from 'moment'
 import { Stats } from './stats'
 import { ProgressBar } from './progress-bar'
 import { Words } from './words'
+import { Timer } from './timer'
+import { Explanation } from './explanation'
 
 export const PracticePageCore = ({ category }: { category: CategoryType }) => {
-  const [isCounting, setIsCounting] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout>()
   const words = useStore((state) => state.words)
   const practice = useStore((state) => state.practice)
+
   const [countdown, setCountdown] = useState(0)
+  const [isCounting, setIsCounting] = useState(false)
   const [time, setTime] = useState(0)
   const [delays, setDelays] = useState<number[]>([])
-  const categoryWords = words.filter((w) => w.categoryId === category.id)
-  const settings = useStore((state) => state.settings)
-  const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
   const [guessedAll, setGuessedAll] = useState(false)
   const [started, setStarted] = useState(false)
   const [pressedStart, setPressedStart] = useState(false)
-
   const initialTimestamp = useRef(Date.now())
   const [lastTypingTimestamp, setLastTypingTimestamp] = useState(Date.now())
+
+  const categoryWords = words.filter((w) => w.categoryId === category.id)
+  const settings = useStore((state) => state.settings)
+  const goal = Math.min(categoryWords.length, settings.practiceMaxWords)
 
   const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
 
@@ -152,24 +155,14 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     setPressedStart(true)
   }
 
-  const displayTime = moment.utc(time).format('mm:ss')
   const displayCountdown = moment.utc(countdown * 1000).format('ss')
 
   return (
     <div className="flex justify-center">
       <div className="w-full pl-96">
         <div className="w-[400px] mx-auto">
-          <div className="flex items-center justify-end">
-            <div className="relative flex items-end pl-2 pr-3 space-x-2 border border-gray-700 rounded-xl">
-              <Text variant="h4" className="text-right">
-                {displayTime}
-              </Text>
-              <div
-                className={`w-2 h-2 rounded-full absolute bottom-1 right-1 ${
-                  isCounting ? 'bg-green-500' : 'bg-red-500'
-                }`}
-              />
-            </div>
+          <div className="">
+            <Timer time={time} isCounting={isCounting} />
           </div>
           <SeparatorFull className="my-2" />
           {started ? (
@@ -185,64 +178,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
               {displayCountdown}
             </Text>
           ) : (
-            <div className="px-4">
-              <Text variant="button" className="text-center">
-                {category.name}
-              </Text>
-              <Text color="gray-light" className="text-center">
-                {
-                  'Type the words you remember from this category as fast as you can! 🔥'
-                }
-              </Text>
-              <SeparatorFull className="my-2" />
-              <div>
-                <ul className="pl-8 text-white list-disc">
-                  <li>
-                    <Text
-                      color="gray-light"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          'After typing each word press <b>Enter</b> to add it to the list.'
-                      }}
-                    />
-                  </li>
-                  <li>
-                    <Text
-                      color="gray-light"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          "You'll see the stats on the right after you guess all the words. Avg is the most important metric as it shows how much time you think between each word on average. Your goal is to improve it over time."
-                      }}
-                    />
-                  </li>
-                  <li>
-                    <Text color="gray-light">
-                      {
-                        'If you type a word that is not in this category, it will appear as red (mistake) in the list.'
-                      }
-                    </Text>
-                  </li>
-                  <li>
-                    <Text
-                      color="gray-light"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          'The timer counts only the time you spend thinking about the words, not the time you spend typing them. The red dot indicates that the timer is paused.'
-                      }}
-                    />
-                  </li>
-                  <li>
-                    <Text
-                      color="gray-light"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          "If you think the word you typed is correct, but it's not in the list, you can hover over it and click the <b>+</b> button to add it to the list. Also you can correct it by clicking the 'edit' button."
-                      }}
-                    />
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <Explanation category={category} />
           )}
           {!pressedStart || guessedAll ? null : (
             <Input

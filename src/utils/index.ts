@@ -1,3 +1,5 @@
+import { WordType } from 'store'
+
 export const findLastId = (array: any[]) => {
   if (array.length === 0) return 0
   return Math.max(...array.map((item) => item.id))
@@ -65,4 +67,10 @@ export const getIsBetterOrWorse = (
   if (next < prev) return 'worse'
 
   return 'same'
+}
+
+export const getRandomWord = ({ words }: { words: WordType[] }) => {
+  const randomIndex = Math.floor(Math.random() * words.length)
+
+  return words[randomIndex]
 }

@@ -6,6 +6,7 @@ import { EditJokePage } from './edit-joke'
 import { SettingsPage } from './settings'
 import { PracticePage } from './practice'
 import { WordPage } from './word'
+import { GuessPage } from './guess'
 
 export type IRoute = {
   name: string
@@ -51,6 +52,11 @@ export const routes: {
     name: 'Edit Joke',
     path: '/joke/:id',
     component: EditJokePage
+  },
+  guess: {
+    name: 'Guess',
+    path: '/guess',
+    component: GuessPage
   },
   settings: {
     name: 'Settings',
