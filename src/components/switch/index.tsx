@@ -8,7 +8,7 @@ export const Switch = ({
 }: {
   checked: boolean
   onChange: (checked: boolean) => void
-  title: string
+  title?: string
 }) => (
   <SwitchBase
     checked={checked}

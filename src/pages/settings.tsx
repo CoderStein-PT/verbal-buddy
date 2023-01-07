@@ -32,6 +32,7 @@ const Preset = ({
       ...state,
       ...preset.data,
       practiceStats: [],
+      guessStats: [],
       selectedWords: []
     }))
     toast.success('Preset applied!')

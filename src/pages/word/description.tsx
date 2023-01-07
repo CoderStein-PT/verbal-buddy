@@ -83,11 +83,13 @@ const Description = ({
 export const Descriptions = ({
   word,
   height,
-  maxHeight
+  maxHeight,
+  keys = 'descriptions'
 }: {
   word: WordType
   height?: number
   maxHeight?: number
+  keys?: 'descriptions' | 'opposites'
 }) => {
   const scrollableContainer = useScrollableContainer({})
 
@@ -112,17 +114,19 @@ export const Descriptions = ({
       produce(s, (state) => {
         const wordIndex = state.words.findIndex((w) => w.id === +word.id)
         const currentWord = state.words[wordIndex]
-        const descriptions = currentWord.descriptions
-        const id = findLastId(currentWord.descriptions || []) + 1
+        const descriptions = currentWord[keys]
+        const id = findLastId(currentWord[keys] || []) + 1
         const newDescription = { id, text }
 
-        currentWord.descriptions = [...(descriptions || []), newDescription]
+        currentWord[keys] = [...(descriptions || []), newDescription]
       })
     )
 
     event.currentTarget.value = ''
     scrollableContainer.scrollDown()
   }
+
+  const descriptions = word[keys]
 
   return (
     <div>
@@ -133,8 +137,8 @@ export const Descriptions = ({
           scrollableContainer={scrollableContainer}
         >
           <div>
-            {word.descriptions?.length ? (
-              word.descriptions.map((d, index) => (
+            {descriptions?.length ? (
+              descriptions.map((d, index) => (
                 <Description
                   key={d.id}
                   word={word}

@@ -113,6 +113,13 @@ export const WordEditor = ({
               </Button>
             )}
           </Tab>
+          <Tab as={React.Fragment}>
+            {({ selected }) => (
+              <Button size="sm" color={selected ? 'gray' : undefined}>
+                {'Opposite words'}
+              </Button>
+            )}
+          </Tab>
         </Tab.List>
         <SeparatorFull className="my-2" />
         <Tab.Panels>
@@ -129,6 +136,14 @@ export const WordEditor = ({
               maxHeight={maxHeight}
               onWordClick={onWordClick}
               word={activeWord}
+            />
+          </Tab.Panel>
+          <Tab.Panel>
+            <Descriptions
+              height={height}
+              maxHeight={maxHeight}
+              word={activeWord}
+              keys="opposites"
             />
           </Tab.Panel>
         </Tab.Panels>

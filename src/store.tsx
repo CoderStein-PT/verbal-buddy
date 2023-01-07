@@ -29,6 +29,7 @@ export type WordType = {
   id: number
   text: string
   descriptions?: DescriptionType[]
+  opposites?: DescriptionType[]
   relatedWords?: RelatedWordType[]
   categoryId?: number
 }
