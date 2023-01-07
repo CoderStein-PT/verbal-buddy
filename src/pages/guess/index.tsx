@@ -1,4 +1,4 @@
-import { Row, Text, ScrollableContainer } from 'components'
+import { Row, Text, ScrollableContainer, Button } from 'components'
 import { useStore, DescriptionType, WordType, GuessDelayType } from 'store'
 import { useMemo, useState } from 'react'
 import { convertDelays, getAverageDelay, getRandomWord } from 'utils'
@@ -43,32 +43,32 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [guessedWords, setGuessedWords] = useState<WordType[]>([])
   const goal = Math.min(words.length, settings.guessMaxWords)
   const game = useGame()
+  const [skippedWords, setSkippedWords] = useState<WordType[]>([])
   const [delays, setDelays] = useState<GuessDelayType[]>([])
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    game.onKeyDown()
+  const rotateWord = (newGuessedWords: WordType[]) => {
+    const newRandomWord = getRandomWord({
+      words: words.filter(
+        (w) =>
+          !newGuessedWords.find((gw) => gw.text === w.text) &&
+          !skippedWords.find((sw) => sw.text === w.text)
+      )
+    })
 
-    const newWord = event.currentTarget.value.toLowerCase()
+    setWord(newRandomWord)
+  }
 
-    if (newWord !== word.text) return
-
-    const newGuessedWords = [...guessedWords, word]
-
-    setGuessedWords(newGuessedWords)
-
-    event.currentTarget.value = ''
-    const newDelay = game.lastTypingTimestamp - game.initialTimestamp.current
+  const checkIfFinished = (
+    newGuessedWords: WordType[],
+    newSkippedWords: WordType[],
+    lastTypingTimestamp: number
+  ) => {
+    const newDelay = lastTypingTimestamp - game.initialTimestamp.current
     const newDelays = [...delays, { delay: newDelay, word }]
     setDelays(newDelays)
 
-    if (newGuessedWords.length !== goal) {
-      const newRandomWord = getRandomWord({
-        words: words.filter(
-          (w) => !newGuessedWords.find((gw) => gw.text === w.text)
-        )
-      })
-
-      setWord(newRandomWord)
+    if (newGuessedWords.length + newSkippedWords.length < goal) {
+      rotateWord(newGuessedWords)
       return
     }
 
@@ -94,6 +94,27 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
         }
       ]
     })
+  }
+
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    game.onKeyDown()
+
+    const newWord = event.currentTarget.value.toLowerCase()
+
+    if (newWord !== word.text) return
+
+    const newGuessedWords = [...guessedWords, word]
+
+    setGuessedWords(newGuessedWords)
+
+    checkIfFinished(newGuessedWords, skippedWords, game.lastTypingTimestamp)
+    event.currentTarget.value = ''
+  }
+
+  const skipWord = () => {
+    const newSkippedWords = [...skippedWords, word]
+    setSkippedWords(newSkippedWords)
+    checkIfFinished(guessedWords, newSkippedWords, Date.now())
   }
 
   const resetPractice = () => {
@@ -130,9 +151,16 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             goal={goal}
             onChange={onChange}
             resetPractice={resetPractice}
-            wordsLeft={guessedWords.length}
+            wordsLeft={guessedWords.length + skippedWords.length}
             startCountdown={startCountdown}
           />
+          {game.started && !game.finished && (
+            <div className="flex justify-end">
+              <Button className="mt-2" color="gray" onClick={skipWord}>
+                {'Skip Word'}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-[420px] flex-shrink-0">

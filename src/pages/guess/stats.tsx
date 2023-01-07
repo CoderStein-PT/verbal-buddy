@@ -18,7 +18,7 @@ const DelayGraph = ({ delays }: { delays: GuessDelayType[] }) => {
   }))
 
   return (
-    <ResponsiveContainer width={100} height={20}>
+    <ResponsiveContainer height={'100%'}>
       <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
         <Bar dataKey="pv" fill="rgb(70,80,100)" barSize={10} />
       </BarChart>
@@ -55,12 +55,12 @@ const StatRow = ({
   )
 
   return (
-    <tr key={stat.timestamp}>
+    <tr key={stat.timestamp} className="relative">
       <td className="flex items-center space-x-1">
         <Text>{moment(stat.timestamp).format('DD.MM.YYYY')}</Text>
         <Text variant="subtitle">{moment(stat.timestamp).format('HH:mm')}</Text>
       </td>
-      <td className="text-right">
+      <td className="px-2 text-right">
         {!!stat.delays && <DelayGraph delays={stat.delays} />}
       </td>
       <td className="text-right">
@@ -91,7 +91,7 @@ export const Stats = () => {
       <Text variant="button">{'Stats'}</Text>
       <SeparatorFull className="my-2" />
       <ScrollableContainer>
-        <table className="w-full">
+        <table className="w-full h-px">
           <thead>
             <tr>
               <th className="text-left">
