@@ -5,6 +5,10 @@ body {
 	font-family: 'Roboto', sans-serif;
 }
 
+.tw-text b{
+	color: #fff;
+}
+
 .tooltip {
 	background-color: black;
 	border: 1px solid #334;

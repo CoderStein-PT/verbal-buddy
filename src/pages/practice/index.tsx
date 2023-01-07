@@ -117,11 +117,11 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     useStore.setState({ practice: [] })
     setTime(0)
     setIsCounting(false)
-    setTimeout(() => {
-      setIsCounting(true)
-    }, 0)
     setGuessedAll(false)
     setDelays([])
+    setStarted(false)
+    setPressedStart(false)
+    setCountdown(0)
   }
 
   useInterval(
@@ -135,57 +135,116 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     () => {
       setCountdown(countdown - 1)
 
-      if (countdown === 0) {
+      if (countdown === 1) {
         setStarted(true)
         setIsCounting(true)
         initialTimestamp.current = Date.now()
         setLastTypingTimestamp(Date.now())
       }
     },
-    countdown > 0 ? 1000 : null
+    pressedStart && countdown > 0 && !started ? 1000 : null
   )
 
   const startCountdown = () => {
+    resetPractice()
     setCountdown(settings.practiceCountdown)
     setPressedStart(true)
   }
 
   const displayTime = moment.utc(time).format('mm:ss')
-  const displayCountdown = moment.utc(countdown * 1000).format('ss')
+  const displayCountdown = moment.utc(countdown * 1000).format('s')
 
   return (
     <div className="flex justify-center">
       <div className="w-full pl-64">
         <div className="w-[400px] mx-auto">
-          <div className="flex items-center justify-between">
-            <Text variant="button">{category?.name}</Text>
-            {isCounting && (
-              <div className="flex items-end space-x-2">
+          <div className="flex items-center justify-end">
+            {
+              <div className="relative flex items-end pl-2 pr-3 space-x-2 border border-gray-700 rounded-xl">
                 <Text variant="h4" className="text-right">
                   {displayTime}
                 </Text>
                 <div
-                  className={`w-2 h-2 rounded-full ${
+                  className={`w-2 h-2 rounded-full absolute bottom-1 right-1 ${
                     isCounting ? 'bg-green-500' : 'bg-red-500'
                   }`}
                 />
               </div>
-            )}
+            }
           </div>
           <SeparatorFull className="my-2" />
-          <ScrollableContainer scrollableContainer={scrollableContainer}>
-            {started ? (
+          {started ? (
+            <ScrollableContainer scrollableContainer={scrollableContainer}>
               <Words
                 checkIfGuessedAll={checkIfGuessedAll}
                 category={category}
                 categoryWords={categoryWords}
               />
-            ) : (
-              <Text variant="h4" className="text-right">
-                {displayCountdown}
+            </ScrollableContainer>
+          ) : !!countdown ? (
+            <Text variant="h4" className="text-center">
+              {displayCountdown}
+            </Text>
+          ) : (
+            <div className="px-4">
+              <Text variant="button" className="text-center">
+                {category.name}
               </Text>
-            )}
-          </ScrollableContainer>
+              <Text color="gray-light" className="text-center">
+                {
+                  'Type the words you remember from this category as fast as you can! 🔥'
+                }
+              </Text>
+              <SeparatorFull className="my-2" />
+              <div>
+                <ul className="pl-8 text-white list-disc">
+                  <li>
+                    <Text
+                      color="gray-light"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          'After typing each word press <b>Enter</b> to add it to the list.'
+                      }}
+                    />
+                  </li>
+                  <li>
+                    <Text
+                      color="gray-light"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          "You'll see the stats on the right after you guess all the words. Avg is the most important metric as it shows how much time you think between each word on average. Your goal is to improve it over time."
+                      }}
+                    />
+                  </li>
+                  <li>
+                    <Text color="gray-light">
+                      {
+                        'If you type a word that is not in this category, it will appear as red (mistake) in the list.'
+                      }
+                    </Text>
+                  </li>
+                  <li>
+                    <Text
+                      color="gray-light"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          'The timer counts only the time you spend thinking about the words, not the time you spend typing them. The red dot indicates that the timer is paused.'
+                      }}
+                    />
+                  </li>
+                  <li>
+                    <Text
+                      color="gray-light"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          "If you think the word you typed is correct, but it's not in the list, you can hover over it and click the <b>+</b> button to add it to the list. Also you can correct it by clicking the 'edit' button."
+                      }}
+                    />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
           {!pressedStart || guessedAll ? null : (
             <Input
               onKeyDown={started ? onKeyDown : undefined}
@@ -195,10 +254,12 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
               className="w-full mt-2 text-2xl"
             />
           )}
-          <div className="mt-4">
-            <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
-          </div>
-          <div className="flex flex-col mt-2">
+          {started && (
+            <div className="mt-4">
+              <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
+            </div>
+          )}
+          <div className="flex flex-col mt-2 space-y-2">
             {started && (
               <Button onClick={resetPractice} color="gray">
                 {'Reset'}

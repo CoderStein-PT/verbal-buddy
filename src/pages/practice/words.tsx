@@ -31,7 +31,7 @@ export const Words = ({
           />
         ))
       ) : (
-        <Text color="gray-light" className="text-center">
+        <Text color="gray-light" className="text-center" variant="button">
           {'Start typing words you know 🔥'}
         </Text>
       )}
