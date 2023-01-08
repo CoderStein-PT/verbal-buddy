@@ -19,7 +19,7 @@ export const routes: {
   [key: string]: IRoute
 } = {
   word: { name: 'Word', path: '/word/:id', component: WordPage },
-  home: { name: 'Home', path: '/', component: CategoriesPage },
+  home: { name: 'Content', path: '/', component: CategoriesPage },
   practice: {
     name: 'Practice',
     path: '/practice/:id',
