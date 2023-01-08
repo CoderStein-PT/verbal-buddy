@@ -2,6 +2,7 @@ import { Button, Row, SeparatorFull, ScrollableContainer } from 'components'
 import { useStore, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
+import { Placeholder } from './placeholder'
 
 export const Joke = ({ joke, index }: { joke: JokeType; index: number }) => {
   const words = useStore((state) => state.words)
@@ -46,6 +47,9 @@ export const Jokes = () => {
 
 export const JokesPage = () => {
   const navigate = useNavigate()
+  const words = useStore((state) => state.words)
+
+  if (words.length < 3) return <Placeholder />
 
   return (
     <div className="mx-auto w-[600px]">

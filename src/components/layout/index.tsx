@@ -47,7 +47,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
       route.path !== '/' &&
       route.path !== '/settings' &&
-      route.path !== '/jokes'
+      route.path !== '/jokes' &&
+      route.path !== '/guess'
     )
   }, [route])
 
@@ -55,7 +56,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <TooltipProvider>
       <div>
         <div className="flex items-center px-16 pt-4 space-x-2">
-          <Link link={'/'}>{'Material'}</Link>
+          <Link link={'/'}>{'Content'}</Link>
           <Link link={'/jokes'}>{'Jokes'}</Link>
           <Link link={'/guess'}>{'Guess'}</Link>
           <Link link={'/settings'}>{'Settings'}</Link>
