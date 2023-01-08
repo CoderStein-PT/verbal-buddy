@@ -52,6 +52,7 @@ export type PracticeStatsType = {
 export type GuessDelayType = {
   delay: number
   word: WordType
+  guessed?: boolean
 }
 
 export type GuessStats = {

@@ -8,6 +8,7 @@ import { Footer } from 'pages/practice/footer'
 import { useGame } from 'pages/practice/use-game'
 import { Explanation } from './explanation'
 import { Stats } from './stats'
+import { GuessResults } from './guess-results'
 
 const Description = ({
   description,
@@ -61,10 +62,15 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const checkIfFinished = (
     newGuessedWords: WordType[],
     newSkippedWords: WordType[],
-    lastTypingTimestamp: number
+    lastTypingTimestamp: number,
+    skipped = false
   ) => {
-    const newDelay = lastTypingTimestamp - game.initialTimestamp.current
-    const newDelays = [...delays, { delay: newDelay, word }]
+    const delayObject: GuessDelayType = {
+      delay: lastTypingTimestamp - game.initialTimestamp.current,
+      word,
+      guessed: !skipped
+    }
+    const newDelays = [...delays, delayObject]
     setDelays(newDelays)
 
     if (newGuessedWords.length + newSkippedWords.length < goal) {
@@ -114,12 +120,14 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const skipWord = () => {
     const newSkippedWords = [...skippedWords, word]
     setSkippedWords(newSkippedWords)
-    checkIfFinished(guessedWords, newSkippedWords, Date.now())
+    checkIfFinished(guessedWords, newSkippedWords, Date.now(), true)
   }
 
   const resetPractice = () => {
     useStore.setState({ practice: [] })
     setDelays([])
+    setGuessedWords([])
+    setSkippedWords([])
     game.reset()
   }
 
@@ -164,7 +172,11 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
         </div>
       </div>
       <div className="w-[420px] flex-shrink-0">
-        <Stats />
+        {game.finished || !game.pressedStart ? (
+          <Stats />
+        ) : (
+          <GuessResults delays={delays} />
+        )}
       </div>
     </div>
   )

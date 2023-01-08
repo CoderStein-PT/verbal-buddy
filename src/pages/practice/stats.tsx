@@ -17,7 +17,12 @@ const DelayGraph = ({ delays }: { delays: number[] }) => {
   return (
     <ResponsiveContainer width={100} height={20}>
       <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-        <Bar dataKey="pv" fill="rgb(70,80,100)" barSize={10} />
+        <Bar
+          isAnimationActive={false}
+          dataKey="pv"
+          fill="rgb(70,80,100)"
+          barSize={10}
+        />
       </BarChart>
     </ResponsiveContainer>
   )
@@ -48,7 +53,7 @@ const StatRow = ({
   const timeProgress = getIsBetterOrWorse(stat.delay, previousStat?.delay, 0.05)
 
   return (
-    <tr key={stat.timestamp}>
+    <tr>
       <td className="flex items-center space-x-1">
         <Text>{moment(stat.timestamp).format('DD.MM.YYYY')}</Text>
         <Text variant="subtitle">{moment(stat.timestamp).format('HH:mm')}</Text>
@@ -72,6 +77,7 @@ const StatRow = ({
     </tr>
   )
 }
+
 export const Stats = ({ categoryId }: { categoryId: number }) => {
   const stats = useStore((state) =>
     state.practiceStats.filter((s) => s.categoryId === categoryId)
