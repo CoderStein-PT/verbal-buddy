@@ -64,7 +64,7 @@ export const Word = ({ word }: { word: WordType }) => {
             onKeyDown={onKeyDown}
           />
         ) : (
-          <Text className="group-hover:text-green-500">{word.text}</Text>
+          <Text className="group-hover:text-primary-500">{word.text}</Text>
         )}
       </div>
       <Button onClick={onDeleteWord} size="icon" color="red">

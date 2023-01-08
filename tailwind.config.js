@@ -10,7 +10,8 @@ module.exports = {
         title: "'Rowdies', cursive"
       },
       colors: {
-        primary: colors.green
+        primary: colors.green,
+        gray: colors.slate
       },
       boxShadow: {
         'primary-light': '0 3px 15px 0 rgba(100, 255, 100, 0.4)',

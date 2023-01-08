@@ -19,7 +19,7 @@ export const Category = ({
   return (
     <div className="flex justify-between space-x-1">
       <div className="w-full cursor-pointer group" onClick={onClick}>
-        <Text className="group-hover:text-green-500">{category.name}</Text>
+        <Text className="group-hover:text-primary-500">{category.name}</Text>
       </div>
     </div>
   )
@@ -42,7 +42,7 @@ export const Word = ({ word }: { word: WordType }) => {
     <div className="flex justify-between space-x-1">
       <div className="w-full cursor-pointer group" onClick={onClick}>
         <Text
-          className={isSelected ? '' : 'group-hover:text-green-500'}
+          className={isSelected ? '' : 'group-hover:text-primary-500'}
           color={isSelected ? 'gray-light' : undefined}
         >
           {word.text}
@@ -68,7 +68,7 @@ export const SelectedWord = ({ word }: { word: WordType }) => {
   return (
     <div className="flex items-center justify-between space-x-1">
       <div className="w-full cursor-pointer group" onClick={onClick}>
-        <Text className="group-hover:text-green-500">{word.text}</Text>
+        <Text className="group-hover:text-primary-500">{word.text}</Text>
       </div>
       <div className="">
         <Button onClick={onDeleteWord} size="icon" color="red">

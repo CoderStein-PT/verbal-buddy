@@ -24,7 +24,7 @@ export const Category = ({
   return (
     <div className="flex justify-between space-x-1">
       <div className="w-full cursor-pointer group" onClick={onClick}>
-        <Text className="group-hover:text-green-500">{category.name}</Text>
+        <Text className="group-hover:text-primary-500">{category.name}</Text>
       </div>
     </div>
   )

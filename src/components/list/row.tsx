@@ -87,7 +87,7 @@ export const Row = ({
         ) : (
           <Text
             title={text}
-            className={`${isSelected ? '' : 'group-hover:text-green-500'} ${
+            className={`${isSelected ? '' : 'group-hover:text-primary-500'} ${
               ellipsis ? 'text-ellipsis overflow-hidden whitespace-nowrap' : ''
             }`}
             color={isSelected ? 'gray-light' : color}
@@ -108,7 +108,7 @@ export const Row = ({
       <div className="w-8 ml-2 text-right">
         {index !== undefined && (
           <Text
-            className="group-hover:text-green-500"
+            className="group-hover:text-primary-500"
             variant="subtitle"
             color="gray-light"
           >
