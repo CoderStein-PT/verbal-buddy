@@ -109,9 +109,12 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full pl-96">
+      <div className="w-full pl-64">
         <div className="w-[400px] mx-auto">
-          <div className="flex justify-end">
+          <div className="flex items-end justify-between">
+            <Text variant="button" className="text-center">
+              {category.name}
+            </Text>
             <Timer time={game.time} isCounting={game.isCounting} />
           </div>
           <SeparatorFull className="my-2" />
@@ -140,7 +143,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
           />
         </div>
       </div>
-      <div className="w-[420px] flex-shrink-0">
+      <div className="w-[360px] flex-shrink-0">
         <Stats categoryId={category.id} />
       </div>
     </div>

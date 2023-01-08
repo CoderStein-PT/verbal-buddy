@@ -78,51 +78,60 @@ const StatRow = ({
   )
 }
 
+const StatsTable = ({ stats }: { stats: PracticeStatsType[] }) => {
+  const reversedStats = [...stats].reverse()
+
+  return (
+    <ScrollableContainer>
+      <table className="w-full">
+        <thead>
+          <tr>
+            <th className="text-left">
+              <Text variant="subtitle">{'Date'}</Text>
+            </th>
+            <th className="text-left">
+              <Text variant="subtitle">{'Avg Graph'}</Text>
+            </th>
+            <th className="text-right">
+              <Text variant="subtitle">{'Avg'}</Text>
+            </th>
+            <th className="text-right">
+              <Text variant="subtitle">{'Words'}</Text>
+            </th>
+            <th className="text-right">
+              <Text variant="subtitle">{'Time'}</Text>
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-700 divide-dashed">
+          {reversedStats.map((stat, idx) => (
+            <StatRow
+              stat={stat}
+              key={stat.timestamp}
+              previousStat={reversedStats[idx + 1]}
+            />
+          ))}
+        </tbody>
+      </table>
+    </ScrollableContainer>
+  )
+}
+
 export const Stats = ({ categoryId }: { categoryId: number }) => {
   const stats = useStore((state) =>
     state.practiceStats.filter((s) => s.categoryId === categoryId)
   )
 
-  if (!stats?.length) return null
-
-  const reversedStats = [...stats].reverse()
-
   return (
     <div className="flex flex-col">
       <Text variant="button">{'Stats'}</Text>
       <SeparatorFull className="my-2" />
-      <ScrollableContainer>
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th className="text-left">
-                <Text variant="subtitle">{'Date'}</Text>
-              </th>
-              <th className="text-left">
-                <Text variant="subtitle">{'Avg Graph'}</Text>
-              </th>
-              <th className="text-right">
-                <Text variant="subtitle">{'Avg'}</Text>
-              </th>
-              <th className="text-right">
-                <Text variant="subtitle">{'Words'}</Text>
-              </th>
-              <th className="text-right">
-                <Text variant="subtitle">{'Time'}</Text>
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-700 divide-dashed">
-            {reversedStats.map((stat, idx) => (
-              <StatRow
-                stat={stat}
-                key={stat.timestamp}
-                previousStat={reversedStats[idx + 1]}
-              />
-            ))}
-          </tbody>
-        </table>
-      </ScrollableContainer>
+      <StatsTable stats={stats} />
+      {!stats?.length && (
+        <Text variant="button" color="gray-light" className="mt-4 text-center">
+          {'No stats yet 🙂'}
+        </Text>
+      )}
     </div>
   )
 }

@@ -4,9 +4,6 @@ import { CategoryType } from 'store'
 export const Explanation = ({ category }: { category: CategoryType }) => {
   return (
     <div className="px-4">
-      <Text variant="button" className="text-center">
-        {category.name}
-      </Text>
       <Text color="gray-light" className="text-center">
         {
           'Type the words you remember from this category as fast as you can! 🔥'

@@ -54,7 +54,8 @@ const Navbar = () => {
       route.path !== '/' &&
       route.path !== '/settings' &&
       route.path !== '/jokes' &&
-      route.path !== '/guess'
+      route.path !== '/guess' &&
+      route.path !== '/about'
     )
   }, [route])
 
@@ -78,8 +79,11 @@ const Navbar = () => {
           <div className="flex items-center flex-1 space-x-2 border-r border-gray-700 border-dashed">
             {showBackButton && (
               <div>
-                <Button size="round" color="gray" onClick={navigateBack}>
-                  <FiChevronLeft className="w-full h-full" />
+                <Button size="round" color="text" onClick={navigateBack}>
+                  <FiChevronLeft className="w-full h-full mr-1" />
+                  <Text className="mr-2 group-hover:text-primary-500">
+                    Back
+                  </Text>
                 </Button>
               </div>
             )}
