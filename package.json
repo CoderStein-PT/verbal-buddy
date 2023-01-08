@@ -3,6 +3,7 @@
   "description": "Joke Creativity Development App",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -15,7 +16,10 @@
     "@aplr/tailwind-components": "^1.1.1",
     "@headlessui/react": "^1.7.7",
     "@headlessui/tailwindcss": "^0.1.2",
+    "@mdx-js/react": "^2.2.1",
+    "@mdx-js/rollup": "^2.2.1",
     "@react-icons/all-files": "^4.1.0",
+    "@tailwindcss/typography": "^0.5.8",
     "chart.js": "^4.1.2",
     "immer": "^9.0.17",
     "moment": "^2.29.4",
@@ -29,6 +33,7 @@
     "react-tooltip": "^5.4.0",
     "recharts": "^2.2.0",
     "tailwind-styled-components": "^2.2.0",
+    "vite-plugin-mdx": "^3.5.11",
     "zustand": "^4.2.0"
   },
   "devDependencies": {

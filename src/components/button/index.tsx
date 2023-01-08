@@ -46,7 +46,7 @@ export const Button = React.forwardRef<any, PropsWithChildren<ButtonProps>>(
     <ButtonCore ref={ref} {...props}>
       {isLoading ? (
         <Loading />
-      ) : (
+      ) : typeof children === 'string' ? (
         <Text
           color="none"
           className="ease-out"
@@ -54,6 +54,8 @@ export const Button = React.forwardRef<any, PropsWithChildren<ButtonProps>>(
         >
           {children}
         </Text>
+      ) : (
+        children
       )}
     </ButtonCore>
   )
