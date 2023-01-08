@@ -1,4 +1,4 @@
-import { Button, Input } from 'components'
+import { Button, Input, Text } from 'components'
 import { ChangeEventHandler } from 'react'
 import { ProgressBar } from './progress-bar'
 import { GameType } from './use-game'
@@ -10,7 +10,9 @@ export const Footer = ({
   onKeyDown,
   resetPractice,
   startCountdown,
-  wordsLeft
+  wordsLeft,
+  skipWord,
+  placeholder
 }: {
   game: GameType
   goal: number
@@ -19,31 +21,42 @@ export const Footer = ({
   resetPractice: () => void
   startCountdown: () => void
   wordsLeft: number
+  skipWord?: () => void
+  placeholder?: string
 }) => (
   <>
     {!game.pressedStart || game.finished ? null : (
-      <Input
-        onChange={game.started ? onChange : undefined}
-        onKeyDown={game.started ? onKeyDown : undefined}
-        type="text"
-        placeholder="New word..."
-        autoFocus
-        className="w-full mt-2 text-2xl"
-      />
+      <>
+        <Input
+          onChange={game.started ? onChange : undefined}
+          onKeyDown={game.started ? onKeyDown : undefined}
+          type="text"
+          placeholder={placeholder || 'New word...'}
+          autoFocus
+          className="w-full mt-2 text-2xl text-center"
+        />
+      </>
     )}
     {game.started && (
       <div className="mt-4">
         <ProgressBar wordsTotal={goal} wordsLeft={wordsLeft} />
       </div>
     )}
-    <div className="flex flex-col mt-2 space-y-2">
+    <div className="flex mt-2 space-x-2">
       {game.started && (
-        <Button onClick={resetPractice} color="gray">
+        <Button className="w-full" onClick={resetPractice} color="gray">
           {'Reset'}
         </Button>
       )}
+      {skipWord && game.started && !game.finished && (
+        <Button className="w-full" color="gray" onClick={skipWord}>
+          {'Skip Word'}
+        </Button>
+      )}
       {game.pressedStart && !game.finished ? null : (
-        <Button onClick={startCountdown}>{'Start'}</Button>
+        <Button className="w-full" onClick={startCountdown}>
+          {'Start'}
+        </Button>
       )}
     </div>
   </>

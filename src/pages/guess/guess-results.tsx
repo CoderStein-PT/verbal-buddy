@@ -6,13 +6,15 @@ import { convertDelays } from 'utils'
 const ResultRow = ({ delay }: { delay: GuessDelayType }) => {
   const delayText = moment.utc(delay.delay).format('mm:ss')
 
+  const color = delay.guessed ? 'primary' : 'red'
+
   return (
     <tr className="relative">
       <td className="">
-        <Text color={delay.guessed ? 'primary' : 'red'}>{delay.word.text}</Text>
+        <Text color={color}>{delay.word.text}</Text>
       </td>
       <td className="text-right">
-        <Text color={delay.guessed ? 'primary' : 'red'}>{delayText}</Text>
+        <Text color={color}>{delayText}</Text>
       </td>
     </tr>
   )

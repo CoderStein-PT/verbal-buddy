@@ -1,6 +1,6 @@
 import { Row, Text, ScrollableContainer, Button } from 'components'
 import { useStore, DescriptionType, WordType, GuessDelayType } from 'store'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { convertDelays, getAverageDelay, getRandomWord } from 'utils'
 import { Timer } from 'pages/practice/timer'
 import { Placeholder } from './placeholder'
@@ -30,11 +30,15 @@ const Descriptions = ({ word }: { word: WordType }) => {
   if (!shuffledDescriptions) return null
 
   return (
-    <ScrollableContainer>
-      {shuffledDescriptions.map((d, index) => (
-        <Description key={d.id} description={d} index={index + 1} />
-      ))}
-    </ScrollableContainer>
+    <div className="p-2 mt-2 border border-gray-600 rounded-md">
+      <ScrollableContainer>
+        <div className="divide-y divide-gray-600 divide-dashed">
+          {shuffledDescriptions.map((d, index) => (
+            <Description key={d.id} description={d} index={index + 1} />
+          ))}
+        </div>
+      </ScrollableContainer>
+    </div>
   )
 }
 
@@ -46,6 +50,20 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const game = useGame()
   const [skippedWords, setSkippedWords] = useState<WordType[]>([])
   const [delays, setDelays] = useState<GuessDelayType[]>([])
+  const [lastWord, setLastWord] = useState<WordType | null>(null)
+  const [showLastWord, setShowLastWord] = useState(false)
+
+  useEffect(() => {
+    if (!lastWord) return
+
+    setShowLastWord(true)
+
+    const timeout = setTimeout(() => {
+      setShowLastWord(false)
+    }, 4000)
+
+    return () => clearTimeout(timeout)
+  }, [lastWord])
 
   const rotateWord = (newGuessedWords: WordType[]) => {
     const newRandomWord = getRandomWord({
@@ -55,6 +73,8 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
           !skippedWords.find((sw) => sw.text === w.text)
       )
     })
+
+    setLastWord(word)
 
     setWord(newRandomWord)
   }
@@ -88,6 +108,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     }))
 
     game.finish()
+    setLastWord(word)
     useStore.setState({
       guessStats: [
         ...useStore.getState().guessStats,
@@ -144,16 +165,29 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             <Timer time={game.time} isCounting={game.isCounting} />
           </div>
           {game.started ? (
-            <ScrollableContainer>
-              <Descriptions word={word} />
-            </ScrollableContainer>
+            <>
+              <ScrollableContainer height={200}>
+                <Descriptions word={word} />
+              </ScrollableContainer>
+            </>
           ) : !!game.countdown ? (
-            <Text variant="h4" className="text-center">
-              {game.displayCountdown}
-            </Text>
+            <div className="h-[200px] flex justify-center items-center">
+              <Text variant="h4" className="text-center">
+                {game.displayCountdown}
+              </Text>
+            </div>
           ) : (
             <Explanation />
           )}
+          <div
+            className={`flex items-center justify-center h-6 ${
+              showLastWord
+                ? 'opacity-100 transition'
+                : 'opacity-0 scale-0 transition duration-300'
+            }`}
+          >
+            <Text variant="h6">{lastWord?.text || '...'}</Text>
+          </div>
           <Footer
             game={game}
             goal={goal}
@@ -161,14 +195,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             resetPractice={resetPractice}
             wordsLeft={guessedWords.length + skippedWords.length}
             startCountdown={startCountdown}
+            skipWord={skipWord}
+            placeholder="Guess word"
           />
-          {game.started && !game.finished && (
-            <div className="flex justify-end">
-              <Button className="mt-2" color="gray" onClick={skipWord}>
-                {'Skip Word'}
-              </Button>
-            </div>
-          )}
         </div>
       </div>
       <div className="w-[420px] flex-shrink-0">

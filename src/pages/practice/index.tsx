@@ -111,7 +111,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     <div className="flex justify-center">
       <div className="w-full pl-96">
         <div className="w-[400px] mx-auto">
-          <div className="">
+          <div className="flex justify-end">
             <Timer time={game.time} isCounting={game.isCounting} />
           </div>
           <SeparatorFull className="my-2" />
