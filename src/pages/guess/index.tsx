@@ -180,7 +180,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             <Explanation />
           )}
           <div
-            className={`flex items-center justify-center h-6 ${
+            className={`flex items-center justify-end h-6 ${
               showLastWord
                 ? 'opacity-100 transition'
                 : 'opacity-0 scale-0 transition duration-300'
