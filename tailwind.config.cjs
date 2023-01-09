@@ -25,8 +25,11 @@ module.exports = {
             '--tw-prose-invert-bullets': theme('colors.primary[500]'),
             '--tw-prose-invert-body': theme('colors.slate[400]'),
             '--tw-prose-invert-headings': theme('colors.slate[200]'),
+            '--tw-prose-invert-quote-borders': theme('colors.primary.500'),
             'h1, h2, h3, h4, h5, h6': {
-              fontFamily: theme('fontFamily[title]')
+              fontFamily: theme('fontFamily[title]'),
+              fontWeight: 400,
+              letterSpacing: '0.05rem'
             },
             ul: {
               listStyleType: 'none'
@@ -43,7 +46,7 @@ module.exports = {
               height: '0.35em',
               position: 'absolute',
               transform: 'rotate(45deg)',
-              top: '0.5rem',
+              top: '0.6rem',
               left: '-1rem',
               backgroundColor: theme('colors.primary.500')
             },

@@ -60,7 +60,7 @@ const Navbar = () => {
   }, [route])
 
   return (
-    <div className="fixed top-0 left-0 right-0">
+    <div className="fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center justify-between w-full h-16 max-w-screen-xl px-16 py-4 mx-auto space-x-2 bg-gray-900 backdrop-blur-md bg-opacity-60 ">
         <div className="flex items-center flex-1 space-x-14">
           <RouterLink to="/">
@@ -82,7 +82,7 @@ const Navbar = () => {
                 <Button size="round" color="text" onClick={navigateBack}>
                   <FiChevronLeft className="w-full h-full mr-1" />
                   <Text className="mr-2 group-hover:text-primary-500">
-                    Back
+                    {'Back'}
                   </Text>
                 </Button>
               </div>
