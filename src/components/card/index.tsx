@@ -7,7 +7,12 @@ export const CardNotRounded = tw.div`bg-white dark:bg-gray-800 shadow-xl border 
 export const Card = tw(CardNotRounded)`rounded-2xl md:rounded-3xl`
 export const CardContent = tw.div`p-2 md:p-4 relative`
 
-export const CardTitle = ({ children, ...props }) => (
+export const CardTitle = ({
+  children,
+  ...props
+}: {
+  children: React.ReactNode
+}) => (
   <Text variant="button" {...props}>
     {children}
   </Text>
