@@ -1,7 +1,16 @@
-# Verbal Buddy
+<p align="center">
+  <a href="https://verbal-buddy.com" target="_blank">
+    <picture>
+      <img alt="Tailwind CSS" src="https://raw.githubusercontent.com/max-sym/verbal-buddy/main/src/public/favicon.svg" width="80" height="80" style="max-width: 100%;">
+    </picture>
+  </a>
+</p>
 
-Web app to help shy people develop communication skills and express themselves so they become more talkative, confident, relaxed, social and successful.
-Open-source, doesn't collect user's data.
+<h1 align="center">
+  Verbal Buddy
+</h1>
+
+<p align="center" >Web app to help shy people develop communication skills and express <br/>themselves so they become more talkative, confident, relaxed, social and successful.<br/><br/>Open-source, doesn't collect user's data.</p>
 
 ## How it works?
 
