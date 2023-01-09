@@ -1,7 +1,7 @@
 <p align="center">
   <a href="https://verbal-buddy.com" target="_blank">
     <picture>
-      <img alt="Tailwind CSS" src="https://raw.githubusercontent.com/max-sym/verbal-buddy/main/src/public/favicon.svg" width="80" height="80" style="max-width: 100%;">
+      <img alt="Verbal Buddy" src="https://raw.githubusercontent.com/max-sym/verbal-buddy/HEAD/src/public/favicon.svg" width="80" height="80" style="max-width: 100%;">
     </picture>
   </a>
 </p>
