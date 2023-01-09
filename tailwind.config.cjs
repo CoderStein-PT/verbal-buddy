@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss/colors')} */
 const colors = require('tailwindcss/colors')
-/** @type {import('tailwindcss').Config} */
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
@@ -13,6 +13,9 @@ module.exports = {
       colors: {
         primary: colors.green,
         gray: colors.slate
+      },
+      transitionTimingFunction: {
+        cool: 'cubic-bezier(0.4, 0, 0.41, 1.57)'
       },
       boxShadow: {
         'primary-light': '0 3px 15px 0 rgba(100, 255, 100, 0.4)',
