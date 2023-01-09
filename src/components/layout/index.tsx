@@ -76,7 +76,7 @@ const Navbar = () => {
               </Text>
             </div>
           </RouterLink>
-          <div className="flex items-center flex-1 space-x-2 border-r border-gray-700 border-dashed">
+          <div className="flex items-center flex-1 px-2 space-x-2 border-gray-700 border-dashed border-x">
             {showBackButton && (
               <div>
                 <Button size="round" color="text" onClick={navigateBack}>
@@ -109,7 +109,7 @@ const links = [
   {
     name: 'Content',
     link: '/',
-    matches: ['/', '/category/:id', '/word/:id']
+    matches: ['/', '/category/:id', '/word/:id', '/practice/:id']
   },
   {
     name: 'Guess',

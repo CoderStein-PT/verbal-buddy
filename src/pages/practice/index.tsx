@@ -12,7 +12,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { Stats } from './stats'
 import { Words } from './words'
 import { Timer } from './timer'
-import { Explanation } from './explanation'
+import Explanation from './explanation.mdx'
 import { useGame } from './use-game'
 import { Footer } from './footer'
 import { Placeholder } from './placeholder'
@@ -131,7 +131,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
               {game.displayCountdown}
             </Text>
           ) : (
-            <Explanation category={category} />
+            <div className="prose dark:prose-invert prose-slate">
+              <Explanation />
+            </div>
           )}
           <Footer
             game={game}

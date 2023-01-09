@@ -1,7 +1,7 @@
 import React from 'react'
 import tw from 'tailwind-styled-components'
 
-export const InputCore = tw.input`px-2 border border-gray-500 text-white bg-gray-900 rounded-md outline-none`
+export const InputCore = tw.input`px-2 border border-gray-500 text-slate-200 bg-gray-900 rounded-md outline-none`
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 

@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss/colors')} */
 const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 
@@ -16,7 +17,44 @@ module.exports = {
       boxShadow: {
         'primary-light': '0 3px 15px 0 rgba(100, 255, 100, 0.4)',
         'red-light': '0 3px 15px 0 rgba(255, 50, 50, 0.4)'
-      }
+      },
+      typography: ({ theme }) => ({
+        slate: {
+          css: {
+            '--tw-prose-bullets': theme('colors.primary[500]'),
+            '--tw-prose-invert-bullets': theme('colors.primary[500]'),
+            '--tw-prose-invert-body': theme('colors.slate[400]'),
+            '--tw-prose-invert-headings': theme('colors.slate[200]'),
+            'h1, h2, h3, h4, h5, h6': {
+              fontFamily: theme('fontFamily[title]')
+            },
+            ul: {
+              listStyleType: 'none'
+            },
+            'ul > li': {
+              marginTop: '0.5rem',
+              marginBottom: '0.5rem',
+              position: 'relative',
+              lineHeight: '1.5'
+            },
+            'ul > li::before': {
+              content: '""',
+              width: '0.35em',
+              height: '0.35em',
+              position: 'absolute',
+              transform: 'rotate(45deg)',
+              top: '0.5rem',
+              left: '-1rem',
+              backgroundColor: theme('colors.primary.500')
+            },
+            hr: {
+              marginTop: '1em',
+              marginBottom: '1em'
+            },
+            '--tw-prose-invert-bold': theme('colors.slate.200')
+          }
+        }
+      })
     }
   },
   plugins: [

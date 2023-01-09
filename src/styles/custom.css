@@ -6,7 +6,7 @@ body {
 }
 
 .tw-text b{
-	color: #fff;
+	@apply text-slate-200;
 }
 
 .tooltip {

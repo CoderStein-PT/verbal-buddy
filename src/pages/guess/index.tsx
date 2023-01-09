@@ -6,7 +6,7 @@ import { Timer } from 'pages/practice/timer'
 import { Placeholder } from './placeholder'
 import { Footer } from 'pages/practice/footer'
 import { useGame } from 'pages/practice/use-game'
-import { Explanation } from './explanation'
+import Explanation from './explanation.mdx'
 import { Stats } from './stats'
 import { GuessResults } from './guess-results'
 
@@ -159,7 +159,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full pl-96">
+      <div className="w-full pl-64">
         <div className="w-[400px] mx-auto">
           <div className="flex justify-end">
             <Timer time={game.time} isCounting={game.isCounting} />
@@ -177,7 +177,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
               </Text>
             </div>
           ) : (
-            <Explanation />
+            <div className="prose dark:prose-invert prose-slate">
+              <Explanation />
+            </div>
           )}
           <div
             className={`flex items-center justify-end h-6 ${
@@ -200,7 +202,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
           />
         </div>
       </div>
-      <div className="w-[420px] flex-shrink-0">
+      <div className="w-[360px] flex-shrink-0">
         {game.finished || !game.pressedStart ? (
           <Stats />
         ) : (

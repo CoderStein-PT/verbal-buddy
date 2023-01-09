@@ -2,8 +2,8 @@ import tw from 'tailwind-styled-components'
 
 const colorClasses = {
   none: '',
-  white: 'text-white',
-  base: 'text-gray-900 dark:text-white',
+  white: 'text-slate-200',
+  base: 'text-gray-900 dark:text-slate-200',
   'gray-light': 'text-gray-600 dark:text-gray-400',
   primary: 'text-primary-500',
   red: 'text-red-500'
