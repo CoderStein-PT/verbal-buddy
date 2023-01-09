@@ -5,6 +5,7 @@ import { Loading, Text, TextProps } from 'components'
 const sizeClasses = {
   round: 'p-2 rounded-full',
   sm: 'py-1 px-3 rounded-lg',
+  md: 'py-1 px-3 rounded-lg',
   base: 'py-2 px-6 rounded-xl',
   lg: 'py-3 px-6 rounded-2xl',
   xl: 'py-4 px-8 text-lg rounded-2xl',
@@ -13,6 +14,7 @@ const sizeClasses = {
 
 const textSizeVariants: Record<string, TextProps['variant']> = {
   sm: 'subtitle',
+  md: 'subtitle2',
   base: 'button',
   lg: 'button',
   xl: 'button',
@@ -36,7 +38,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 export const ButtonCore = tw.button<ButtonProps>`
-  relative flex items-center justify-center transition ease-out appearance-none font-title whitespace-nowrap group
+  relative flex items-center justify-center transition ease-out appearance-none whitespace-nowrap group
   ${({ size = 'base', color = 'primary', disabled }) =>
     `${sizeClasses[size]} ${colorClasses[disabled ? 'gray' : color]}`}
 `

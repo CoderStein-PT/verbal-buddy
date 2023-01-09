@@ -19,6 +19,7 @@ const variantClasses = {
   bodyBig: 'md:text-lg md:leading-relaxed',
   body: '',
   subtitle: 'text-sm md:text-sm',
+  subtitle2: 'text-sm md:text-base tracking-wide',
   button: 'text-base md:text-lg font-title uppercase',
   caption: 'text-xs md:text-xs font-title',
   overline: 'text-xs md:text-xs'
