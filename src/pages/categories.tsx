@@ -15,6 +15,7 @@ import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
 import { Link, useNavigate } from 'react-router-dom'
+import Explanation from './explanation.mdx'
 
 export const Category = ({ category }: { category: CategoryType }) => {
   const navigate = useNavigate()
@@ -84,20 +85,15 @@ export const Categories = ({
   const categories = useStore((state) => state.categories)
 
   return (
-    <ScrollableContainer scrollableContainer={scrollableContainer}>
+    <ScrollableContainer height={400} scrollableContainer={scrollableContainer}>
       <div className="px-2">
         {categories?.length ? (
           categories.map((category) => (
             <Category key={category.id} category={category} />
           ))
         ) : (
-          <div className="flex flex-col justify-center space-y-4">
-            <Text color="gray-light" variant="h6" className="text-center">
-              {'No categories yet 🧐'}
-            </Text>
-            <Link to="/settings" className="flex flex-col w-full">
-              <Button>{'Use presets'}</Button>
-            </Link>
+          <div className="prose dark:prose-invert prose-slate">
+            <Explanation />
           </div>
         )}
       </div>
@@ -134,7 +130,12 @@ export const CategoriesPage = () => {
 
   return (
     <div className="mx-auto w-[400px]">
-      <Text variant="button">{'Categories'}</Text>
+      <div className="flex items-center justify-between">
+        <Text variant="button">{'Categories'}</Text>
+        <Link to="/settings">
+          <Button size="md">{'Use presets'}</Button>
+        </Link>
+      </div>
       <SeparatorFull className="my-2" />
       <Categories scrollableContainer={scrollableContainer} />
       <SeparatorFull className="my-2" />
@@ -143,6 +144,8 @@ export const CategoriesPage = () => {
         type="text"
         placeholder="New category..."
         className="w-full"
+        autoFocus
+        big
       />
     </div>
   )

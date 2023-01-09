@@ -33,7 +33,8 @@ export const Footer = ({
           type="text"
           placeholder={placeholder || 'New word...'}
           autoFocus
-          className="w-full mt-2 text-2xl text-center"
+          big
+          className="w-full mt-2 text-center"
         />
       </>
     )}
