@@ -2,7 +2,8 @@ import { Button, Row, SeparatorFull, ScrollableContainer } from 'components'
 import { useStore, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
-import { Placeholder } from './placeholder'
+import Explanation from './explanation.mdx'
+import ExplanationEmpty from './explanation-empty.mdx'
 
 export const Joke = ({ joke, index }: { joke: JokeType; index: number }) => {
   const words = useStore((state) => state.words)
@@ -42,6 +43,11 @@ export const Jokes = () => {
         {jokes.map((joke, index) => (
           <Joke key={joke.id} joke={joke} index={index + 1} />
         ))}
+        {jokes.length === 0 && (
+          <div className="prose dark:prose-invert prose-slate">
+            <Explanation />
+          </div>
+        )}
       </div>
     </ScrollableContainer>
   )
@@ -50,8 +56,16 @@ export const Jokes = () => {
 export const JokesPage = () => {
   const navigate = useNavigate()
   const words = useStore((state) => state.words)
+  const categories = useStore((state) => state.categories)
 
-  if (words.length < 3) return <Placeholder />
+  if (words.length < 3 || !categories.length)
+    return (
+      <div className="prose dark:prose-invert prose-slate mx-auto w-[400px]">
+        <SeparatorFull className="my-4" />
+        <ExplanationEmpty />
+        <SeparatorFull className="my-4" />
+      </div>
+    )
 
   return (
     <div className="mx-auto w-[600px]">
