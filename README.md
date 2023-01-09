@@ -1,7 +1,7 @@
 # Verbal Buddy
 
 Web app to help shy people develop communication skills and express themselves so they become more talkative, confident, relaxed, social and successful.
-Open-source.
+Open-source, doesn't collect user's data.
 
 ## How it works?
 
@@ -25,6 +25,10 @@ The tools are:
 - Practice remembering the words you wrote with a timer ticking so you try to improve your speed
 - Describe objects
 - Make jokes in a structured and controlled manner
+
+### Privacy
+
+It saves your data only in localStorage.
 
 ## Tech stack
 
