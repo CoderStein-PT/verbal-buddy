@@ -1,10 +1,32 @@
-# React Tailwindcss Boilerplate build with Vite
+# Verbal Buddy
 
-This is a [ReactJS](https://reactjs.org) + [Vite](https://vitejs.dev) boilerplate to be used with [Tailwindcss](https://tailwindcss.com).
+Web app to help shy people develop communication skills and express themselves so they become more talkative, confident, relaxed, social and successful.
+Open-source.
 
-## What is inside?
+## How it works?
 
-This project uses many tools like:
+This app provides different tools you can use to turn the parts of your brain responsible for communication and language so you can:
+
+- Have more control over your relationships and life
+- Keep up with the tempo of conversations and not feel left out
+- Make others hear your ideas and actually make a difference instead of being a bystander
+- Make friends and have deeper and more fulfilling relationships
+- Focusing on the solutions instead of the words / how to say them and thus having more leverage in negotiations/conflicts/difficult situations
+- Be less anxious, more confident and relaxed as a result
+- Get a job/promotion/open a business/raise money/hire people etc. easier.
+- Feel respected by other people since you get your ideas across
+- Not have awkward silences anymore
+- Actually having fun
+
+The tools are:
+
+- Guess words from their descriptions
+- Fill as many words you know from certain categories to train your brain to access them
+- Practice remembering the words you wrote with a timer ticking so you try to improve your speed
+- Describe objects
+- Make jokes in a structured and controlled manner
+
+## Tech stack
 
 - [ReactJS](https://reactjs.org)
 - [Vite](https://vitejs.dev)
@@ -18,55 +40,10 @@ This project uses many tools like:
 ## Getting Started
 
 ### Install
+`yarn`
 
-Create the project.
+### Run
+`yarn dev`
 
-```bash
-npx degit joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate my-app
-```
-
-Access the project directory.
-
-```bash
-cd my-app
-```
-
-Install dependencies.
-
-```bash
-pnpm install
-```
-
-Serve with hot reload at <http://localhost:5173>.
-
-```bash
-pnpm run dev
-```
-
-### Lint
-
-```bash
-pnpm run lint
-```
-
-### Typecheck
-
-```bash
-pnpm run typecheck
-```
-
-### Build
-
-```bash
-pnpm run build
-```
-
-### Test
-
-```bash
-pnpm run test
-```
-
-## License
-
-This project is licensed under the MIT License.
+### License
+MIT
