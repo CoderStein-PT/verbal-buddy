@@ -104,6 +104,6 @@ export const useStore = create(
         guessMaxWords: 10
       }
     }),
-    { name: 'joke-generator' }
+    { name: 'joke-generator', version: 1 }
   )
 )
