@@ -45,7 +45,7 @@ export const Premises = ({ joke }: { joke: JokeType }) => {
   if (!joke.premises) return null
 
   return (
-    <ScrollableContainer maxHeight={200}>
+    <ScrollableContainer maxHeight={212}>
       <div className="px-2 divide-y divide-gray-700 divide-dashed">
         {joke.premises.map((premise, index) => (
           <Premise

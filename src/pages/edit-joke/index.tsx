@@ -76,7 +76,6 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
             </div>
             <SeparatorFull />
             <Premises joke={joke} />
-            <SeparatorFull className="mb-2" />
             <Input
               onKeyDown={onKeyDown}
               placeholder="New premise..."
