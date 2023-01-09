@@ -18,3 +18,22 @@ body {
 	line-height: 1.3;
 	color: #dde;
 }
+
+/*  */
+
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply transition bg-opacity-20 bg-primary-500;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	@apply opacity-100 cursor-pointer bg-primary-500;
+}

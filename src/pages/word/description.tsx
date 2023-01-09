@@ -130,12 +130,12 @@ export const Descriptions = ({
 
   return (
     <div>
-      <div className="px-2">
-        <ScrollableContainer
-          height={height}
-          maxHeight={maxHeight}
-          scrollableContainer={scrollableContainer}
-        >
+      <ScrollableContainer
+        height={height}
+        maxHeight={maxHeight}
+        scrollableContainer={scrollableContainer}
+      >
+        <div className="px-2">
           <div>
             {descriptions?.length ? (
               descriptions.map((d, index) => (
@@ -156,8 +156,8 @@ export const Descriptions = ({
               </Text>
             )}
           </div>
-        </ScrollableContainer>
-      </div>
+        </div>
+      </ScrollableContainer>
       <Input
         onKeyDown={onKeyDown}
         type="text"

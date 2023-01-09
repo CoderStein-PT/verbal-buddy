@@ -101,15 +101,17 @@ export const Words = ({
 
   return (
     <ScrollableContainer height={height} maxHeight={maxHeight}>
-      {words.map((word, index) => (
-        <Word
-          onSelectWord={onSelectWord}
-          selectedWords={selectedWords}
-          key={word.id}
-          word={word}
-          index={index + 1}
-        />
-      ))}
+      <div className="px-2">
+        {words.map((word, index) => (
+          <Word
+            onSelectWord={onSelectWord}
+            selectedWords={selectedWords}
+            key={word.id}
+            word={word}
+            index={index + 1}
+          />
+        ))}
+      </div>
     </ScrollableContainer>
   )
 }
@@ -168,7 +170,7 @@ export const WordSelector = ({
         </Text>
       </div>
       <SeparatorFull />
-      <div className="px-2 mt-2">
+      <div className="mt-2">
         {selectedCategoryId ? (
           <div>
             <Words

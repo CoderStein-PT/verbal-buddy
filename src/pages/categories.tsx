@@ -85,20 +85,22 @@ export const Categories = ({
 
   return (
     <ScrollableContainer scrollableContainer={scrollableContainer}>
-      {categories?.length ? (
-        categories.map((category) => (
-          <Category key={category.id} category={category} />
-        ))
-      ) : (
-        <div className="flex flex-col justify-center space-y-4">
-          <Text color="gray-light" variant="h6" className="text-center">
-            {'No categories yet 🧐'}
-          </Text>
-          <Link to="/settings" className="flex flex-col w-full">
-            <Button>{'Use presets'}</Button>
-          </Link>
-        </div>
-      )}
+      <div className="px-2">
+        {categories?.length ? (
+          categories.map((category) => (
+            <Category key={category.id} category={category} />
+          ))
+        ) : (
+          <div className="flex flex-col justify-center space-y-4">
+            <Text color="gray-light" variant="h6" className="text-center">
+              {'No categories yet 🧐'}
+            </Text>
+            <Link to="/settings" className="flex flex-col w-full">
+              <Button>{'Use presets'}</Button>
+            </Link>
+          </div>
+        )}
+      </div>
     </ScrollableContainer>
   )
 }

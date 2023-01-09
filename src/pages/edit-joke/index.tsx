@@ -68,16 +68,14 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
   return (
     <div>
       <WordManager joke={joke} />
-      <div className="flex mt-8 space-x-4">
+      <div className="flex mt-4 space-x-4">
         <div className="w-1/3">
           <ListContainer>
             <div className="px-2">
               <Text variant="button">{'Premises'}</Text>
             </div>
             <SeparatorFull />
-            <div className="px-2">
-              <Premises joke={joke} />
-            </div>
+            <Premises joke={joke} />
             <SeparatorFull className="mb-2" />
             <Input
               onKeyDown={onKeyDown}
@@ -88,21 +86,25 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
         </div>
         <div className="w-1/3">
           <Text variant="button">{'Drafts'}</Text>
-          <InputCore
-            value={joke.draftText || ''}
-            onChange={onDraftChange}
-            className="h-[240px] w-full resize-none"
-            $as="textarea"
-          />
+          <div className="overflow-hidden rounded-md">
+            <InputCore
+              value={joke.draftText || ''}
+              onChange={onDraftChange}
+              className="h-[240px] w-full resize-none"
+              $as="textarea"
+            />
+          </div>
         </div>
         <div className="w-1/3">
           <Text variant="button">{'Joke'}</Text>
-          <InputCore
-            value={joke.text || ''}
-            onChange={onTextChange}
-            className="h-[240px] w-full resize-none"
-            $as="textarea"
-          />
+          <div className="overflow-hidden rounded-md">
+            <InputCore
+              value={joke.text || ''}
+              onChange={onTextChange}
+              className="h-[240px] w-full resize-none"
+              $as="textarea"
+            />
+          </div>
         </div>
       </div>
     </div>

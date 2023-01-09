@@ -82,7 +82,7 @@ export const WordManager = ({ joke }: { joke: JokeType }) => {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="pb-1 overflow-x-auto">
       <div className="flex space-x-4">
         {wordsToLoop.map((word) => (
           <Column key={word?.id}>

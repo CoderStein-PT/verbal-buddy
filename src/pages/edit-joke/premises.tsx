@@ -46,7 +46,7 @@ export const Premises = ({ joke }: { joke: JokeType }) => {
 
   return (
     <ScrollableContainer maxHeight={200}>
-      <div className="divide-y divide-gray-700 divide-dashed">
+      <div className="px-2 divide-y divide-gray-700 divide-dashed">
         {joke.premises.map((premise, index) => (
           <Premise
             index={index + 1}

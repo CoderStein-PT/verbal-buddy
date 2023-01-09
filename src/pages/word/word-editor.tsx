@@ -98,7 +98,7 @@ export const WordEditor = ({
       />
       <Tab.Group>
         <SeparatorFull />
-        <Tab.List className="flex px-2 mt-2 space-x-1">
+        <Tab.List className="flex px-2 mt-2 space-x-1 overflow-x-auto">
           <Tab as={React.Fragment}>
             {({ selected }) => (
               <Button size="sm" color={selected ? 'gray' : undefined}>
@@ -116,7 +116,7 @@ export const WordEditor = ({
           <Tab as={React.Fragment}>
             {({ selected }) => (
               <Button size="sm" color={selected ? 'gray' : undefined}>
-                {'Opposite words'}
+                {'Opposites'}
               </Button>
             )}
           </Tab>

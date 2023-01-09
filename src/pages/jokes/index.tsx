@@ -38,9 +38,11 @@ export const Jokes = () => {
   const jokes = useStore((state) => state.jokes)
   return (
     <ScrollableContainer>
-      {jokes.map((joke, index) => (
-        <Joke key={joke.id} joke={joke} index={index + 1} />
-      ))}
+      <div className="px-2">
+        {jokes.map((joke, index) => (
+          <Joke key={joke.id} joke={joke} index={index + 1} />
+        ))}
+      </div>
     </ScrollableContainer>
   )
 }
@@ -56,7 +58,7 @@ export const JokesPage = () => {
       <SeparatorFull className="my-4" />
       <Jokes />
       <SeparatorFull className="my-4" />
-      <div className="mt-4">
+      <div className="flex justify-end mt-4">
         <Button onClick={() => navigate('/jokes/new')}>{'New Joke'}</Button>
       </div>
     </div>
