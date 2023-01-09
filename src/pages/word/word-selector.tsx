@@ -42,13 +42,15 @@ export const Categories = ({
   const categories = useStore((state) => state.categories)
   return (
     <ScrollableContainer height={height} maxHeight={maxHeight}>
-      {categories.map((category) => (
-        <Category
-          key={category.id}
-          category={category}
-          setSelectedCategoryId={setSelectedCategoryId}
-        />
-      ))}
+      <div className="px-2">
+        {categories.map((category) => (
+          <Category
+            key={category.id}
+            category={category}
+            setSelectedCategoryId={setSelectedCategoryId}
+          />
+        ))}
+      </div>
     </ScrollableContainer>
   )
 }
