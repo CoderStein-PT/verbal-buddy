@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Rowdies:wght@400;700&display=swap');
 
-body {
+html, body {
 	@apply bg-gray-900;
 	font-family: 'Roboto', sans-serif;
+	scroll-behavior: smooth;
+    height: 100%;
 }
 
 .tw-text b{

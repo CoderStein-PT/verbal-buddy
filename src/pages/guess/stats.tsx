@@ -20,7 +20,12 @@ const DelayGraph = ({ delays }: { delays: GuessDelayType[] }) => {
   return (
     <ResponsiveContainer height={'100%'}>
       <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-        <Bar isAnimationActive={false} dataKey="pv" fill="rgb(70,80,100)" barSize={10} />
+        <Bar
+          isAnimationActive={false}
+          dataKey="pv"
+          fill="rgb(70,80,100)"
+          barSize={10}
+        />
       </BarChart>
     </ResponsiveContainer>
   )
