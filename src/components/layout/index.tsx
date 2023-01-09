@@ -32,7 +32,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <MobileOverlay />
       <Navbar />
       <div className="max-w-screen-xl mx-auto">
-        <div className="px-16 pt-32">{children}</div>
+        <div className="min-h-[800px] flex flex-col">
+          <div className="px-16 pt-32">{children}</div>
+          <div className="flex items-end flex-1 pt-32 pb-12">
+            <Text variant="subtitle" color="gray-light">
+              © {new Date().getFullYear()} - Verbal Buddy. All rights reserved
+            </Text>
+          </div>
+        </div>
         <ToastContainer
           position="bottom-right"
           autoClose={5000}
