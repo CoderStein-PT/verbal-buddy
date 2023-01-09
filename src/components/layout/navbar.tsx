@@ -8,10 +8,10 @@ import {
 import { routes } from 'pages'
 import { useMemo, useRef } from 'react'
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
-import { GiAcorn } from '@react-icons/all-files/gi/GiAcorn'
 import { Link } from './link'
 import { links } from './links'
 import React from 'react'
+import { Logo } from './logo'
 
 const useRefs = () => {
   const refs = useRef<Record<string, HTMLElement | null>>({})
@@ -130,17 +130,7 @@ export const Navbar = () => {
       <div className="flex items-center justify-between w-full h-16 max-w-screen-xl px-16 py-4 mx-auto space-x-2 bg-gray-900 backdrop-blur-md bg-opacity-60 ">
         <div className="flex items-center flex-1 space-x-14">
           <RouterLink to="/">
-            <div className="relative flex items-center space-x-2 cursor-pointer group">
-              <div>
-                <GiAcorn className="transition w-7 h-7 text-primary-800 group-hover:text-primary-500" />
-              </div>
-              <Text
-                className="relative z-10 group-hover:text-primary-500"
-                variant="h6"
-              >
-                {'Verbal Buddy'}
-              </Text>
-            </div>
+            <Logo />
           </RouterLink>
           <div className="flex items-center flex-1 px-2 space-x-2 border-gray-700 border-dashed border-x">
             {showBackButton && (
