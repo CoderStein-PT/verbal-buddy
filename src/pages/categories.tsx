@@ -14,8 +14,11 @@ import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
+import { MdSend } from '@react-icons/all-files/md/MdSend'
 import { Link, useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
+import { TooltipWrapper } from 'react-tooltip'
+import { useState } from 'react'
 
 export const Category = ({ category }: { category: CategoryType }) => {
   const navigate = useNavigate()
@@ -103,29 +106,39 @@ export const Categories = ({
 
 export const CategoriesPage = () => {
   const scrollableContainer = useScrollableContainer({})
+  const [newCategoryText, setNewCategoryText] = useState('')
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      const newCategory = event.currentTarget.value
-      if (!newCategory) {
-        toast.error('Category cannot be empty')
-        return
-      }
+    if (event.key !== 'Enter') return
 
-      if (useStore.getState().categories.find((c) => c.name === newCategory)) {
-        toast.error('Category already exists')
-        return
-      }
+    onCreateCategory()
+  }
 
-      useStore.setState((state) => ({
-        categories: [
-          ...state.categories,
-          { id: findLastId(state.categories) + 1, name: newCategory }
-        ]
-      }))
-      event.currentTarget.value = ''
-      scrollableContainer.scrollDown()
+  const onCreateCategory = () => {
+    if (!newCategoryText) {
+      toast.error('Category cannot be empty')
+      return
     }
+
+    if (
+      useStore.getState().categories.find((c) => c.name === newCategoryText)
+    ) {
+      toast.error('Category already exists')
+      return
+    }
+
+    useStore.setState((state) => ({
+      categories: [
+        ...state.categories,
+        { id: findLastId(state.categories) + 1, name: newCategoryText }
+      ]
+    }))
+    setNewCategoryText('')
+    scrollableContainer.scrollDown()
+  }
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewCategoryText(event.target.value)
   }
 
   return (
@@ -144,8 +157,20 @@ export const CategoriesPage = () => {
         type="text"
         placeholder="New category..."
         className="w-full"
+        value={newCategoryText}
+        onChange={onChange}
         autoFocus
         big
+        icon={
+          <TooltipWrapper content="Send (Enter key)" place="right">
+            <button
+              onClick={onCreateCategory}
+              className="absolute top-0 bottom-0 right-0 flex items-center justify-center px-2 transition cursor-pointer text-slate-500 hover:text-green-500"
+            >
+              <MdSend className="w-5 h-5" />
+            </button>
+          </TooltipWrapper>
+        }
       />
     </div>
   )

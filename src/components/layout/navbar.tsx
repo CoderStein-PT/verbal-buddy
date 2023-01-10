@@ -12,6 +12,7 @@ import { Link } from './link'
 import { links } from './links'
 import React from 'react'
 import { Logo } from './logo'
+import tw from 'tailwind-styled-components'
 
 const useRefs = () => {
   const refs = useRef<Record<string, HTMLElement | null>>({})
@@ -22,6 +23,8 @@ const useRefs = () => {
 
   return { refs: refs.current, setRefFromKey }
 }
+
+const LinkGlow = tw.div`absolute w-[100px] h-0.5 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent`
 
 export const Links = () => {
   const { refs, setRefFromKey } = useRefs()
@@ -57,6 +60,8 @@ export const Links = () => {
     setShowBox(false)
   }
 
+  const offset = showBox ? 0 : 200
+
   return (
     <div className="relative flex items-center">
       {links.map((link) => (
@@ -69,28 +74,20 @@ export const Links = () => {
           onMouseLeave={onMouseLeave}
         />
       ))}
-      <div
-        className="absolute bottom-0 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent"
+      <LinkGlow
+        className="bottom-0 left-0"
         style={{
-          width: '100px',
-          height: '1px',
-          transform: `translateX(${
-            left - (showBox ? 0 : 200)
-          }px) scaleX(${scaleX})`,
-          opacity: showBox ? 1 : 0
+          transform: `translateX(${left - offset}px) scaleX(${scaleX})`,
+          opacity: +!!showBox
         }}
-      ></div>
-      <div
-        className="absolute top-0 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent"
+      />
+      <LinkGlow
+        className="top-0 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent"
         style={{
-          width: '100px',
-          height: '1px',
-          transform: `translateX(${
-            left + (showBox ? 0 : 200)
-          }px) scaleX(${scaleX})`,
-          opacity: showBox ? 1 : 0
+          transform: `translateX(${left + offset}px) scaleX(${scaleX})`,
+          opacity: +!!showBox
         }}
-      ></div>
+      />
     </div>
   )
 }

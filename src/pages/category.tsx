@@ -15,6 +15,9 @@ import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { Navigate, useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { useNavigate } from 'react-router-dom'
+import { TooltipWrapper } from 'react-tooltip'
+import { useState } from 'react'
+import { MdSend } from '@react-icons/all-files/md/MdSend'
 
 export const Word = ({ word, index }: { word: WordType; index: number }) => {
   const navigate = useNavigate()
@@ -70,6 +73,13 @@ export const Words = ({
 }) => {
   const words = useStore((state) => state.words)
 
+  if (!words.length)
+    return (
+      <Text color="gray-light" className="text-center">
+        {'No words yet. Add some! 🔥'}
+      </Text>
+    )
+
   return (
     <ScrollableContainer scrollableContainer={scrollableContainer}>
       {words
@@ -95,29 +105,37 @@ export const CategoryPage = () => {
 export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
   const navigate = useNavigate()
+  const [newWord, setNewWord] = useState<string>('')
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
-
-    const text = event.currentTarget.value
-    if (!text) {
+  const onCreateWord = () => {
+    if (!newWord) {
       toast.error('Word cannot be empty')
       return
     }
 
     const words = useStore.getState().words
 
-    if (words.find((w) => w.text === text && w.categoryId === category.id)) {
+    if (words.find((w) => w.text === newWord && w.categoryId === category.id)) {
       toast.error('Word in this category already exists')
       return
     }
 
     const id = findLastId(words) + 1
-    const newWord = { id, text, categoryId: category.id }
+    const newWordObject = { id, text: newWord, categoryId: category.id }
 
-    useStore.setState({ words: [...words, newWord] })
-    event.currentTarget.value = ''
+    useStore.setState({ words: [...words, newWordObject] })
+    setNewWord('')
     scrollableContainer.scrollDown()
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+
+    onCreateWord()
+  }
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewWord(event.target.value)
   }
 
   const resetCategoryWords = () => {
@@ -144,9 +162,22 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
       <Input
         onKeyDown={onKeyDown}
         type="text"
+        placeholder="New Word..."
+        className="w-full"
+        value={newWord}
+        onChange={onChange}
         autoFocus
-        placeholder="New word..."
-        className="w-full mt-2"
+        big
+        icon={
+          <TooltipWrapper content="Send (Enter key)" place="right">
+            <button
+              onClick={onCreateWord}
+              className="absolute top-0 bottom-0 right-0 flex items-center justify-center px-2 transition cursor-pointer text-slate-500 hover:text-green-500"
+            >
+              <MdSend className="w-5 h-5" />
+            </button>
+          </TooltipWrapper>
+        }
       />
       <div className="flex justify-end mt-2 space-x-2">
         <Button onClick={onPracticeClick}>{'Practice'}</Button>

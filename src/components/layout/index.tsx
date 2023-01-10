@@ -3,6 +3,7 @@ import { Tooltip, TooltipProvider } from 'react-tooltip'
 import { Navbar } from './navbar'
 import { SeparatorFull, Text } from 'components'
 import { Logo } from './logo'
+import { Link } from 'react-router-dom'
 
 const MobileOverlay = () => {
   // when the website is loaded on mobile, we need to say that only the desktop version is supported
@@ -34,10 +35,17 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="max-w-screen-xl mx-auto">
         <div className="min-h-[800px] flex flex-col">
           <div className="px-16 pt-32">{children}</div>
-          <div className="flex items-end flex-1 pt-32 pb-12">
+          <div className="flex items-end justify-between flex-1 pt-32 pb-12">
             <Text variant="subtitle" color="gray-light">
               © {new Date().getFullYear()} - Verbal Buddy. All rights reserved
             </Text>
+            <div className="flex items-center space-x-3">
+              <a href="/about#privacy">
+                <Text variant="subtitle" color="gray-light">
+                  {'Privacy Policy'}
+                </Text>
+              </a>
+            </div>
           </div>
         </div>
         <ToastContainer
