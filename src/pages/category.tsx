@@ -174,9 +174,11 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
           <InputSendIcon onClick={onCreateWord} title={'Send (Enter key)'} />
         }
       />
-      <div className="flex justify-end mt-2 space-x-2">
-        <Button onClick={onPracticeClick}>{'Practice'}</Button>
-        <Button color="gray" onClick={resetCategoryWords}>
+      <div className="flex justify-start mt-6 space-x-2">
+        <Button size="md" onClick={onPracticeClick}>
+          {'Practice Category'}
+        </Button>
+        <Button size="md" color="gray" onClick={resetCategoryWords}>
           {'Reset'}
         </Button>
       </div>

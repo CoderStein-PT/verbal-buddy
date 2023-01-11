@@ -81,3 +81,5 @@ export const compareStrings = (a: string, b: string) => {
 
   return aNormalized === bNormalized
 }
+
+export const isMobile = () => window.innerWidth < 768

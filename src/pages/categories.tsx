@@ -9,7 +9,7 @@ import {
   Button
 } from 'components'
 import { useStore, CategoryType } from 'store'
-import { findLastId } from 'utils'
+import { findLastId, isMobile } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
@@ -89,7 +89,10 @@ export const Categories = ({
   const categories = useStore((state) => state.categories)
 
   return (
-    <ScrollableContainer height={400} scrollableContainer={scrollableContainer}>
+    <ScrollableContainer
+      height={isMobile() ? 250 : 400}
+      scrollableContainer={scrollableContainer}
+    >
       <div className="px-2">
         {categories?.length ? (
           categories.map((category) => (

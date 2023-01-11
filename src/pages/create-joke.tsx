@@ -2,7 +2,7 @@ import { Button, Text } from 'components'
 import { useStore, CategoryType, WordType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
-import { findLastId } from 'utils'
+import { findLastId, isMobile } from 'utils'
 import { useWordSelector, WordSelector } from './word/word-selector'
 
 export const Category = ({
@@ -187,7 +187,12 @@ export const CreateJokePage = () => {
     <div className="flex flex-col-reverse md:flex-row">
       <div className="md:w-[320px] w-full mx-auto mt-4 md:mt-0">
         <WordSelector wordSelector={wordSelector} />
-        <Button onClick={selectRandomWords} className="w-full mt-4">
+        <Button
+          onClick={selectRandomWords}
+          className="w-full mt-4"
+          color={isMobile() ? 'gray' : undefined}
+          size={isMobile() ? 'sm' : 'md'}
+        >
           {'Select random words'}
         </Button>
       </div>
