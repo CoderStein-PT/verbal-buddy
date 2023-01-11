@@ -25,20 +25,30 @@ const Description = ({
   return <Row text={description.text} index={index} />
 }
 
-const Descriptions = ({ word }: { word: WordType }) => {
-  const shuffledDescriptions = useMemo(() => {
+const shuffleArray = (array: any[]) => {
+  return [...array].sort(() => 0.5 - Math.random())
+}
+
+const Descriptions = ({
+  word,
+  descriptionCount
+}: {
+  word: WordType
+  descriptionCount: number
+}) => {
+  const processedDescriptions = useMemo(() => {
     if (!word.descriptions || word.descriptions.length === 0) return null
 
-    return [...word.descriptions].sort(() => 0.5 - Math.random())
+    return shuffleArray(word.descriptions)
   }, [word.descriptions])
 
-  if (!shuffledDescriptions) return null
+  if (!processedDescriptions) return null
 
   return (
     <div className="p-2 mt-2 border border-gray-600 rounded-md">
       <ScrollableContainer>
         <div className="divide-y divide-gray-600 divide-dashed">
-          {shuffledDescriptions.map((d, index) => (
+          {processedDescriptions.slice(0, descriptionCount).map((d, index) => (
             <Description key={d.id} description={d} index={index + 1} />
           ))}
         </div>
@@ -57,6 +67,8 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [delays, setDelays] = useState<GuessDelayType[]>([])
   const [lastWord, setLastWord] = useState<WordType | null>(null)
   const [showLastWord, setShowLastWord] = useState(false)
+  const [hintsLeft, setHintsLeft] = useState(10)
+  const [descriptionCount, setDescriptionCount] = useState(3)
 
   useEffect(() => {
     if (!lastWord) return
@@ -80,6 +92,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     })
 
     setLastWord(word)
+    resetDescriptionCount()
 
     setWord(newRandomWord)
   }
@@ -162,6 +175,18 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     game.startCountdown()
   }
 
+  const moreDescriptions = () => {
+    setDescriptionCount(descriptionCount + 1)
+    setHintsLeft(hintsLeft - 1)
+  }
+
+  const resetDescriptionCount = () => {
+    setDescriptionCount(3)
+  }
+
+  const showHintsButton =
+    game.started && descriptionCount < (word?.descriptions?.length || 0)
+
   return (
     <div className="flex justify-center">
       <div className="w-full pl-64">
@@ -172,7 +197,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
           {game.started ? (
             <>
               <ScrollableContainer height={200}>
-                <Descriptions word={word} />
+                <Descriptions descriptionCount={descriptionCount} word={word} />
               </ScrollableContainer>
             </>
           ) : !!game.countdown ? (
@@ -186,14 +211,30 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
               <Explanation />
             </div>
           )}
-          <div
-            className={`flex items-center justify-end h-6 ${
-              showLastWord
-                ? 'opacity-100 transition'
-                : 'opacity-0 scale-0 transition duration-300'
-            }`}
-          >
-            <Text variant="h6">{lastWord?.text || '...'}</Text>
+          <div className="flex items-center justify-between mt-2">
+            {showHintsButton ? (
+              <Button
+                size="sm"
+                disabled={hintsLeft < 1}
+                color="gray"
+                onClick={moreDescriptions}
+              >
+                {hintsLeft > 0
+                  ? 'Show more (' + hintsLeft + 'x)'
+                  : 'No Hints Left'}
+              </Button>
+            ) : (
+              <div></div>
+            )}
+            <div
+              className={`flex items-center justify-end ${
+                showLastWord
+                  ? 'opacity-100 transition'
+                  : 'opacity-0 scale-0 transition duration-300'
+              }`}
+            >
+              <Text variant="subtitle2">{lastWord?.text || '...'}</Text>
+            </div>
           </div>
           <Footer
             game={game}
