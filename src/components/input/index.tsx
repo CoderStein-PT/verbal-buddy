@@ -9,7 +9,7 @@ ${({ $big }) => $big && 'text-2xl text-center'}
 type InputCoreProps = { $big?: boolean }
 
 export type InputProps = {
-  big: boolean
+  big?: boolean
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 // eslint-disable-next-line
