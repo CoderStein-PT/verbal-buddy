@@ -74,3 +74,10 @@ export const getRandomWord = ({ words }: { words: WordType[] }) => {
 
   return words[randomIndex]
 }
+
+export const compareStrings = (a: string, b: string) => {
+  const aNormalized = a.toLowerCase().replace(/[- ]/g, '')
+  const bNormalized = b.toLowerCase().replace(/[- ]/g, '')
+
+  return aNormalized === bNormalized
+}

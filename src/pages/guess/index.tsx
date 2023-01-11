@@ -1,7 +1,12 @@
 import { Row, Text, ScrollableContainer, Button } from 'components'
 import { useStore, DescriptionType, WordType, GuessDelayType } from 'store'
 import { useEffect, useMemo, useState } from 'react'
-import { convertDelays, getAverageDelay, getRandomWord } from 'utils'
+import {
+  compareStrings,
+  convertDelays,
+  getAverageDelay,
+  getRandomWord
+} from 'utils'
 import { Timer } from 'pages/practice/timer'
 import { Placeholder } from './placeholder'
 import { Footer } from 'pages/practice/footer'
@@ -126,9 +131,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     game.onKeyDown()
 
-    const newWord = event.currentTarget.value.toLowerCase()
+    const newWord = event.currentTarget.value
 
-    if (newWord !== word.text) return
+    if (!compareStrings(newWord, word.text)) return
 
     const newGuessedWords = [...guessedWords, word]
 

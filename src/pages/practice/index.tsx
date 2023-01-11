@@ -5,7 +5,12 @@ import {
   SeparatorFull
 } from 'components'
 import { CategoryType, useStore } from 'store'
-import { convertDelays, findLastId, getAverageDelay } from 'utils'
+import {
+  compareStrings,
+  convertDelays,
+  findLastId,
+  getAverageDelay
+} from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
@@ -32,14 +37,15 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
   const wordsLeft = useMemo(
     () =>
-      categoryWords.filter((w) => practice.find((p) => p.text === w.text))
-        .length,
+      categoryWords.filter((w) =>
+        practice.find((p) => compareStrings(p.text, w.text))
+      ).length,
     [practice, categoryWords]
   )
 
   const checkIfFinished = () => {
     const newWordsLeft = categoryWords.filter((w) =>
-      useStore.getState().practice.find((p) => p.text === w.text)
+      useStore.getState().practice.find((p) => compareStrings(p.text, w.text))
     ).length
 
     if (newWordsLeft !== goal || game.finished) return
@@ -48,7 +54,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     toast.success('You guessed all words!')
 
     const incorrectWordsCount = categoryWords.filter(
-      (w) => !practice.find((p) => p.text === w.text)
+      (w) => !practice.find((p) => compareStrings(p.text, w.text))
     ).length
 
     useStore.setState((state) => ({
@@ -85,7 +91,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
       return { practice: [...(practice || []), newPractice] }
     })
 
-    if (categoryWords.find((w) => w.text === newWord)) {
+    if (categoryWords.find((w) => compareStrings(w.text, newWord))) {
       const newDelay = game.lastTypingTimestamp - game.initialTimestamp.current
       setDelays((delays) => [...delays, newDelay])
     }

@@ -1,6 +1,6 @@
 import { ActionType, Row } from 'components'
 import { CategoryType, useStore, WordType } from 'store'
-import { findLastId } from 'utils'
+import { compareStrings, findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo } from 'react'
 import produce from 'immer'
@@ -21,7 +21,7 @@ export const Word = ({
   onWordAdded: () => void
 }) => {
   const isGuessed = useMemo(
-    () => !!categoryWords.find((w) => w.text === word.text),
+    () => !!categoryWords.find((w) => compareStrings(w.text, word.text)),
     [categoryWords, word]
   )
 
@@ -59,6 +59,7 @@ export const Word = ({
         })
       })
     )
+
     setTimeout(() => {
       onWordAdded()
     }, 100)
