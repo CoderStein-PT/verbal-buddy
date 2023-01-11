@@ -96,7 +96,7 @@ export const Row = ({
           </Text>
         )}
       </div>
-      <div className="flex items-center space-x-1 transition opacity-0 duration-500-150 group-hover:opacity-100 hover:duration-150">
+      <div className="flex items-center space-x-1 transition duration-300 md:opacity-0 group-hover:opacity-100 group-hover:duration-150">
         {actions?.map((action, index) => (
           <ActionButton
             key={index}

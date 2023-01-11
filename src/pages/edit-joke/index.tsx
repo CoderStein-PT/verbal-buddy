@@ -1,17 +1,8 @@
-import {
-  Input,
-  InputCore,
-  ListContainer,
-  SeparatorFull,
-  Text
-} from 'components'
+import { InputCore, Text } from 'components'
 import { useStore, JokeType } from 'store'
-import { toast } from 'react-toastify'
-import { findLastId } from 'utils'
 import { useParams } from 'react-router-dom'
-import { Premises } from './premises'
 import { WordManager } from './word-manager'
-import produce from 'immer'
+import { PremisesBase } from './premises'
 
 const EditJokeCore = ({ joke }: { joke: JokeType }) => {
   const onTextChange = (
@@ -34,56 +25,14 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
     }))
   }
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
-
-    const newPremise = event.currentTarget.value
-
-    if (!newPremise) {
-      toast.error('Premise cannot be empty')
-      return
-    }
-
-    if (joke.text?.includes(newPremise)) {
-      toast.error('Premise already exists')
-      return
-    }
-
-    event.currentTarget.value = ''
-
-    useStore.setState((state) =>
-      produce(state, (draft) => {
-        const currentJoke = draft.jokes.find((j) => j.id === joke.id)
-
-        if (!currentJoke?.premises) return
-
-        currentJoke.premises.push({
-          id: findLastId(currentJoke.premises || []) + 1,
-          text: newPremise
-        })
-      })
-    )
-  }
-
   return (
     <div>
       <WordManager joke={joke} />
-      <div className="flex mt-4 space-x-4">
-        <div className="w-1/3">
-          <ListContainer>
-            <div className="px-2">
-              <Text variant="button">{'Premises'}</Text>
-            </div>
-            <SeparatorFull />
-            <Premises joke={joke} />
-            <Input
-              onKeyDown={onKeyDown}
-              placeholder="New premise..."
-              className="w-full"
-            />
-          </ListContainer>
+      <div className="flex flex-col mt-4 space-x-0 space-y-2 md:space-y-0 md:space-x-4 md:flex-row">
+        <div className="w-full md:w-1/3">
+          <PremisesBase joke={joke} />
         </div>
-        <div className="w-1/3">
+        <div className="w-full md:w-1/3">
           <Text variant="button">{'Drafts'}</Text>
           <div className="overflow-hidden rounded-md">
             <InputCore
@@ -94,7 +43,7 @@ const EditJokeCore = ({ joke }: { joke: JokeType }) => {
             />
           </div>
         </div>
-        <div className="w-1/3">
+        <div className="w-full md:w-1/3">
           <Text variant="button">{'Joke'}</Text>
           <div className="overflow-hidden rounded-md">
             <InputCore

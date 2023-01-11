@@ -200,8 +200,8 @@ export const SettingsPage = () => {
   }
 
   return (
-    <div className="flex justify-between space-x-12">
-      <div className="w-[480px]">
+    <div className="justify-between block md:space-x-12 md:flex">
+      <div className="md:w-[480px] w-full">
         <ScrollableContainer maxHeight={600}>
           <div className="space-y-4">
             <Text variant="button">{'Jokes'}</Text>
@@ -277,7 +277,7 @@ export const SettingsPage = () => {
           </div>
         </ScrollableContainer>
       </div>
-      <div className="relative w-1/2">
+      <div className="relative mt-8 md:w-1/2 md:mt-0">
         <Text variant="button">{'Presets'}</Text>
         <Explanation title={explanations.presets.main} />
         <Presets />

@@ -14,6 +14,8 @@ import { useGame } from 'pages/practice/use-game'
 import Explanation from './explanation.mdx'
 import { Stats } from './stats'
 import { GuessResults } from './guess-results'
+import { PageContainer } from 'components/layout/container'
+import { Link } from 'react-router-dom'
 
 const Description = ({
   description,
@@ -189,8 +191,8 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full pl-64">
-        <div className="w-[400px] mx-auto">
+      <div className="w-full md:pl-64">
+        <PageContainer>
           <div className="flex justify-end">
             <Timer time={game.time} isCounting={game.isCounting} />
           </div>
@@ -246,9 +248,14 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             skipWord={skipWord}
             placeholder="Guess word"
           />
-        </div>
+          <div className="flex flex-col mt-2 md:hidden">
+            <Link className="flex flex-col" to={`/guess/stats`}>
+              <Button color="gray">{'See Stats'}</Button>
+            </Link>
+          </div>
+        </PageContainer>
       </div>
-      <div className="w-[360px] flex-shrink-0">
+      <div className="md:block hidden w-[360px] flex-shrink-0">
         {game.finished || !game.pressedStart ? (
           <Stats />
         ) : (

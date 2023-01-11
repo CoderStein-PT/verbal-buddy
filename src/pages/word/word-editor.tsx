@@ -20,7 +20,7 @@ const Header = ({
   onDeleteClick?: () => void
 }) => {
   return (
-    <div className="px-2 overflow-x-auto">
+    <div className="flex items-center justify-between py-1 pl-2 pr-1 space-x-2 overflow-x-auto">
       <Text variant="button" className="whitespace-nowrap">
         {breadcrumbs.map((breadcrumb, index) => (
           <span
@@ -39,7 +39,7 @@ const Header = ({
         ))}
       </Text>
       {!!onDeleteClick && (
-        <div className="absolute top-1 right-1">
+        <div className="">
           <Button
             title="Delete Word"
             size="icon"

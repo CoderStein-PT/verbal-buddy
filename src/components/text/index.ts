@@ -10,16 +10,16 @@ const colorClasses = {
 }
 
 const variantClasses = {
-  h1: 'text-5xl md:text-7xl font-title md:leading-tight',
-  h2: 'text-4xl md:text-6xl font-title md:leading-tight',
-  h3: 'text-3xl md:text-5xl font-title md:leading-tight',
-  h4: 'text-2xl md:text-4xl font-title',
-  h5: 'text-xl md:text-3xl font-title',
-  h6: 'text-lg md:text-2xl font-title',
+  h1: 'text-6xl md:text-7xl font-title md:leading-tight',
+  h2: 'text-5xl md:text-6xl font-title md:leading-tight',
+  h3: 'text-4xl md:text-5xl font-title md:leading-tight',
+  h4: 'text-3xl md:text-4xl font-title',
+  h5: 'text-2xl md:text-3xl font-title',
+  h6: 'text-xl md:text-2xl font-title',
   bodyBig: 'md:text-lg md:leading-relaxed',
   body: '',
   subtitle: 'text-sm md:text-sm',
-  subtitle2: 'text-sm md:text-base tracking-wide',
+  subtitle2: 'text-base md:text-base tracking-wide',
   button: 'text-base md:text-lg font-title uppercase',
   caption: 'text-xs md:text-xs font-title',
   overline: 'text-xs md:text-xs'

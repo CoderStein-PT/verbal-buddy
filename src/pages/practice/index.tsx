@@ -2,7 +2,8 @@ import {
   Text,
   ScrollableContainer,
   useScrollableContainer,
-  SeparatorFull
+  SeparatorFull,
+  Button
 } from 'components'
 import { CategoryType, useStore } from 'store'
 import {
@@ -13,7 +14,7 @@ import {
 } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { Stats } from './stats'
 import { Words } from './words'
 import { Timer } from './timer'
@@ -21,6 +22,7 @@ import Explanation from './explanation.mdx'
 import { useGame } from './use-game'
 import { Footer } from './footer'
 import { Placeholder } from './placeholder'
+import { PageContainer } from 'components/layout/container'
 
 export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const words = useStore((state) => state.words)
@@ -115,8 +117,8 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full pl-64">
-        <div className="w-[400px] mx-auto">
+      <div className="w-full md:pl-64">
+        <PageContainer>
           <div className="flex items-end justify-between">
             <Text variant="button" className="text-center">
               {category.name}
@@ -149,9 +151,17 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
             onKeyDown={onKeyDown}
             resetPractice={resetPractice}
           />
-        </div>
+          <div className="flex flex-col mt-2 md:hidden">
+            <Link
+              className="flex flex-col"
+              to={`/practice/${category.id}/stats`}
+            >
+              <Button color="gray">{'See Stats'}</Button>
+            </Link>
+          </div>
+        </PageContainer>
       </div>
-      <div className="w-[360px] flex-shrink-0">
+      <div className="md:block hidden w-[360px] flex-shrink-0">
         <Stats categoryId={category.id} />
       </div>
     </div>

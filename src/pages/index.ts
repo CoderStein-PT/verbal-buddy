@@ -8,6 +8,7 @@ import { PracticePage } from './practice'
 import { WordPage } from './word'
 import { GuessPage } from './guess'
 import { AboutPage } from './about'
+import { PracticeStats } from './practice-stats'
 
 export type IRoute = {
   name: string
@@ -33,6 +34,16 @@ export const routes: {
   },
   joke: { name: 'New Joke', path: '/jokes/new', component: CreateJokePage },
   jokes: { name: 'Jokes', path: '/jokes', component: JokesPage },
+  practiceStats: {
+    name: 'Practice Stats',
+    path: '/practice/:id/stats',
+    component: PracticeStats
+  },
+  guessStats: {
+    name: 'Guess Stats',
+    path: '/guess/stats',
+    component: PracticeStats
+  },
   editJoke: { name: 'Edit Joke', path: '/joke/:id', component: EditJokePage },
   guess: { name: 'Guess', path: '/guess', component: GuessPage },
   settings: { name: 'Settings', path: '/settings', component: SettingsPage },
