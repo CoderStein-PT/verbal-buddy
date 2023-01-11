@@ -9,6 +9,7 @@ import { WordPage } from './word'
 import { GuessPage } from './guess'
 import { AboutPage } from './about'
 import { PracticeStats } from './practice-stats'
+import { GuessStats } from './guess-stats'
 
 export type IRoute = {
   name: string
@@ -42,7 +43,7 @@ export const routes: {
   guessStats: {
     name: 'Guess Stats',
     path: '/guess/stats',
-    component: PracticeStats
+    component: GuessStats
   },
   editJoke: { name: 'Edit Joke', path: '/joke/:id', component: EditJokePage },
   guess: { name: 'Guess', path: '/guess', component: GuessPage },
