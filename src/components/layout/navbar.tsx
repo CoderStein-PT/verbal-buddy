@@ -40,7 +40,7 @@ export const Links = () => {
       const matches = link.matches || [link.link]
       return matches.some((match) => matchPath(match, location.pathname))
     })
-  }, [links, location.pathname])
+  }, [location.pathname])
 
   const onMouseEnter = (name: string) => {
     const target = refs[name]
@@ -63,7 +63,7 @@ export const Links = () => {
   const offset = showBox ? 0 : 200
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative items-center hidden md:flex">
       {links.map((link) => (
         <Link
           ref={setRefFromKey(link.name)}
@@ -92,6 +92,8 @@ export const Links = () => {
   )
 }
 
+const noBackButtonPaths = ['/', '/settings', '/jokes', '/guess', '/about']
+
 export const Navbar = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -113,23 +115,17 @@ export const Navbar = () => {
 
   const showBackButton = useMemo(() => {
     if (!route) return false
-    return (
-      route.path !== '/' &&
-      route.path !== '/settings' &&
-      route.path !== '/jokes' &&
-      route.path !== '/guess' &&
-      route.path !== '/about'
-    )
+    return !noBackButtonPaths.includes(route.path)
   }, [route])
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center justify-between w-full h-16 max-w-screen-xl px-16 py-4 mx-auto space-x-2 bg-gray-900 backdrop-blur-md bg-opacity-60 ">
-        <div className="flex items-center flex-1 space-x-14">
+        <div className="flex items-center justify-center flex-1 w-full md:w-auto space-x-14">
           <RouterLink to="/">
             <Logo />
           </RouterLink>
-          <div className="flex items-center flex-1 px-2 space-x-2 border-gray-700 border-dashed border-x">
+          <div className="items-center flex-1 hidden px-2 space-x-2 border-gray-700 border-dashed md:flex border-x">
             {showBackButton && (
               <div>
                 <Button size="round" color="text" onClick={navigateBack}>
