@@ -3,7 +3,7 @@ import { useStore, WordType } from 'store'
 import { Descriptions } from './description'
 import { RelatedWords } from './related-words'
 import { Tab } from '@headlessui/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 
 const Header = ({
@@ -67,6 +67,11 @@ export const WordEditor = ({
 }) => {
   const [breadcrumbs, setBreadcrumbs] = React.useState<number[]>([word.id])
   const [activeBreadcrumbIndex, setActiveBreadcrumbIndex] = React.useState(0)
+
+  useEffect(() => {
+    setBreadcrumbs([word.id])
+    setActiveBreadcrumbIndex(0)
+  }, [word.id])
 
   const onWordClick = (word: WordType) => {
     const newBreadcrumbs = [

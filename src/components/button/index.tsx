@@ -38,7 +38,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 export const ButtonCore = tw.button<ButtonProps>`
-  relative flex items-center justify-center transition ease-out appearance-none whitespace-nowrap group
+  relative flex items-center justify-center transition ease-out appearance-none whitespace-nowrap group select-none
   ${({ size = 'base', color = 'primary', disabled }) =>
     `${sizeClasses[size]} ${colorClasses[disabled ? 'gray' : color]}`}
 `
