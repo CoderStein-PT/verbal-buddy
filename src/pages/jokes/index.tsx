@@ -68,7 +68,7 @@ export const JokesPage = () => {
     )
 
   return (
-    <div className="mx-auto w-[600px]">
+    <div className="mx-auto md:w-[400px] w-full">
       <SeparatorFull className="my-4" />
       <Jokes />
       <SeparatorFull className="my-4" />

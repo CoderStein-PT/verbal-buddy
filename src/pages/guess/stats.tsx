@@ -84,6 +84,7 @@ const StatRow = ({
     </tr>
   )
 }
+
 export const Stats = () => {
   const stats = useStore((state) => state.guessStats)
 

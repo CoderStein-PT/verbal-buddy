@@ -7,7 +7,7 @@ import { useWordSelector, WordSelector } from '../word/word-selector'
 import produce from 'immer'
 import tw from 'tailwind-styled-components'
 
-const Column = tw.div`w-1/3 flex-shrink-0 flex-grow-0 relative`
+const Column = tw.div`md:w-1/3 w-full flex-shrink-0 flex-grow-0 relative`
 
 const AddNewWord = ({
   joke,
@@ -83,7 +83,7 @@ export const WordManager = ({ joke }: { joke: JokeType }) => {
 
   return (
     <div className="pb-1 overflow-x-auto">
-      <div className="flex space-x-4">
+      <div className="flex space-x-2 md:space-x-4">
         {wordsToLoop.map((word) => (
           <Column key={word?.id}>
             <WordEditor

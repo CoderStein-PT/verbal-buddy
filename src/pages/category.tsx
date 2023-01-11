@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router-dom'
 import { TooltipWrapper } from 'react-tooltip'
 import { useState } from 'react'
 import { MdSend } from '@react-icons/all-files/md/MdSend'
+import { InputSendIcon } from 'components/input/input-send-icon'
+import { PageContainer } from 'components/layout/container'
 
 export const Word = ({ word, index }: { word: WordType; index: number }) => {
   const navigate = useNavigate()
@@ -151,7 +153,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   }
 
   return (
-    <div className="w-[400px] mx-auto">
+    <PageContainer>
       <Text variant="button">{category?.name}</Text>
       <SeparatorFull className="w-full my-2" />
       <Words
@@ -169,14 +171,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
         autoFocus
         big
         icon={
-          <TooltipWrapper content="Send (Enter key)" place="right">
-            <button
-              onClick={onCreateWord}
-              className="absolute top-0 bottom-0 right-0 flex items-center justify-center px-2 transition cursor-pointer text-slate-500 hover:text-green-500"
-            >
-              <MdSend className="w-5 h-5" />
-            </button>
-          </TooltipWrapper>
+          <InputSendIcon onClick={onCreateWord} title={'Send (Enter key)'} />
         }
       />
       <div className="flex justify-end mt-2 space-x-2">
@@ -185,6 +180,6 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
           {'Reset'}
         </Button>
       </div>
-    </div>
+    </PageContainer>
   )
 }

@@ -83,7 +83,7 @@ export const TableOfContents = ({
   }, [headings])
 
   return (
-    <div className="fixed top-32 right-[max(0px,calc(50%-34rem))]">
+    <div className="fixed top-32 right-[max(0px,calc(50%-34rem))] hidden md:block">
       {headings.length > 0 ? (
         <div>
           {headings.map((heading) => (

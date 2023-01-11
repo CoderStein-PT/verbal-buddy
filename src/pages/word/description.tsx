@@ -10,6 +10,8 @@ import { toast } from 'react-toastify'
 import produce from 'immer'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { findLastId } from 'utils'
+import { InputSendIcon } from 'components/input/input-send-icon'
+import { useState } from 'react'
 
 const Description = ({
   word,
@@ -92,12 +94,9 @@ export const Descriptions = ({
   keys?: 'descriptions' | 'opposites'
 }) => {
   const scrollableContainer = useScrollableContainer({})
+  const [text, setText] = useState('')
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
-
-    const text = event.currentTarget.value
-
+  const onAddDescription = () => {
     if (!text) {
       toast.error('Description cannot be empty')
       return
@@ -122,8 +121,18 @@ export const Descriptions = ({
       })
     )
 
-    event.currentTarget.value = ''
+    setText('')
     scrollableContainer.scrollDown()
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+
+    onAddDescription()
+  }
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.currentTarget.value)
   }
 
   const descriptions = word[keys]
@@ -158,12 +167,19 @@ export const Descriptions = ({
           </div>
         </div>
       </ScrollableContainer>
-      <Input
-        onKeyDown={onKeyDown}
-        type="text"
-        placeholder="New description..."
-        className="w-full mt-2"
-      />
+      <div className="relative mt-2">
+        <Input
+          onKeyDown={onKeyDown}
+          type="text"
+          placeholder="New description..."
+          className="w-full"
+          autoFocus
+          onChange={onChange}
+          value={text}
+          big
+          icon={<InputSendIcon onClick={onAddDescription} />}
+        />
+      </div>
     </div>
   )
 }

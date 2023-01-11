@@ -9,7 +9,7 @@ const sizeClasses = {
   base: 'py-2 px-6 rounded-xl',
   lg: 'py-3 px-6 rounded-2xl',
   xl: 'py-4 px-8 text-lg rounded-2xl',
-  icon: 'p-0.5 rounded-full'
+  icon: 'md:p-0.5 p-1.5 rounded-full'
 }
 
 const textSizeVariants: Record<string, TextProps['variant']> = {

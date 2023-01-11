@@ -1,7 +1,18 @@
-import { Row, ScrollableContainer } from 'components'
+import {
+  Input,
+  Text,
+  ListContainer,
+  Row,
+  ScrollableContainer,
+  SeparatorFull
+} from 'components'
 import { useStore, PremiseType, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import produce from 'immer'
+import { InputSendIcon } from 'components/input/input-send-icon'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { findLastId } from 'utils'
 
 const Premise = ({
   premise,
@@ -57,5 +68,67 @@ export const Premises = ({ joke }: { joke: JokeType }) => {
         ))}
       </div>
     </ScrollableContainer>
+  )
+}
+
+export const PremisesBase = ({ joke }: { joke: JokeType }) => {
+  const [text, setText] = useState('')
+
+  const addNewPremise = () => {
+    if (!text) {
+      toast.error('Premise cannot be empty')
+      return
+    }
+
+    if (joke.text?.includes(text)) {
+      toast.error('Premise already exists')
+      return
+    }
+
+    setText('')
+
+    useStore.setState((state) =>
+      produce(state, (draft) => {
+        const currentJoke = draft.jokes.find((j) => j.id === joke.id)
+
+        if (!currentJoke?.premises) return
+
+        currentJoke.premises.push({
+          id: findLastId(currentJoke.premises || []) + 1,
+          text
+        })
+      })
+    )
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return
+
+    addNewPremise()
+  }
+
+  const onPremiseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.currentTarget.value)
+  }
+
+  return (
+    <ListContainer>
+      <div className="px-2">
+        <Text variant="button">{'Premises'}</Text>
+      </div>
+      <SeparatorFull />
+      <Premises joke={joke} />
+      <Input
+        onKeyDown={onKeyDown}
+        placeholder="New premise..."
+        className="w-full"
+        big
+        onChange={onPremiseChange}
+        value={text}
+        icon={
+          <InputSendIcon onClick={() => onKeyDown({ key: 'Enter' } as any)} />
+        }
+      />
+    </ListContainer>
   )
 }

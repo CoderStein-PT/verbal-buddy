@@ -13,6 +13,8 @@ import { links } from './links'
 import React from 'react'
 import { Logo } from './logo'
 import tw from 'tailwind-styled-components'
+import { MenuLauncher } from './menu-launcher'
+import { useUiStore } from 'ui-store'
 
 const useRefs = () => {
   const refs = useRef<Record<string, HTMLElement | null>>({})
@@ -118,13 +120,28 @@ export const Navbar = () => {
     return !noBackButtonPaths.includes(route.path)
   }, [route])
 
+  const openSidebar = useUiStore((state) => state.openSidebar)
+
   return (
-    <div className="fixed top-0 left-0 right-0 z-50">
-      <div className="flex items-center justify-between w-full h-16 max-w-screen-xl px-16 py-4 mx-auto space-x-2 bg-gray-900 backdrop-blur-md bg-opacity-60 ">
+    <div className="fixed top-0 left-0 right-0 z-40">
+      <div className="flex items-center justify-between w-full h-12 max-w-screen-xl px-2 py-1 mx-auto bg-gray-900 md:space-x-2 md:px-16 md:py-4 md:h-16 backdrop-blur-md bg-opacity-60 ">
+        <div className="absolute md:hidden top-1 left-2">
+          {showBackButton && (
+            <div>
+              <Button size="round" color="text" onClick={navigateBack}>
+                <FiChevronLeft className="w-full h-full mr-1" />
+                <Text className="mr-2 group-hover:text-primary-500">
+                  {'Back'}
+                </Text>
+              </Button>
+            </div>
+          )}
+        </div>
         <div className="flex items-center justify-center flex-1 w-full md:w-auto space-x-14">
           <RouterLink to="/">
             <Logo />
           </RouterLink>
+          <MenuLauncher onClick={openSidebar} />
           <div className="items-center flex-1 hidden px-2 space-x-2 border-gray-700 border-dashed md:flex border-x">
             {showBackButton && (
               <div>

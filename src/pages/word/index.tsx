@@ -2,6 +2,7 @@ import { useStore } from 'store'
 import { useNavigate, useParams } from 'react-router-dom'
 import { WordEditor } from './word-editor'
 import { Button } from 'components'
+import { PageContainer } from 'components/layout/container'
 
 export const WordPage = () => {
   const wordId = useParams<{ id: string }>().id
@@ -31,7 +32,7 @@ export const WordPage = () => {
   }
 
   return (
-    <div className="w-[400px] mx-auto">
+    <PageContainer>
       <WordEditor height={330} word={word} />
       <div className="flex items-center justify-between mt-4">
         <div>
@@ -49,6 +50,6 @@ export const WordPage = () => {
           )}
         </div>
       </div>
-    </div>
+    </PageContainer>
   )
 }

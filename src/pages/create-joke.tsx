@@ -96,11 +96,22 @@ export const Categories = ({ setSelectedCategoryId }: any) => {
 
 export const SelectedWords = () => {
   const selectedWords = useStore((state) => state.selectedWords)
+
   return (
     <div>
       {selectedWords.map((word) => (
         <SelectedWord key={word.id} word={word} />
       ))}
+      {selectedWords.length === 0 && (
+        <div className="text-center">
+          <Text color="gray-light" className="md:hidden">
+            {'Please, select the words below.'}
+          </Text>
+          <Text color="gray-light" className="hidden md:block">
+            {'Please, select the words from the list on the left.'}
+          </Text>
+        </div>
+      )}
     </div>
   )
 }
@@ -173,14 +184,14 @@ export const CreateJokePage = () => {
   }
 
   return (
-    <div className="flex">
-      <div className="w-[320px] mx-auto">
+    <div className="flex flex-col-reverse md:flex-row">
+      <div className="md:w-[320px] w-full mx-auto mt-4 md:mt-0">
         <WordSelector wordSelector={wordSelector} />
         <Button onClick={selectRandomWords} className="w-full mt-4">
           {'Select random words'}
         </Button>
       </div>
-      <div className="w-[320px] mx-auto">
+      <div className="md:w-[320px] w-full mx-auto">
         <Text variant="h5">{'Selected words'}</Text>
         <div className="mt-4">
           <SelectedWords />
