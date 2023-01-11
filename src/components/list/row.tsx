@@ -36,7 +36,7 @@ export const Row = ({
   onChange,
   index,
   actions,
-  ellipsis,
+  ellipsis = true,
   isSelected,
   color = undefined
 }: {
@@ -73,17 +73,21 @@ export const Row = ({
   return (
     <div className="flex items-center justify-between space-x-1 group">
       <div
-        className="w-full overflow-hidden cursor-pointer group"
+        className={
+          'w-full cursor-pointer group' + (isEditMode ? '' : ' overflow-hidden')
+        }
         onClick={onClick}
       >
         {isEditMode ? (
-          <Input
-            className="w-full"
-            ref={inputRef}
-            onBlur={onChangeReal}
-            defaultValue={text}
-            onKeyDown={onKeyDown}
-          />
+          <div className="p-0.5">
+            <Input
+              className="w-full"
+              ref={inputRef}
+              onBlur={onChangeReal}
+              defaultValue={text}
+              onKeyDown={onKeyDown}
+            />
+          </div>
         ) : (
           <Text
             title={text}
