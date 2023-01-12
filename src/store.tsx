@@ -20,6 +20,14 @@ export type JokeType = {
   premises?: PremiseType[]
 }
 
+export type JournalEntryType = {
+  id: number
+  title: string
+  text: string
+  createdAt: string
+  updatedAt: string
+}
+
 export type RelatedWordType = {
   id: number
   wordId: number
@@ -78,6 +86,7 @@ export type StoreType = {
   words: WordType[]
   practice: WordType[]
   selectedWords: WordType[]
+  journal: JournalEntryType[]
   jokes: JokeType[]
   practiceStats: PracticeStatsType[]
   guessStats: GuessStats[]
@@ -93,6 +102,7 @@ export const useStore = create(
       selectedWords: [],
       jokes: [],
       practiceStats: [],
+      journal: [],
       guessStats: [],
       settings: {
         randomWords: 3,

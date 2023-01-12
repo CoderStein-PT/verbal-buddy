@@ -20,6 +20,7 @@ import Explanation from './explanation.mdx'
 import { TooltipWrapper } from 'react-tooltip'
 import { useState } from 'react'
 import { InputSendIcon } from 'components/input/input-send-icon'
+import { PageContainer } from 'components/layout/container'
 
 export const Category = ({ category }: { category: CategoryType }) => {
   const navigate = useNavigate()
@@ -146,7 +147,7 @@ export const CategoriesPage = () => {
   }
 
   return (
-    <div className="mx-auto md:w-[400px] w-full">
+    <PageContainer>
       <div className="flex items-center justify-between">
         <Text variant="button">{'Categories'}</Text>
         <Link to="/settings">
@@ -172,6 +173,6 @@ export const CategoriesPage = () => {
           />
         }
       />
-    </div>
+    </PageContainer>
   )
 }

@@ -6,95 +6,24 @@ import {
   useLocation
 } from 'react-router-dom'
 import { routes } from 'pages'
-import { useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
-import { Link } from './link'
-import { links } from './links'
-import React from 'react'
 import { Logo } from './logo'
 import tw from 'tailwind-styled-components'
 import { MenuLauncher } from './menu-launcher'
 import { useUiStore } from 'ui-store'
+import { Links } from './links'
 
-const useRefs = () => {
-  const refs = useRef<Record<string, HTMLElement | null>>({})
+export const LinkGlow = tw.div`absolute w-[100px] h-0.5 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent`
 
-  const setRefFromKey = (key: string) => (element: HTMLElement | null) => {
-    refs.current[key] = element
-  }
-
-  return { refs: refs.current, setRefFromKey }
-}
-
-const LinkGlow = tw.div`absolute w-[100px] h-0.5 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent`
-
-export const Links = () => {
-  const { refs, setRefFromKey } = useRefs()
-
-  const location = useLocation()
-
-  const [showBox, setShowBox] = React.useState(false)
-  const [left, setLeft] = React.useState(0)
-  const [scaleX, setScaleX] = React.useState(1)
-
-  const active = useMemo(() => {
-    return links.find((link) => {
-      const matches = link.matches || [link.link]
-      return matches.some((match) => matchPath(match, location.pathname))
-    })
-  }, [location.pathname])
-
-  const onMouseEnter = (name: string) => {
-    const target = refs[name]
-
-    if (!target) return
-
-    const left = target.offsetLeft
-    const width = target.offsetWidth
-
-    setScaleX(width / 100)
-    setLeft(left)
-
-    setShowBox(true)
-  }
-
-  const onMouseLeave = () => {
-    setShowBox(false)
-  }
-
-  const offset = showBox ? 0 : 200
-
-  return (
-    <div className="relative items-center hidden md:flex">
-      {links.map((link) => (
-        <Link
-          ref={setRefFromKey(link.name)}
-          link={link}
-          key={link.link}
-          active={active?.name === link.name}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-        />
-      ))}
-      <LinkGlow
-        className="bottom-0 left-0"
-        style={{
-          transform: `translateX(${left - offset}px) scaleX(${scaleX})`,
-          opacity: +!!showBox
-        }}
-      />
-      <LinkGlow
-        className="top-0 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent"
-        style={{
-          transform: `translateX(${left + offset}px) scaleX(${scaleX})`,
-          opacity: +!!showBox
-        }}
-      />
-    </div>
-  )
-}
-
-const noBackButtonPaths = ['/', '/settings', '/jokes', '/guess', '/about']
+const noBackButtonPaths = [
+  '/',
+  '/settings',
+  '/jokes',
+  '/guess',
+  '/about',
+  '/journal'
+]
 
 export const Navbar = () => {
   const navigate = useNavigate()

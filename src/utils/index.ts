@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { WordType } from 'store'
 
 export const findLastId = (array: any[]) => {
@@ -83,3 +84,13 @@ export const compareStrings = (a: string, b: string) => {
 }
 
 export const isMobile = () => window.innerWidth < 768
+
+export const useRefs = () => {
+  const refs = useRef<Record<string, HTMLElement | null>>({})
+
+  const setRefFromKey = (key: string) => (element: HTMLElement | null) => {
+    refs.current[key] = element
+  }
+
+  return { refs: refs.current, setRefFromKey }
+}

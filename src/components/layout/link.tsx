@@ -1,7 +1,7 @@
 import { Text } from 'components'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { LinkType } from './links'
+import { LinkType } from './links-list'
 
 // eslint-disable-next-line react/display-name
 export const Link = React.forwardRef<any, any>(
@@ -27,9 +27,17 @@ export const Link = React.forwardRef<any, any>(
           onMouseEnter={() => onMouseEnter?.(link.name)}
           onMouseLeave={onMouseLeave}
         >
-          <Text variant="button" color={active ? 'primary' : undefined}>
-            {link.name}
-          </Text>
+          {link.icon ? (
+            <link.icon
+              className={`transition ${
+                active ? 'text-primary-500' : 'text-slate-200'
+              }`}
+            />
+          ) : (
+            <Text variant="button" color={active ? 'primary' : undefined}>
+              {link.name}
+            </Text>
+          )}
         </div>
       </RouterLink>
     )

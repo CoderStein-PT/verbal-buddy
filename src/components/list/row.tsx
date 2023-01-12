@@ -1,5 +1,6 @@
 import { Input, Button, Text, ButtonProps, TextProps } from 'components'
 import { useState, useRef } from 'react'
+import { TooltipWrapper } from 'react-tooltip'
 
 const ActionButton = ({
   action,
@@ -40,7 +41,7 @@ export const Row = ({
   isSelected,
   color = undefined
 }: {
-  text?: string
+  text?: React.ReactNode | string
   onClick?: () => void
   onChange?: (text: string | undefined) => void
   index?: number
@@ -84,20 +85,27 @@ export const Row = ({
               className="w-full"
               ref={inputRef}
               onBlur={onChangeReal}
-              defaultValue={text}
+              defaultValue={typeof text === 'string' ? text : ''}
               onKeyDown={onKeyDown}
             />
           </div>
         ) : (
-          <Text
-            title={text}
-            className={`${isSelected ? '' : 'group-hover:text-primary-500'} ${
-              ellipsis ? 'text-ellipsis overflow-hidden whitespace-nowrap' : ''
-            }`}
-            color={isSelected ? 'gray-light' : color}
+          <TooltipWrapper
+            content={
+              typeof text === 'string' && text.length > 20 ? text : undefined
+            }
           >
-            {text}
-          </Text>
+            <Text
+              className={`${isSelected ? '' : 'group-hover:text-primary-500'} ${
+                ellipsis
+                  ? 'text-ellipsis overflow-hidden whitespace-nowrap'
+                  : ''
+              }`}
+              color={isSelected ? 'gray-light' : color}
+            >
+              {text}
+            </Text>
+          </TooltipWrapper>
         )}
       </div>
       <div className="flex items-center space-x-1 transition duration-300 md:opacity-0 group-hover:opacity-100 group-hover:duration-150">

@@ -10,6 +10,8 @@ import { GuessPage } from './guess'
 import { AboutPage } from './about'
 import { PracticeStats } from './practice-stats'
 import { GuessStats } from './guess-stats'
+import { JournalPage } from './journal'
+import { JournalEditPage } from './journal-edit'
 
 export type IRoute = {
   name: string
@@ -48,5 +50,11 @@ export const routes: {
   editJoke: { name: 'Edit Joke', path: '/joke/:id', component: EditJokePage },
   guess: { name: 'Guess', path: '/guess', component: GuessPage },
   settings: { name: 'Settings', path: '/settings', component: SettingsPage },
-  about: { name: 'About', path: '/about', component: AboutPage }
+  about: { name: 'About', path: '/about', component: AboutPage },
+  journal: { name: 'Journal', path: '/journal', component: JournalPage },
+  journalEdit: {
+    name: 'Edit Journal',
+    path: '/journal/:id',
+    component: JournalEditPage
+  }
 }

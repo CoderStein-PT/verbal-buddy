@@ -4,6 +4,7 @@ import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
 import ExplanationEmpty from './explanation-empty.mdx'
+import { PageContainer } from 'components/layout/container'
 
 export const Joke = ({ joke, index }: { joke: JokeType; index: number }) => {
   const words = useStore((state) => state.words)
@@ -68,13 +69,13 @@ export const JokesPage = () => {
     )
 
   return (
-    <div className="mx-auto md:w-[400px] w-full">
+    <PageContainer>
       <SeparatorFull className="my-4" />
       <Jokes />
       <SeparatorFull className="my-4" />
       <div className="flex justify-end mt-4">
         <Button onClick={() => navigate('/jokes/new')}>{'New Joke'}</Button>
       </div>
-    </div>
+    </PageContainer>
   )
 }

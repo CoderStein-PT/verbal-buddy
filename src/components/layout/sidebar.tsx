@@ -2,7 +2,7 @@ import tw from 'tailwind-styled-components'
 import { CrossButton } from './cross-button'
 import { Text } from 'components'
 import { useNavigate } from 'react-router-dom'
-import { links, LinkType } from './links'
+import { links, LinkType } from './links-list'
 import { useUiStore } from 'ui-store'
 import { Logo } from './logo'
 
@@ -22,8 +22,9 @@ const Content = tw.div`absolute inset-0 flex flex-col space-y-3 px-8 my-16`
 
 const MobileNavLinkContainer = tw.div<{
   $isSidebarOpen: boolean
-}>`w-full py-1 transition duration-300 ease-in-out ${({ $isSidebarOpen }) =>
-  $isSidebarOpen ? '' : 'translate-y-16 opacity-0'}`
+}>`w-full py-1 transition cursor-pointer duration-300 ease-in-out ${({
+  $isSidebarOpen
+}) => ($isSidebarOpen ? '' : 'translate-y-16 opacity-0')}`
 
 const MobileNavLink = ({
   navLink,
