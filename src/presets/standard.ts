@@ -31,7 +31,6 @@ export const standard: PresetType = {
       { id: 23, name: 'Places' }
     ],
     words: [
-      // 24 words of Animals category
       { id: 1, text: 'cat', categoryId: 1 },
       { id: 2, text: 'dog', categoryId: 1 },
       { id: 3, text: 'bird', categoryId: 1 },
@@ -56,7 +55,6 @@ export const standard: PresetType = {
       { id: 22, text: 'whale', categoryId: 1 },
       { id: 23, text: 'shark', categoryId: 1 },
       { id: 24, text: 'penguin', categoryId: 1 },
-      // 24 words of Food category
       { id: 25, text: 'apple', categoryId: 2 },
       { id: 26, text: 'banana', categoryId: 2 },
       { id: 27, text: 'orange', categoryId: 2 },
@@ -81,7 +79,6 @@ export const standard: PresetType = {
       { id: 46, text: 'cucumber', categoryId: 2 },
       { id: 47, text: 'pepper', categoryId: 2 },
       { id: 48, text: 'garlic', categoryId: 2 },
-      // 24 words of Colors category
       { id: 49, text: 'red', categoryId: 3 },
       { id: 50, text: 'orange', categoryId: 3 },
       { id: 51, text: 'yellow', categoryId: 3 },
@@ -106,7 +103,6 @@ export const standard: PresetType = {
       { id: 70, text: 'beige', categoryId: 3 },
       { id: 71, text: 'coral', categoryId: 3 },
       { id: 72, text: 'emerald', categoryId: 3 },
-      // 14 words of Shapes category
       { id: 73, text: 'circle', categoryId: 4 },
       { id: 74, text: 'square', categoryId: 4 },
       { id: 75, text: 'triangle', categoryId: 4 },
@@ -121,7 +117,6 @@ export const standard: PresetType = {
       { id: 84, text: 'trapezoid', categoryId: 4 },
       { id: 85, text: 'cube', categoryId: 4 },
       { id: 86, text: 'sphere', categoryId: 4 },
-      // words of Human states category
       { id: 987, text: 'happy', categoryId: 5 },
       { id: 988, text: 'sad', categoryId: 5 },
       { id: 989, text: 'angry', categoryId: 5 },
@@ -184,7 +179,6 @@ export const standard: PresetType = {
       { id: 9146, text: 'repulsed', categoryId: 5 },
       { id: 9148, text: 'startled', categoryId: 5 },
       { id: 9149, text: 'stressed', categoryId: 5 },
-      // words of clothes category
       { id: 88, text: 'shirt', categoryId: 6 },
       { id: 89, text: 'pants', categoryId: 6 },
       { id: 90, text: 'shoes', categoryId: 6 },
@@ -211,7 +205,6 @@ export const standard: PresetType = {
       { id: 111, text: 'flip-flops', categoryId: 6 },
       { id: 112, text: 'hoodie', categoryId: 6 },
       { id: 113, text: 'raincoat', categoryId: 6 },
-      // words of Body parts category
       { id: 114, text: 'head', categoryId: 7 },
       { id: 115, text: 'face', categoryId: 7 },
       { id: 116, text: 'eye', categoryId: 7 },
@@ -241,7 +234,6 @@ export const standard: PresetType = {
       { id: 140, text: 'chin', categoryId: 7 },
       { id: 141, text: 'forehead', categoryId: 7 },
       { id: 142, text: 'cheek', categoryId: 7 },
-      // 15 words of Furniture category
       { id: 143, text: 'chair', categoryId: 8 },
       { id: 144, text: 'table', categoryId: 8 },
       { id: 145, text: 'bed', categoryId: 8 },
@@ -257,7 +249,6 @@ export const standard: PresetType = {
       { id: 155, text: 'shelf', categoryId: 8 },
       { id: 156, text: 'cabinet', categoryId: 8 },
       { id: 157, text: 'cupboard', categoryId: 8 },
-      // 15 words of Kitchen category
       { id: 158, text: 'kitchen', categoryId: 9 },
       { id: 159, text: 'oven', categoryId: 9 },
       { id: 160, text: 'fridge', categoryId: 9 },
@@ -277,7 +268,6 @@ export const standard: PresetType = {
       { id: 174, text: 'plate', categoryId: 9 },
       { id: 175, text: 'bowl', categoryId: 9 },
       { id: 176, text: 'glass', categoryId: 9 },
-      // 15 words of Sports category
       { id: 177, text: 'football', categoryId: 10 },
       { id: 178, text: 'basketball', categoryId: 10 },
       { id: 179, text: 'tennis', categoryId: 10 },
@@ -293,7 +283,6 @@ export const standard: PresetType = {
       { id: 189, text: 'snowboarding', categoryId: 10 },
       { id: 190, text: 'cycling', categoryId: 10 },
       { id: 191, text: 'running', categoryId: 10 },
-      // 15 words of Transport category
       { id: 192, text: 'car', categoryId: 11 },
       { id: 193, text: 'bus', categoryId: 11 },
       { id: 194, text: 'train', categoryId: 11 },
@@ -309,7 +298,6 @@ export const standard: PresetType = {
       { id: 204, text: 'subway', categoryId: 11 },
       { id: 205, text: 'helicopter', categoryId: 11 },
       { id: 206, text: 'rocket', categoryId: 11 },
-      // 15 words of Jobs category
       { id: 207, text: 'doctor', categoryId: 12 },
       { id: 208, text: 'nurse', categoryId: 12 },
       { id: 209, text: 'teacher', categoryId: 12 },
@@ -325,7 +313,6 @@ export const standard: PresetType = {
       { id: 219, text: 'actor', categoryId: 12 },
       { id: 220, text: 'singer', categoryId: 12 },
       { id: 221, text: 'dancer', categoryId: 12 },
-      // 15 words of Hobbies category
       { id: 222, text: 'reading', categoryId: 13 },
       { id: 223, text: 'writing', categoryId: 13 },
       { id: 224, text: 'drawing', categoryId: 13 },
@@ -341,7 +328,6 @@ export const standard: PresetType = {
       { id: 234, text: 'hiking', categoryId: 13 },
       { id: 235, text: 'fishing', categoryId: 13 },
       { id: 236, text: 'singing', categoryId: 13 },
-      // 15 words of Nature category
       { id: 237, text: 'sun', categoryId: 14 },
       { id: 238, text: 'moon', categoryId: 14 },
       { id: 239, text: 'star', categoryId: 14 },
@@ -357,7 +343,6 @@ export const standard: PresetType = {
       { id: 249, text: 'river', categoryId: 14 },
       { id: 250, text: 'ocean', categoryId: 14 },
       { id: 251, text: 'sea', categoryId: 14 },
-      // 15 words of Weather category
       { id: 252, text: 'spring', categoryId: 15 },
       { id: 253, text: 'summer', categoryId: 15 },
       { id: 254, text: 'autumn', categoryId: 15 },
@@ -373,7 +358,6 @@ export const standard: PresetType = {
       { id: 264, text: 'blizzard', categoryId: 15 },
       { id: 265, text: 'hurricane', categoryId: 15 },
       { id: 266, text: 'tornado', categoryId: 15 },
-      // 15 words of People (famous) category
       { id: 267, text: 'Bill Gates', categoryId: 16 },
       { id: 268, text: 'Steve Jobs', categoryId: 16 },
       { id: 269, text: 'Elon Musk', categoryId: 16 },
@@ -383,7 +367,6 @@ export const standard: PresetType = {
       { id: 7273, text: 'Bill Clinton', categoryId: 16 },
       { id: 7274, text: 'Barack Obama', categoryId: 16 },
       { id: 7275, text: 'Donald Trump', categoryId: 16 },
-      // 15 words of People (family) category
       { id: 1267, text: 'mother', categoryId: 17 },
       { id: 1268, text: 'father', categoryId: 17 },
       { id: 1269, text: 'brother', categoryId: 17 },
@@ -408,7 +391,6 @@ export const standard: PresetType = {
       { id: 1288, text: 'lady', categoryId: 17 },
       { id: 1289, text: 'baron', categoryId: 17 },
       { id: 1290, text: 'baroness', categoryId: 17 },
-      // 15 words of Characters (famous) category
       { id: 291, text: 'Batman', categoryId: 18 },
       { id: 292, text: 'Superman', categoryId: 18 },
       { id: 293, text: 'Spiderman', categoryId: 18 },
@@ -421,7 +403,6 @@ export const standard: PresetType = {
       { id: 300, text: 'Hawkeye', categoryId: 18 },
       { id: 301, text: 'Black Widow', categoryId: 18 },
       { id: 302, text: 'Black Panther', categoryId: 18 },
-      // 15 words of Characters (stereotypes) category
       { id: 303, text: 'gentleman', categoryId: 19 },
       { id: 304, text: 'gentlewoman', categoryId: 19 },
       { id: 305, text: 'cowboy', categoryId: 19 },
@@ -448,7 +429,6 @@ export const standard: PresetType = {
       { id: 326, text: 'cyborg', categoryId: 19 },
       { id: 331, text: 'nerd', categoryId: 19 },
       { id: 332, text: 'athlete', categoryId: 19 },
-      // 15 words of Car brands category
       { id: 333, text: 'Audi', categoryId: 20 },
       { id: 334, text: 'BMW', categoryId: 20 },
       { id: 335, text: 'Mercedes', categoryId: 20 },
@@ -499,7 +479,6 @@ export const standard: PresetType = {
       { id: 380, text: 'Smart', categoryId: 20 },
       { id: 381, text: 'Morgan', categoryId: 20 },
       { id: 382, text: 'McLaren', categoryId: 20 },
-      // 15 words of Countries category
       { id: 383, text: 'Afghanistan', categoryId: 21 },
       { id: 384, text: 'Albania', categoryId: 21 },
       { id: 385, text: 'Algeria', categoryId: 21 },
@@ -580,7 +559,6 @@ export const standard: PresetType = {
       { id: 460, text: 'Iran', categoryId: 21 },
       { id: 461, text: 'Iraq', categoryId: 21 },
       { id: 462, text: 'Ireland', categoryId: 21 },
-      // 15 words of Cities category
       { id: 463, text: 'New York', categoryId: 22 },
       { id: 464, text: 'Los Angeles', categoryId: 22 },
       { id: 465, text: 'Chicago', categoryId: 22 },
@@ -596,7 +574,6 @@ export const standard: PresetType = {
       { id: 475, text: 'San Francisco', categoryId: 22 },
       { id: 476, text: 'Indianapolis', categoryId: 22 },
       { id: 477, text: 'Columbus', categoryId: 22 },
-      // 15 words of Places category
       { id: 478, text: 'Mount Everest', categoryId: 23 },
       { id: 479, text: 'museum', categoryId: 23 },
       { id: 480, text: 'beach', categoryId: 23 },
@@ -611,7 +588,83 @@ export const standard: PresetType = {
       { id: 489, text: 'temple', categoryId: 23 },
       { id: 490, text: 'church', categoryId: 23 },
       { id: 491, text: 'grocery store', categoryId: 23 },
-      { id: 492, text: 'mall', categoryId: 23 }
+      { id: 492, text: 'mall', categoryId: 23 },
+      { id: 9150, text: 'irritated', categoryId: 5 },
+      { id: 9151, text: 'bitter', categoryId: 5 },
+      { id: 9152, text: 'likeable', categoryId: 5 },
+      { id: 9153, text: 'powerful', categoryId: 5 },
+      { id: 9154, text: 'greedy', categoryId: 5 },
+      { id: 9155, text: 'mature', categoryId: 5 },
+      { id: 9156, text: 'wise', categoryId: 5 },
+      { id: 9157, text: 'confident', categoryId: 5 },
+      { id: 9158, text: 'shy', categoryId: 5 },
+      { id: 9159, text: 'sexy', categoryId: 5 },
+      { id: 9160, text: 'crazy', categoryId: 5 },
+      { id: 9161, text: 'dumb', categoryId: 5 },
+      { id: 9162, text: 'stupid', categoryId: 5 },
+      { id: 9163, text: 'interested', categoryId: 5 },
+      { id: 9164, text: 'interesting', categoryId: 5 },
+      { id: 9165, text: 'intriguing', categoryId: 5 },
+      { id: 9166, text: 'mysterious', categoryId: 5 },
+      { id: 9167, text: 'anonymous', categoryId: 5 },
+      { id: 9168, text: 'genuine', categoryId: 5 },
+      { id: 9169, text: 'fake', categoryId: 5 },
+      { id: 9170, text: 'clear', categoryId: 5 },
+      { id: 9171, text: 'clean', categoryId: 5 },
+      { id: 9172, text: 'dirty', categoryId: 5 },
+      { id: 9173, text: 'domesticated', categoryId: 5 },
+      { id: 9174, text: 'dominated', categoryId: 5 },
+      { id: 9175, text: 'dominant', categoryId: 5 },
+      { id: 9176, text: 'submissive', categoryId: 5 },
+      { id: 9177, text: 'reckless', categoryId: 5 },
+      { id: 9178, text: 'impulsive', categoryId: 5 },
+      { id: 9179, text: 'compulsive', categoryId: 5 },
+      { id: 9180, text: 'epileptic', categoryId: 5 },
+      { id: 9181, text: 'famous', categoryId: 5 },
+      { id: 9182, text: 'fearful', categoryId: 5 },
+      { id: 9183, text: 'fearless', categoryId: 5 },
+      { id: 9184, text: 'amazed', categoryId: 5 },
+      { id: 9185, text: 'astonished', categoryId: 5 },
+      { id: 9186, text: 'brave', categoryId: 5 },
+      { id: 9187, text: 'ugly', categoryId: 5 },
+      { id: 9188, text: 'creative', categoryId: 5 },
+      { id: 9189, text: 'generous', categoryId: 5 },
+      { id: 9190, text: 'sensitive', categoryId: 5 },
+      { id: 9191, text: 'resilient', categoryId: 5 },
+      { id: 9192, text: 'stressed out', categoryId: 5 },
+      { id: 9193, text: 'cold', categoryId: 5 },
+      { id: 9194, text: 'warm', categoryId: 5 },
+      { id: 9195, text: 'warm-hearted', categoryId: 5 },
+      { id: 9196, text: 'naive', categoryId: 5 },
+      { id: 9197, text: 'glorious', categoryId: 5 },
+      { id: 9198, text: 'disgusting', categoryId: 5 },
+      { id: 9199, text: 'forgetful', categoryId: 5 },
+      { id: 9200, text: 'nice', categoryId: 5 },
+      { id: 9201, text: 'evil', categoryId: 5 },
+      { id: 9202, text: 'aggressive', categoryId: 5 },
+      { id: 9203, text: 'aggressor', categoryId: 5 },
+      { id: 9204, text: 'blind', categoryId: 5 },
+      { id: 9205, text: 'hard working', categoryId: 5 },
+      { id: 9206, text: 'ironic', categoryId: 5 },
+      { id: 9207, text: 'comical', categoryId: 5 },
+      { id: 9208, text: 'humorous', categoryId: 5 },
+      { id: 9209, text: 'deaf', categoryId: 5 },
+      { id: 9210, text: 'awake', categoryId: 5 },
+      { id: 9211, text: 'aware', categoryId: 5 },
+      { id: 9212, text: 'conscious', categoryId: 5 },
+      { id: 9213, text: 'asleep', categoryId: 5 },
+      { id: 9214, text: 'unconscious', categoryId: 5 },
+      { id: 9215, text: 'curious', categoryId: 5 },
+      { id: 9216, text: 'intrigued', categoryId: 5 },
+      { id: 9217, text: 'commanding', categoryId: 5 },
+      { id: 9218, text: 'demanding', categoryId: 5 },
+      { id: 9219, text: 'agreeable', categoryId: 5 },
+      { id: 9220, text: 'disagreeable', categoryId: 5 },
+      { id: 9221, text: 'quiet', categoryId: 5 },
+      { id: 9222, text: 'silent', categoryId: 5 },
+      { id: 9223, text: 'talkative', categoryId: 5 },
+      { id: 9224, text: 'social', categoryId: 5 },
+      { id: 9225, text: 'friendly', categoryId: 5 }
     ]
   }
 }
