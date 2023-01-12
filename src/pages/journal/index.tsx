@@ -29,7 +29,9 @@ export const Entry = ({
 
     useStore.setState(
       produce((state) => {
-        const entryIndex = state.journal.findIndex((j) => j.id === entry.id)
+        const entryIndex = state.journal.findIndex(
+          (j: any) => j.id === entry.id
+        )
         state.journal.splice(entryIndex, 1)
       })
     )

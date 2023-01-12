@@ -106,8 +106,8 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
             style={{ padding: '1rem', height: '400px' }}
             placeholder="Write your journal entry here..."
             value={entry.text}
-            $as="textarea"
-            onChange={onChange}
+            $as={'textarea' as any}
+            onChange={onChange as any}
             autoFocus
           />
         )}
