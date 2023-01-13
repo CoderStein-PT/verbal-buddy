@@ -28,7 +28,8 @@ export const GuessStats = () => {
       <SeparatorFull className="my-2" />
       <div
         className={
-          'flex ' + (!!stats.length ? 'justify-between' : 'justify-end')
+          'flex space-x-2 ' +
+          (!!stats.length ? 'justify-between' : 'justify-end')
         }
       >
         <div className="flex flex-col space-x-0 space-y-2 md:flex-row md:space-x-2 md:space-y-0">
