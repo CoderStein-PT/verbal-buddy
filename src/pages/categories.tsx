@@ -95,7 +95,7 @@ export const Categories = ({
       height={isMobile() ? 250 : 400}
       scrollableContainer={scrollableContainer}
     >
-      <div className="px-2">
+      <div className="px-2" data-test="categories-list">
         {categories?.length ? (
           categories.map((category) => (
             <Category key={category.id} category={category} />
@@ -151,7 +151,7 @@ export const CategoriesPage = () => {
     <PageContainer>
       <div className="flex items-center justify-between">
         <Text variant="button">{'Categories'}</Text>
-        <Link to="/settings#presets">
+        <Link to="/settings#presets" data-test="btn-use-presets">
           <Button size="md">{'Use presets'}</Button>
         </Link>
       </div>
@@ -160,6 +160,7 @@ export const CategoriesPage = () => {
       <SeparatorFull className="my-2" />
       <Input
         onKeyDown={onKeyDown}
+        data-test="input-new-category"
         type="text"
         placeholder="New category..."
         className="w-full"
