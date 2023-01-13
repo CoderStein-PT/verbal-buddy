@@ -241,7 +241,6 @@ export const StatsDesktop = ({ stats }: { stats: GuessStats[] }) => {
 export const StatsMobile = ({ stats }: { stats: GuessStats[] }) => {
   return (
     <Tab.Group>
-      <SeparatorFull />
       <Tab.List className="flex px-2 mt-2 space-x-1 overflow-x-auto">
         <Tab as={React.Fragment}>
           {({ selected }) => (
