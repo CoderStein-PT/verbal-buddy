@@ -1,8 +1,12 @@
 # on pull request to main branch run yarn test
+# and on any push to the branch of the pull request as well
 on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - '!main'
   
 jobs:
   test:
