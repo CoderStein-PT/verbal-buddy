@@ -35,10 +35,6 @@ The tools are:
 - Describe objects
 - Make jokes in a structured and controlled manner
 
-### Privacy
-
-It saves your data only in localStorage.
-
 ## Tech stack
 
 - [ReactJS](https://reactjs.org)
@@ -53,10 +49,13 @@ It saves your data only in localStorage.
 ## Getting Started
 
 ### Install
+
 `yarn`
 
 ### Run
+
 `yarn dev`
 
 ### License
+
 MIT
