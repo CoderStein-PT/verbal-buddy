@@ -11,12 +11,13 @@ import {
   calculateMultipleDelays,
   capGraphPointsFrequency,
   getIsBetterOrWorse,
-  isMobile
+  isMobile,
+  WordWithAvgDelay
 } from 'utils'
 import moment from 'moment'
 import { BarChart, Bar, ResponsiveContainer } from 'recharts'
 import { Tab } from '@headlessui/react'
-import React from 'react'
+import React, { useState } from 'react'
 
 const DelayGraph = ({ delays }: { delays: GuessWordType[] }) => {
   const data = capGraphPointsFrequency(
@@ -136,6 +137,51 @@ const StatsTable = ({ stats }: { stats: GuessStats[] }) => {
   )
 }
 
+const WordRow = ({
+  word,
+  index
+}: {
+  word: WordWithAvgDelay & { text: string }
+  index: number
+}) => {
+  const [showText, setShowText] = useState(false)
+
+  const onToggleShow = () => {
+    setShowText(!showText)
+  }
+
+  const onTurnOnShow = () => {
+    setShowText(true)
+  }
+
+  const onTurnOffShow = () => {
+    setShowText(false)
+  }
+
+  return (
+    <tr key={word.wordId}>
+      <td className="w-6">
+        <Text>{index}</Text>
+      </td>
+      <td
+        className="cursor-pointer"
+        onMouseEnter={!isMobile() ? onTurnOnShow : undefined}
+        onMouseLeave={!isMobile() ? onTurnOffShow : undefined}
+        onClick={isMobile() ? onToggleShow : undefined}
+      >
+        <Text color={showText ? undefined : 'gray-light'}>
+          {showText
+            ? word.text
+            : '[' + (isMobile() ? 'Click' : 'Hover') + ' to reveal]'}
+        </Text>
+      </td>
+      <td className="text-right">
+        <Text>{moment(word.avgDelay).format('mm:ss')}</Text>
+      </td>
+    </tr>
+  )
+}
+
 const MostDifficultWords = ({ stats }: { stats: GuessStats[] }) => {
   const words = useStore((s) => s.words)
 
@@ -143,7 +189,7 @@ const MostDifficultWords = ({ stats }: { stats: GuessStats[] }) => {
     .slice(0, 50)
     .map((w) => ({
       ...w,
-      text: words.find((word) => word.id === w.wordId)?.text
+      text: words.find((word) => word.id === w.wordId)?.text || ''
     }))
     .sort((a, b) => b.avgDelay - a.avgDelay)
 
@@ -168,17 +214,7 @@ const MostDifficultWords = ({ stats }: { stats: GuessStats[] }) => {
           </thead>
           <tbody className="divide-y divide-gray-700 divide-dashed">
             {sortedWords.map((word, idx) => (
-              <tr key={word.wordId}>
-                <td>
-                  <Text>{idx + 1}</Text>
-                </td>
-                <td>
-                  <Text>{word.text}</Text>
-                </td>
-                <td className="text-right">
-                  <Text>{moment(word.avgDelay).format('mm:ss')}</Text>
-                </td>
-              </tr>
+              <WordRow word={word} index={idx + 1} key={word.wordId} />
             ))}
           </tbody>
         </table>

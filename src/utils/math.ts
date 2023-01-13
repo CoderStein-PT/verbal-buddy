@@ -1,7 +1,7 @@
 import { GuessWordType, GuessStats } from 'store'
 
-type GuessWordWithCount = GuessWordType & { count: number }
-type WordWithAvgDelay = { wordId: number; avgDelay: number }
+export type GuessWordWithCount = GuessWordType & { count: number }
+export type WordWithAvgDelay = { wordId: number; avgDelay: number }
 
 export const calculateMultipleDelays = (
   stats: GuessStats[]

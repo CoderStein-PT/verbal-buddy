@@ -2,6 +2,7 @@ import { Text, ScrollableContainer, Button, ProseDiv } from 'components'
 import { useStore, WordType, GuessWordType } from 'store'
 import { useEffect, useState } from 'react'
 import {
+  calculateMultipleDelays,
   compareStrings,
   convertDelays,
   findLastId,
@@ -232,15 +233,20 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
 export const GuessPlayPage = () => {
   const categoryIds = useParams<{ categoryIds: string }>().categoryIds
   const words = useStore((s) => s.words)
+  const stats = useStore((s) => s.guessStats)
 
   if (!categoryIds) return <Navigate to="/guess" />
 
-  // Words that have descriptions and are in one of the categories
+  const isDifficultWords = categoryIds === 'difficult-words'
+
+  const difficultWords = calculateMultipleDelays(stats).slice(0, 50)
+
   const wordsFiltered = words.filter(
     (w) =>
-      w.descriptions &&
-      !!w.descriptions.length &&
-      categoryIds.split(',').includes(w.categoryId + '')
+      w?.descriptions?.length &&
+      (isDifficultWords
+        ? difficultWords.find((dw) => dw.wordId === w.id)
+        : categoryIds.split(',').includes(w.categoryId + ''))
   )
 
   if (!wordsFiltered.length) return <Placeholder />

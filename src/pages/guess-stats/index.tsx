@@ -31,11 +31,18 @@ export const GuessStats = () => {
           'flex ' + (!!stats.length ? 'justify-between' : 'justify-end')
         }
       >
-        {!!stats.length && (
-          <Button color="gray" size="md" onClick={resetStats}>
-            {'Reset Stats'}
-          </Button>
-        )}
+        <div className="flex space-x-2">
+          {!!stats.length && (
+            <div>
+              <Button color="gray" size="md" onClick={resetStats}>
+                {'Reset Stats'}
+              </Button>
+            </div>
+          )}
+          <Link to="/guess/difficult-words">
+            <Button size="md">{'Guess difficult words'}</Button>
+          </Link>
+        </div>
         <Link to="/guess/new-game">
           <Button>{'New Game'}</Button>
         </Link>
