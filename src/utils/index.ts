@@ -94,3 +94,7 @@ export const useRefs = () => {
 
   return { refs: refs.current, setRefFromKey }
 }
+
+export const shuffleArray = (array: any[]) => {
+  return [...array].sort(() => 0.5 - Math.random())
+}

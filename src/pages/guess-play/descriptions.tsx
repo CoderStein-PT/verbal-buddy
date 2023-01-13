@@ -1,6 +1,7 @@
 import { Row, ScrollableContainer } from 'components'
 import { DescriptionType, WordType } from 'store'
 import { useMemo } from 'react'
+import { shuffleArray } from 'utils'
 
 const Description = ({
   description,
@@ -10,10 +11,6 @@ const Description = ({
   index: number
 }) => {
   return <Row text={description.text} index={index} />
-}
-
-const shuffleArray = (array: any[]) => {
-  return [...array].sort(() => 0.5 - Math.random())
 }
 
 export const Descriptions = ({

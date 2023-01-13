@@ -2,7 +2,7 @@ import { Button, Text } from 'components'
 import { useStore, WordType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
-import { findLastId, isMobile } from 'utils'
+import { findLastId, isMobile, shuffleArray } from 'utils'
 import { WordSelector } from './word/word-selector'
 import { useWordSelector } from './word/use-words-selector'
 
@@ -76,20 +76,6 @@ export const SelectedWords = () => {
   )
 }
 
-export const Words = ({ categoryId }: { categoryId: number }) => {
-  const words = useStore((state) => state.words)
-
-  return (
-    <div className="max-h-[500px] overflow-y-auto">
-      {words
-        .filter((w) => w.categoryId === categoryId)
-        .map((word) => (
-          <Word key={word.id} word={word} />
-        ))}
-    </div>
-  )
-}
-
 export const CreateJokePage = () => {
   const selectedWords = useStore((state) => state.selectedWords)
 
@@ -129,18 +115,13 @@ export const CreateJokePage = () => {
   const settings = useStore((state) => state.settings)
 
   const selectRandomWords = () => {
-    // if a category is selected, select random words from that category
-    // if not selected, select random words from all categories
     const newwords = wordSelector.selectedCategoryId
       ? words.filter((w) => w.categoryId === wordSelector.selectedCategoryId)
       : words
 
-    const randomWords: WordType[] = []
+    const shuffledNewWords = shuffleArray(newwords)
 
-    for (let i = 0; i < settings.randomWords; i++) {
-      const randomIndex = Math.floor(Math.random() * newwords.length)
-      randomWords.push(newwords[randomIndex])
-    }
+    const randomWords = shuffledNewWords.slice(0, settings.randomWords)
 
     useStore.setState({ selectedWords: randomWords })
   }
