@@ -3,7 +3,8 @@ import {
   ScrollableContainer,
   useScrollableContainer,
   SeparatorFull,
-  Button
+  Button,
+  ProseDiv
 } from 'components'
 import { CategoryType, useStore } from 'store'
 import {
@@ -139,9 +140,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
               {game.displayCountdown}
             </Text>
           ) : (
-            <div className="prose dark:prose-invert prose-slate">
+            <ProseDiv>
               <Explanation />
-            </div>
+            </ProseDiv>
           )}
           <Footer
             game={game}

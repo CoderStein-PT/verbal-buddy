@@ -1,17 +1,23 @@
 import { Text, ScrollableContainer, SeparatorFull } from 'components'
 import moment from 'moment'
-import { GuessDelayType } from 'store'
+import { GuessWordType, useStore, WordType } from 'store'
 import { convertDelays } from 'utils'
 
-const ResultRow = ({ delay }: { delay: GuessDelayType }) => {
+const ResultRow = ({
+  delay,
+  word
+}: {
+  delay: GuessWordType
+  word: WordType
+}) => {
   const delayText = moment.utc(delay.delay).format('mm:ss')
 
-  const color = delay.guessed ? 'primary' : 'red'
+  const color = delay.guessed ? undefined : 'red'
 
   return (
     <tr className="relative">
       <td className="">
-        <Text color={color}>{delay.word.text}</Text>
+        <Text color={color}>{word.text}</Text>
       </td>
       <td className="text-right">
         <Text color={color}>{delayText}</Text>
@@ -20,8 +26,22 @@ const ResultRow = ({ delay }: { delay: GuessDelayType }) => {
   )
 }
 
-export const GuessResults = ({ delays }: { delays: GuessDelayType[] }) => {
+const Header = () => (
+  <thead className="border-b border-slate-500">
+    <tr>
+      <th className="text-left">
+        <Text variant="subtitle2">{'Word'}</Text>
+      </th>
+      <th className="text-right">
+        <Text variant="subtitle2">{'Delay'}</Text>
+      </th>
+    </tr>
+  </thead>
+)
+
+export const GuessResults = ({ delays }: { delays: GuessWordType[] }) => {
   const flattenedDelays = delays.map((d) => d.delay)
+  const words = useStore((state) => state.words)
 
   const convertedDelays = convertDelays(flattenedDelays)
 
@@ -36,19 +56,14 @@ export const GuessResults = ({ delays }: { delays: GuessDelayType[] }) => {
       <SeparatorFull className="my-2" />
       <ScrollableContainer>
         <table className="w-full h-px">
-          <thead>
-            <tr>
-              <th className="text-left">
-                <Text variant="subtitle">{'Word'}</Text>
-              </th>
-              <th className="text-right">
-                <Text variant="subtitle">{'Delay'}</Text>
-              </th>
-            </tr>
-          </thead>
+          <Header />
           <tbody className="divide-y divide-gray-700 divide-dashed">
-            {newDelays.map((d, idx) => (
-              <ResultRow delay={d} key={d.word.id} />
+            {newDelays.map((d) => (
+              <ResultRow
+                delay={d}
+                word={words.find((w) => w.id === d.wordId)}
+                key={d.wordId}
+              />
             ))}
           </tbody>
         </table>

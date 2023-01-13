@@ -57,19 +57,20 @@ export type PracticeStatsType = {
   delays: number[]
 }
 
-export type GuessDelayType = {
+export type GuessWordType = {
   delay: number
-  word: WordType
+  wordId: number
   guessed?: boolean
 }
 
 export type GuessStats = {
+  id: number
   categoryIds?: number[]
   timestamp: number
   totalTime: number
   avgDelayBetweenWords: number
   wordsCount: number
-  delays: GuessDelayType[]
+  words: GuessWordType[]
 }
 
 export type SettingsType = {

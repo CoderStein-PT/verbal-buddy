@@ -7,7 +7,7 @@ import { SettingsPage } from './settings'
 import { PracticePage } from './practice'
 import { WordPage } from './word'
 import { GuessPlayPage } from './guess-play'
-import { GuessPage } from './guess'
+import { GuessNewGamePage } from './guess-new-game'
 import { AboutPage } from './about'
 import { PracticeStats } from './practice-stats'
 import { GuessStats } from './guess-stats'
@@ -38,18 +38,22 @@ export const routes: {
   },
   joke: { name: 'New Joke', path: '/jokes/new', component: CreateJokePage },
   jokes: { name: 'Jokes', path: '/jokes', component: JokesPage },
+  editJoke: { name: 'Edit Joke', path: '/joke/:id', component: EditJokePage },
   practiceStats: {
     name: 'Practice Stats',
     path: '/practice/:id/stats',
     component: PracticeStats
   },
-  guessStats: {
-    name: 'Guess Stats',
-    path: '/guess/stats',
+  guess: {
+    name: 'Guess',
+    path: '/guess',
     component: GuessStats
   },
-  editJoke: { name: 'Edit Joke', path: '/joke/:id', component: EditJokePage },
-  guess: { name: 'Guess', path: '/guess', component: GuessPage },
+  guessNewGame: {
+    name: 'New Guess Game',
+    path: '/guess/new-game',
+    component: GuessNewGamePage
+  },
   guessPlay: {
     name: 'Play Guess',
     path: '/guess/:categoryIds',

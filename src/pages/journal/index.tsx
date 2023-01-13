@@ -1,6 +1,7 @@
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import {
   Button,
+  ProseDiv,
   Row,
   ScrollableContainer,
   SeparatorFull,
@@ -68,9 +69,9 @@ export const Entries = () => {
           <Entry key={entry.id} entry={entry} index={index + 1} />
         ))}
         {journal.length === 0 && (
-          <div className="prose dark:prose-invert prose-slate">
+          <ProseDiv>
             <Explanation />
-          </div>
+          </ProseDiv>
         )}
       </div>
     </ScrollableContainer>

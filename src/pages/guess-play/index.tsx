@@ -1,9 +1,11 @@
-import { Text, ScrollableContainer, Button } from 'components'
-import { useStore, WordType, GuessDelayType } from 'store'
+import { Text, ScrollableContainer, Button, ProseDiv } from 'components'
+import { useStore, WordType, GuessWordType } from 'store'
 import { useEffect, useState } from 'react'
 import {
+  calculateMultipleDelays,
   compareStrings,
   convertDelays,
+  findLastId,
   getAverageDelay,
   getRandomWord
 } from 'utils'
@@ -12,7 +14,6 @@ import { Placeholder } from './placeholder'
 import { Footer } from 'pages/practice/footer'
 import { useGame } from 'pages/practice/use-game'
 import Explanation from './explanation.mdx'
-import { Stats } from './stats'
 import { GuessResults } from './guess-results'
 import { PageContainer } from 'components/layout/container'
 import { Navigate, Link, useParams } from 'react-router-dom'
@@ -26,7 +27,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const goal = Math.min(words.length, settings.guessMaxWords)
   const game = useGame()
   const [skippedWords, setSkippedWords] = useState<WordType[]>([])
-  const [delays, setDelays] = useState<GuessDelayType[]>([])
+  const [delays, setDelays] = useState<GuessWordType[]>([])
   const [lastWord, setLastWord] = useState<WordType | null>(null)
   const [showLastWord, setShowLastWord] = useState(false)
   const [hintsLeft, setHintsLeft] = useState(10)
@@ -65,43 +66,44 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     lastTypingTimestamp: number,
     skipped = false
   ) => {
-    const delayObject: GuessDelayType = {
+    const wordObject: GuessWordType = {
       delay: lastTypingTimestamp - game.initialTimestamp.current,
-      word,
+      wordId: word.id,
       guessed: !skipped
     }
 
-    const newDelays = [...delays, delayObject]
-    setDelays(newDelays)
+    const newWords = [...delays, wordObject]
+    setDelays(newWords)
 
     if (newGuessedWords.length + newSkippedWords.length < goal) {
       rotateWord(newGuessedWords)
       return
     }
 
-    const flattenedDelays = newDelays.map((d) => d.delay)
+    const flattenedDelays = newWords.map((d) => d.delay)
 
     const convertedDelays = convertDelays(flattenedDelays)
 
     const newConvertedDelays = convertedDelays.map((delay, index) => ({
       delay,
-      word: newDelays[index].word
+      wordId: newWords[index].wordId
     }))
 
     game.finish()
     setLastWord(word)
-    useStore.setState({
+    useStore.setState((state) => ({
       guessStats: [
-        ...useStore.getState().guessStats,
+        ...state.guessStats,
         {
+          id: findLastId(state.guessStats) + 1,
           timestamp: Date.now(),
           totalTime: game.time,
           avgDelayBetweenWords: getAverageDelay(flattenedDelays),
           wordsCount: newGuessedWords.length,
-          delays: newConvertedDelays
+          words: newConvertedDelays
         }
       ]
-    })
+    }))
   }
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -152,7 +154,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full md:pl-64">
+      <div className="w-full">
         <PageContainer>
           <div className="flex items-center justify-between">
             <Text>
@@ -173,9 +175,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
               </Text>
             </div>
           ) : (
-            <div className="prose dark:prose-invert prose-slate">
+            <ProseDiv>
               <Explanation />
-            </div>
+            </ProseDiv>
           )}
           <div
             className={`flex items-center mt-2 ${
@@ -215,18 +217,14 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             placeholder="Guess word"
           />
           <div className="flex flex-col mt-2 md:hidden">
-            <Link className="flex flex-col" to={`/guess/stats`}>
+            <Link className="flex flex-col" to={`/guess`}>
               <Button color="gray">{'See Stats'}</Button>
             </Link>
           </div>
         </PageContainer>
       </div>
       <div className="md:block hidden w-[360px] flex-shrink-0">
-        {game.finished || !game.pressedStart ? (
-          <Stats />
-        ) : (
-          <GuessResults delays={delays} />
-        )}
+        <GuessResults delays={delays} />
       </div>
     </div>
   )
@@ -235,15 +233,20 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
 export const GuessPlayPage = () => {
   const categoryIds = useParams<{ categoryIds: string }>().categoryIds
   const words = useStore((s) => s.words)
+  const stats = useStore((s) => s.guessStats)
 
   if (!categoryIds) return <Navigate to="/guess" />
 
-  // Words that have descriptions and are in one of the categories
+  const isDifficultWords = categoryIds === 'difficult-words'
+
+  const difficultWords = calculateMultipleDelays(stats).slice(0, 50)
+
   const wordsFiltered = words.filter(
     (w) =>
-      w.descriptions &&
-      !!w.descriptions.length &&
-      categoryIds.split(',').includes(w.categoryId + '')
+      w?.descriptions?.length &&
+      (isDifficultWords
+        ? difficultWords.find((dw) => dw.wordId === w.id)
+        : categoryIds.split(',').includes(w.categoryId + ''))
   )
 
   if (!wordsFiltered.length) return <Placeholder />

@@ -6,7 +6,8 @@ import {
   ScrollableContainer,
   ScrollableContainerType,
   useScrollableContainer,
-  Button
+  Button,
+  ProseDiv
 } from 'components'
 import { useStore, CategoryType } from 'store'
 import { findLastId, isMobile } from 'utils'
@@ -100,9 +101,9 @@ export const Categories = ({
             <Category key={category.id} category={category} />
           ))
         ) : (
-          <div className="prose dark:prose-invert prose-slate">
+          <ProseDiv>
             <Explanation />
-          </div>
+          </ProseDiv>
         )}
       </div>
     </ScrollableContainer>

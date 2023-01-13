@@ -1,4 +1,4 @@
-import { Button, Input, Text } from 'components'
+import { Button, Input, ProseDiv, Text } from 'components'
 import { useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useParams } from 'react-router-dom'
@@ -97,9 +97,9 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
       </div>
       <div className="mt-4">
         {isPreview ? (
-          <div className="prose dark:prose-invert prose-slate">
+          <ProseDiv>
             <ReactMarkdown>{entry.text}</ReactMarkdown>
-          </div>
+          </ProseDiv>
         ) : (
           <Input
             className="w-full resize-none"

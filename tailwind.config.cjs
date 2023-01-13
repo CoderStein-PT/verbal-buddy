@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        title: "'Rowdies', cursive"
+        title: "'Rowdies', sans-serif"
       },
       colors: {
         primary: colors.green,

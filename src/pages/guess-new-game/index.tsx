@@ -5,9 +5,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CategoryType, useStore } from 'store'
 
-export const GuessPageCore = () => {}
-
-export const GuessPage = () => {
+export const GuessNewGamePage = () => {
   const [selectedCategories, setSelectedCategories] = useState<CategoryType[]>(
     []
   )
