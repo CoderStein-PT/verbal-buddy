@@ -534,4 +534,4 @@ class LanguagesGC {
   }
 }
 
-const glowCookies = new GlowCookies()
+window.glowCookies = new GlowCookies()
