@@ -39,7 +39,9 @@ export const Row = ({
   actions,
   ellipsis = true,
   isSelected,
-  color = undefined
+  color = undefined,
+  actionsVisible,
+  selectedColor = 'gray-light'
 }: {
   text?: React.ReactNode | string
   onClick?: () => void
@@ -49,6 +51,8 @@ export const Row = ({
   ellipsis?: boolean
   isSelected?: boolean
   color?: TextProps['color']
+  actionsVisible?: boolean
+  selectedColor?: TextProps['color']
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -96,19 +100,29 @@ export const Row = ({
             }
           >
             <Text
-              className={`${isSelected ? '' : 'group-hover:text-primary-500'} ${
+              className={`${
+                isSelected
+                  ? ''
+                  : 'group-hover:text-primary-500 group-hover:transition-none'
+              } ${
                 ellipsis
                   ? 'text-ellipsis overflow-hidden whitespace-nowrap'
                   : ''
               }`}
-              color={isSelected ? 'gray-light' : color}
+              color={isSelected ? selectedColor : color}
             >
               {text}
             </Text>
           </TooltipWrapper>
         )}
       </div>
-      <div className="flex items-center space-x-1 transition duration-300 md:opacity-0 group-hover:opacity-100 group-hover:duration-150">
+      <div
+        className={`flex items-center space-x-1 ${
+          actionsVisible
+            ? ''
+            : 'transition duration-300 md:opacity-0 group-hover:opacity-100 group-hover:duration-150"'
+        }`}
+      >
         {actions?.map((action, index) => (
           <ActionButton
             key={index}

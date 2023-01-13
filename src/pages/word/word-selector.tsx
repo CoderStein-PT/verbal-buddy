@@ -1,4 +1,5 @@
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
+import { FiCheck } from '@react-icons/all-files/fi/FiCheck'
 import {
   Button,
   Text,
@@ -7,47 +8,60 @@ import {
   SeparatorFull,
   Row
 } from 'components'
-import { useState } from 'react'
 import { useStore, CategoryType, WordType } from 'store'
+import { WordSelectorType } from './use-words-selector'
 
 export const Category = ({
   category,
-  setSelectedCategoryId
+  onCategoryClick,
+  active,
+  index
 }: {
   category: CategoryType
-  setSelectedCategoryId: any
+  onCategoryClick: (category: CategoryType) => void
+  active?: boolean
+  index?: number
 }) => {
   const onClick = () => {
-    setSelectedCategoryId(category.id)
+    onCategoryClick(category)
   }
 
   return (
-    <div className="flex justify-between space-x-1">
-      <div className="w-full cursor-pointer group" onClick={onClick}>
-        <Text className="group-hover:text-primary-500">{category.name}</Text>
-      </div>
-    </div>
+    <Row
+      text={category.name}
+      isSelected={active}
+      onClick={onClick}
+      index={index}
+      actionsVisible
+      selectedColor="primary"
+      actions={active ? [{ icon: FiCheck, color: 'textPrimary' }] : []}
+    />
   )
 }
 
 export const Categories = ({
-  setSelectedCategoryId,
+  onCategoryClick,
   height,
-  maxHeight
+  maxHeight,
+  selectedCategories
 }: {
-  setSelectedCategoryId: any
+  onCategoryClick: (category: CategoryType) => void
   height?: number
   maxHeight?: number
+  selectedCategories?: CategoryType[]
 }) => {
   const categories = useStore((state) => state.categories)
+
   return (
     <ScrollableContainer height={height} maxHeight={maxHeight}>
-      <div className="px-2">
-        {categories.map((category) => (
+      <div className="px-2 my-1">
+        {categories.map((category, index) => (
           <Category
             key={category.id}
             category={category}
-            setSelectedCategoryId={setSelectedCategoryId}
+            onCategoryClick={onCategoryClick}
+            active={!!selectedCategories?.find((c) => c.id === category.id)}
+            index={index + 1}
           />
         ))}
       </div>
@@ -80,6 +94,9 @@ export const Word = ({
       isSelected={isSelected}
       onClick={onClick}
       index={index}
+      actionsVisible
+      selectedColor="primary"
+      actions={isSelected ? [{ icon: FiCheck, color: 'textPrimary' }] : []}
     />
   )
 }
@@ -118,29 +135,12 @@ export const Words = ({
   )
 }
 
-export const useWordSelector = ({
-  onSelectWord = () => {},
-  selectedWords = []
-}: {
-  onSelectWord?: (word: WordType) => void
-  selectedWords?: WordType[]
-}) => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null)
-
-  return {
-    selectedCategoryId,
-    setSelectedCategoryId,
-    onSelectWord,
-    selectedWords
-  }
-}
-
 export const WordSelector = ({
   wordSelector,
   height,
   maxHeight
 }: {
-  wordSelector: ReturnType<typeof useWordSelector>
+  wordSelector: WordSelectorType
   height?: number
   maxHeight?: number
 }) => {
@@ -155,13 +155,17 @@ export const WordSelector = ({
     state.categories.find((c) => c.id === selectedCategoryId)
   )
 
+  const onCategoryClick = (category: CategoryType) => {
+    setSelectedCategoryId(category.id)
+  }
+
   return (
     <ListContainer>
       <div className="flex px-2 space-x-2">
         {!!selectedCategoryId && (
           <Button
-            color="gray"
-            size="sm"
+            color="text"
+            size="icon"
             onClick={() => setSelectedCategoryId(null)}
           >
             <FiChevronLeft className="w-full h-full" />
@@ -172,9 +176,9 @@ export const WordSelector = ({
         </Text>
       </div>
       <SeparatorFull />
-      <div className="mt-2">
+      <div className="">
         {selectedCategoryId ? (
-          <div>
+          <div className="my-1">
             <Words
               onSelectWord={onSelectWord}
               categoryId={selectedCategoryId}
@@ -187,7 +191,7 @@ export const WordSelector = ({
           <Categories
             height={height}
             maxHeight={maxHeight}
-            setSelectedCategoryId={setSelectedCategoryId}
+            onCategoryClick={onCategoryClick}
           />
         )}
       </div>

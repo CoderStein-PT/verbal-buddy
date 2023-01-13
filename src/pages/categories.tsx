@@ -150,7 +150,7 @@ export const CategoriesPage = () => {
     <PageContainer>
       <div className="flex items-center justify-between">
         <Text variant="button">{'Categories'}</Text>
-        <Link to="/settings">
+        <Link to="/settings#presets">
           <Button size="md">{'Use presets'}</Button>
         </Link>
       </div>

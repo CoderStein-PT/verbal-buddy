@@ -27,6 +27,7 @@ const colorClasses = {
     'text-slate-200 bg-primary-500 border border-transparent hover:bg-primary-400 dark:bg-transparent dark:text-primary-500 dark:border-primary-500 dark:hover:bg-primary-500 dark:hover:text-white dark:hover:shadow-primary-light',
   gray: 'text-gray-800 bg-gray-100 border border-gray-300 hover:bg-gray-200 dark:bg-transparent dark:text-slate-200 dark:border-gray-500 dark:hover:bg-gray-500 dark:hover:text-white',
   text: 'text-gray-800 dark:text-slate-200 dark:hover:text-primary-500',
+  textPrimary: 'text-primary-500',
   red: 'text-gray-800 bg-red-100 border border-red-300 hover:bg-red-200 dark:bg-transparent dark:text-red-500 dark:border-red-500 dark:hover:bg-red-500 dark:hover:text-white dark:hover:shadow-red-light'
 }
 

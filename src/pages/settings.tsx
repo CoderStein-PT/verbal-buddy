@@ -278,7 +278,9 @@ export const SettingsPage = () => {
         </ScrollableContainer>
       </div>
       <div className="relative mt-8 md:w-1/2 md:mt-0">
-        <Text variant="button">{'Presets'}</Text>
+        <Text id="presets" variant="button">
+          {'Presets'}
+        </Text>
         <Explanation title={explanations.presets.main} />
         <Presets />
       </div>

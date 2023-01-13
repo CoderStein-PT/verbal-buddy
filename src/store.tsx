@@ -64,6 +64,7 @@ export type GuessDelayType = {
 }
 
 export type GuessStats = {
+  categoryIds?: number[]
   timestamp: number
   totalTime: number
   avgDelayBetweenWords: number
@@ -102,8 +103,8 @@ export const useStore = create(
       selectedWords: [],
       jokes: [],
       practiceStats: [],
-      journal: [],
       guessStats: [],
+      journal: [],
       settings: {
         randomWords: 3,
         practiceMaxWords: 10,

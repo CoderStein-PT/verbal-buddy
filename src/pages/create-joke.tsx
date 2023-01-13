@@ -1,29 +1,10 @@
 import { Button, Text } from 'components'
-import { useStore, CategoryType, WordType } from 'store'
+import { useStore, WordType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
 import { findLastId, isMobile } from 'utils'
-import { useWordSelector, WordSelector } from './word/word-selector'
-
-export const Category = ({
-  category,
-  setSelectedCategoryId
-}: {
-  category: CategoryType
-  setSelectedCategoryId: any
-}) => {
-  const onClick = () => {
-    setSelectedCategoryId(category.id)
-  }
-
-  return (
-    <div className="flex justify-between space-x-1">
-      <div className="w-full cursor-pointer group" onClick={onClick}>
-        <Text className="group-hover:text-primary-500">{category.name}</Text>
-      </div>
-    </div>
-  )
-}
+import { WordSelector } from './word/word-selector'
+import { useWordSelector } from './word/use-words-selector'
 
 export const Word = ({ word }: { word: WordType }) => {
   const isSelected = useStore((state) =>
@@ -53,12 +34,6 @@ export const Word = ({ word }: { word: WordType }) => {
 }
 
 export const SelectedWord = ({ word }: { word: WordType }) => {
-  const onClick = () => {
-    useStore.setState((state) => ({
-      selectedWords: [...state.selectedWords, word]
-    }))
-  }
-
   const onDeleteWord = () => {
     useStore.setState((state) => ({
       selectedWords: state.selectedWords.filter((w) => w.id !== word.id)
@@ -67,7 +42,7 @@ export const SelectedWord = ({ word }: { word: WordType }) => {
 
   return (
     <div className="flex items-center justify-between space-x-1">
-      <div className="w-full cursor-pointer group" onClick={onClick}>
+      <div className="w-full cursor-pointer group">
         <Text className="group-hover:text-primary-500">{word.text}</Text>
       </div>
       <div className="">
@@ -75,21 +50,6 @@ export const SelectedWord = ({ word }: { word: WordType }) => {
           <RiCloseFill className="w-full h-full" />
         </Button>
       </div>
-    </div>
-  )
-}
-
-export const Categories = ({ setSelectedCategoryId }: any) => {
-  const categories = useStore((state) => state.categories)
-  return (
-    <div>
-      {categories.map((category) => (
-        <Category
-          key={category.id}
-          category={category}
-          setSelectedCategoryId={setSelectedCategoryId}
-        />
-      ))}
     </div>
   )
 }
@@ -131,7 +91,10 @@ export const Words = ({ categoryId }: { categoryId: number }) => {
 }
 
 export const CreateJokePage = () => {
+  const selectedWords = useStore((state) => state.selectedWords)
+
   const wordSelector = useWordSelector({
+    selectedWords,
     onSelectWord: (word) => {
       useStore.setState((state) => ({
         selectedWords: [...state.selectedWords, word]
@@ -141,7 +104,6 @@ export const CreateJokePage = () => {
 
   const words = useStore((state) => state.words)
 
-  const selectedWords = useStore((state) => state.selectedWords)
   const jokes = useStore((state) => state.jokes)
 
   const navigate = useNavigate()

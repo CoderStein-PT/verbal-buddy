@@ -6,6 +6,7 @@ import { EditJokePage } from './edit-joke'
 import { SettingsPage } from './settings'
 import { PracticePage } from './practice'
 import { WordPage } from './word'
+import { GuessPlayPage } from './guess-play'
 import { GuessPage } from './guess'
 import { AboutPage } from './about'
 import { PracticeStats } from './practice-stats'
@@ -49,6 +50,11 @@ export const routes: {
   },
   editJoke: { name: 'Edit Joke', path: '/joke/:id', component: EditJokePage },
   guess: { name: 'Guess', path: '/guess', component: GuessPage },
+  guessPlay: {
+    name: 'Play Guess',
+    path: '/guess/:categoryIds',
+    component: GuessPlayPage
+  },
   settings: { name: 'Settings', path: '/settings', component: SettingsPage },
   about: { name: 'About', path: '/about', component: AboutPage },
   journal: { name: 'Journal', path: '/journal', component: JournalPage },

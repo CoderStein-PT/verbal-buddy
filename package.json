@@ -1,6 +1,6 @@
 {
-  "name": "joke-app",
-  "description": "Joke Creativity Development App",
+  "name": "verbal-buddy",
+  "description": "Verbal Buddy",
   "version": "0.1.0",
   "private": true,
   "type": "module",

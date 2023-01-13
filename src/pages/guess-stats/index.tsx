@@ -1,6 +1,6 @@
 import { PageContainer } from 'components/layout/container'
 import { Text } from 'components'
-import { Stats } from 'pages/guess/stats'
+import { Stats } from 'pages/guess-play/stats'
 
 export const GuessStats = () => {
   return (
