@@ -57,6 +57,39 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
     setTitle(e.currentTarget.value)
   }
 
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // if it's shift + tab, remove 2 spaces
+    if (e.key === 'Tab' && e.shiftKey) {
+      e.preventDefault()
+      const target = e.target as HTMLTextAreaElement
+      const start = target.selectionStart
+      const end = target.selectionEnd
+      const value = target.value
+
+      // set textarea value to: text before caret + tab + text after caret
+      target.value = value.substring(0, start - 2) + value.substring(end)
+
+      // put caret at right position again
+      target.selectionStart = target.selectionEnd = start - 2
+      return
+    }
+
+    // if it's tab, add 2 spaces
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      const target = e.target as HTMLTextAreaElement
+      const start = target.selectionStart
+      const end = target.selectionEnd
+      const value = target.value
+
+      // set textarea value to: text before caret + tab + text after caret
+      target.value = value.substring(0, start) + '  ' + value.substring(end)
+
+      // put caret at right position again
+      target.selectionStart = target.selectionEnd = start + 2
+    }
+  }
+
   return (
     <div>
       <div className="flex justify-between space-x-2">
@@ -107,6 +140,7 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
             placeholder="Write your journal entry here..."
             value={entry.text}
             $as={'textarea' as any}
+            onKeyDown={onKeyDown}
             onChange={onChange as any}
             autoFocus
           />
