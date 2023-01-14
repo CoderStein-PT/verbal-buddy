@@ -62,10 +62,11 @@ export const Entry = ({
 
 export const Entries = () => {
   const journal = useStore((state) => state.journal)
+
   return (
     <ScrollableContainer>
       <div className="px-2">
-        {journal.map((entry, index) => (
+        {[...journal].reverse().map((entry, index) => (
           <Entry key={entry.id} entry={entry} index={index + 1} />
         ))}
         {journal.length === 0 && (
