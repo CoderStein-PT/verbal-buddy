@@ -57,7 +57,10 @@ export const GuessResults = ({ delays }: { delays: GuessWordType[] }) => {
       <ScrollableContainer>
         <table className="w-full h-px">
           <Header />
-          <tbody className="divide-y divide-gray-700 divide-dashed">
+          <tbody
+            className="divide-y divide-gray-700 divide-dashed"
+            data-test="game-results-list"
+          >
             {newDelays.map((d) => (
               <ResultRow
                 delay={d}

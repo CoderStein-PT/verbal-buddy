@@ -43,7 +43,7 @@ export const GuessStats = () => {
             <Button size="md">{'Guess difficult words'}</Button>
           </Link>
         </div>
-        <Link to="/guess/new-game">
+        <Link to="/guess/new-game" data-test="btn-new-game">
           <Button>{'New Game'}</Button>
         </Link>
       </div>

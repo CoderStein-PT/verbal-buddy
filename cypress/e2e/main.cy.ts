@@ -1,10 +1,19 @@
 describe('Categories', () => {
-  it('basic test', () => {
+  beforeEach(() => {
     cy.visit('localhost:3000')
+  })
 
-    cy.getEl('input-new-category').first().type('Category 1{enter}')
-    cy.getEl('categories-list').children().should('have.length', 1)
-    cy.getEl('input-new-category').first().type('Category 2{enter}')
-    cy.getEl('categories-list').children().should('have.length', 2)
+  it('fill basic data', () => {
+    cy.fillData()
+  })
+
+  it('pre-fill data and play guess games', () => {
+    cy.preFillState()
+
+    cy.playGuessGame()
+    cy.playGuessGame()
+    cy.playGuessGame()
+
+    cy.getEl('guess-stats-main').children().should('have.length', 3)
   })
 })

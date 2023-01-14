@@ -1,4 +1,5 @@
 import { PresetType } from 'presets/types'
+import { environment } from 'utils'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -119,3 +120,7 @@ export const useStore = create(
     { name: 'joke-generator', version: 1 }
   )
 )
+
+if (window.Cypress) {
+  window.store = useStore
+}

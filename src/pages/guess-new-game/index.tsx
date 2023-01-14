@@ -41,7 +41,11 @@ export const GuessNewGamePage = () => {
     <PageContainer>
       <div className="flex justify-between">
         <Text variant="button">{'Choose categories'}</Text>
-        <Button size="sm" onClick={onToggleAllClick}>
+        <Button
+          size="sm"
+          onClick={onToggleAllClick}
+          data-test="btn-toggle-select-all"
+        >
           {categories.length === selectedCategories.length
             ? 'Clear'
             : 'Select all'}
@@ -54,7 +58,9 @@ export const GuessNewGamePage = () => {
       />
       <SeparatorFull className="my-2" />
       <div className="flex justify-end">
-        <Button onClick={onStart}>{'Start'}</Button>
+        <Button onClick={onStart} data-test="btn-start-game">
+          {'Start'}
+        </Button>
       </div>
     </PageContainer>
   )

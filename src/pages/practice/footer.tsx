@@ -1,4 +1,4 @@
-import { Button, Input, Text } from 'components'
+import { Button, Input } from 'components'
 import { ChangeEventHandler } from 'react'
 import { ProgressBar } from './progress-bar'
 import { GameType } from './use-game'
@@ -33,6 +33,7 @@ export const Footer = ({
           type="text"
           placeholder={placeholder || 'New word...'}
           autoFocus
+          data-test="input-game"
           big
           className="w-full mt-2 text-center"
         />
@@ -55,7 +56,11 @@ export const Footer = ({
         </Button>
       )}
       {game.pressedStart && !game.finished ? null : (
-        <Button className="w-full" onClick={startCountdown}>
+        <Button
+          className="w-full"
+          onClick={startCountdown}
+          data-test="btn-game-start"
+        >
           {'Start'}
         </Button>
       )}

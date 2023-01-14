@@ -15,9 +15,7 @@ import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { Navigate, useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { useNavigate } from 'react-router-dom'
-import { TooltipWrapper } from 'react-tooltip'
 import { useState } from 'react'
-import { MdSend } from '@react-icons/all-files/md/MdSend'
 import { InputSendIcon } from 'components/input/input-send-icon'
 import { PageContainer } from 'components/layout/container'
 
@@ -84,11 +82,13 @@ export const Words = ({
 
   return (
     <ScrollableContainer scrollableContainer={scrollableContainer}>
-      {words
-        .filter((w) => w.categoryId === categoryId)
-        .map((word, index) => (
-          <Word key={word.id} index={index + 1} word={word} />
-        ))}
+      <div className="px-2" data-test="words-list">
+        {words
+          .filter((w) => w.categoryId === categoryId)
+          .map((word, index) => (
+            <Word key={word.id} index={index + 1} word={word} />
+          ))}
+      </div>
     </ScrollableContainer>
   )
 }
@@ -167,6 +167,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
         placeholder="New Word..."
         className="w-full"
         value={newWord}
+        data-test="input-new-word"
         onChange={onChange}
         autoFocus
         big
