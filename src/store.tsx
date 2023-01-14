@@ -1,5 +1,4 @@
 import { PresetType } from 'presets/types'
-import { environment } from 'utils'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 

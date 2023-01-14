@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { routes, IRoute } from './pages'
 import { Layout } from 'components'
 import { useEffect } from 'react'
-import { environment } from 'utils'
+import { environment } from 'utils/helpers'
 
 const Page = ({ route }: { route: IRoute }) => {
   return <route.component />
