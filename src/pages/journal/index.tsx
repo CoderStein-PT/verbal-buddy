@@ -67,7 +67,7 @@ export const Entries = () => {
     <ScrollableContainer>
       <div className="px-2">
         {[...journal].reverse().map((entry, index) => (
-          <Entry key={entry.id} entry={entry} index={index + 1} />
+          <Entry key={entry.id} entry={entry} index={journal.length - index} />
         ))}
         {journal.length === 0 && (
           <ProseDiv>
