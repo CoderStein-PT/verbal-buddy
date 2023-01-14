@@ -86,18 +86,21 @@ export const JournalPage = () => {
     if (!title) return
 
     const id = findLastId(useStore.getState().journal) + 1
-    useStore.setState((state) => {
-      const newEntry: JournalEntryType = {
-        id,
-        title,
-        text: '',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
 
-      state.journal.push(newEntry)
-      return state
-    })
+    useStore.setState((s) =>
+      produce(s, (state) => {
+        const newEntry: JournalEntryType = {
+          id,
+          title,
+          text: '',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+
+        state.journal.push(newEntry)
+        return state
+      })
+    )
 
     navigate(`/journal/${id}`)
   }

@@ -102,7 +102,7 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
           </ProseDiv>
         ) : (
           <Input
-            className="w-full resize-none"
+            className="w-full resize-none text-lg"
             style={{ padding: '1rem', height: '400px' }}
             placeholder="Write your journal entry here..."
             value={entry.text}

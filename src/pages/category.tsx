@@ -6,12 +6,14 @@ import {
   ScrollableContainer,
   ScrollableContainerType,
   useScrollableContainer,
-  Button
+  Button,
+  ActionType
 } from 'components'
 import { CategoryType, useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
+import { BsDot } from '@react-icons/all-files/bs/BsDot'
 import { Navigate, useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { useNavigate } from 'react-router-dom'
@@ -50,16 +52,28 @@ export const Word = ({ word, index }: { word: WordType; index: number }) => {
     navigate(`/word/${word.id}`)
   }
 
+  const actions: ActionType[] = [
+    { title: 'Edit', icon: FiEdit2, onClick: 'edit' },
+    { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' },
+    ...(!!word?.descriptions?.length
+      ? [
+          {
+            title: 'Has descriptions',
+            icon: BsDot,
+            color: 'textPrimary',
+            alwaysShow: true
+          } as ActionType
+        ]
+      : [])
+  ]
+
   return (
     <Row
       text={word.text}
       onChange={onChange}
       index={index}
       onClick={onEditClick}
-      actions={[
-        { title: 'Edit', icon: FiEdit2, onClick: 'edit' },
-        { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
-      ]}
+      actions={actions}
     />
   )
 }

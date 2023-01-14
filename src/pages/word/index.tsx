@@ -1,35 +1,63 @@
-import { useStore } from 'store'
+import { useStore, WordType } from 'store'
 import { useNavigate, useParams } from 'react-router-dom'
 import { WordEditor } from './word-editor'
 import { Button } from 'components'
 import { PageContainer } from 'components/layout/container'
+import { useCallback, useEffect, useMemo } from 'react'
+import { TooltipWrapper } from 'react-tooltip'
 
-export const WordPage = () => {
-  const wordId = useParams<{ id: string }>().id
+export const WordPageCore = ({ word }: { word: WordType }) => {
   const navigate = useNavigate()
-
-  const word = useStore((state) =>
-    wordId ? state.words.find((c) => c.id === +wordId) : null
-  )
 
   const words = useStore((state) => state.words)
 
-  if (!word) return null
+  const prevWord = useMemo(
+    () => words.find((c) => c.id === word.id - 1),
+    [word, words]
+  )
 
-  const prevWord = words.find((c) => c.id === word.id - 1)
-  const nextWord = words.find((c) => c.id === word.id + 1)
+  const nextWord = useMemo(
+    () => words.find((c) => c.id === word.id + 1),
+    [word, words]
+  )
 
-  const goToPreviousWord = () => {
+  const goToPreviousWord = useCallback(() => {
     if (!prevWord) return
 
     navigate(`/word/${prevWord.id}`, { replace: true })
-  }
+  }, [prevWord, navigate])
 
-  const goToNextWord = () => {
+  const goToNextWord = useCallback(() => {
     if (!nextWord) return
 
     navigate(`/word/${nextWord.id}`, { replace: true })
-  }
+  }, [nextWord, navigate])
+
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowLeft') {
+        e.preventDefault()
+        goToPreviousWord()
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowRight') {
+        e.preventDefault()
+        goToNextWord()
+      }
+
+      if (e.key === 'Escape') {
+        navigate(-1)
+      }
+    },
+    [navigate, goToPreviousWord, goToNextWord]
+  )
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [onKeyDown])
 
   return (
     <PageContainer>
@@ -39,29 +67,44 @@ export const WordPage = () => {
       <div className="flex items-center justify-between mt-4">
         <div>
           {prevWord && (
-            <Button
-              color="gray"
-              size="md"
-              onClick={goToPreviousWord}
-              data-test="btn-prev-word"
-            >
-              {'Previous Word'}
-            </Button>
+            <TooltipWrapper content="CTRL+Left">
+              <Button
+                color="gray"
+                size="md"
+                onClick={goToPreviousWord}
+                data-test="btn-prev-word"
+              >
+                {'Previous Word'}
+              </Button>
+            </TooltipWrapper>
           )}
         </div>
         <div>
           {nextWord && (
-            <Button
-              color="gray"
-              size="md"
-              onClick={goToNextWord}
-              data-test="btn-next-word"
-            >
-              {'Next Word'}
-            </Button>
+            <TooltipWrapper content="CTRL+Right">
+              <Button
+                color="gray"
+                size="md"
+                onClick={goToNextWord}
+                data-test="btn-next-word"
+              >
+                {'Next Word'}
+              </Button>
+            </TooltipWrapper>
           )}
         </div>
       </div>
     </PageContainer>
   )
+}
+
+export const WordPage = () => {
+  const wordId = useParams<{ id: string }>().id
+
+  const word = useStore((state) =>
+    wordId ? state.words.find((c) => c.id === +wordId) : null
+  )
+
+  if (!word) return null
+  return <WordPageCore word={word} />
 }

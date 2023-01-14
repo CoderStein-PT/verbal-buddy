@@ -29,6 +29,7 @@ export type ActionType = {
   onClick?: 'edit' | (() => void)
   icon: React.FunctionComponent
   color?: ButtonProps['color']
+  alwaysShow?: boolean
 }
 
 export const Row = ({
@@ -116,19 +117,20 @@ export const Row = ({
           </TooltipWrapper>
         )}
       </div>
-      <div
-        className={`flex items-center space-x-1 ${
-          actionsVisible
-            ? ''
-            : 'transition duration-300 md:opacity-0 group-hover:opacity-100 group-hover:duration-150"'
-        }`}
-      >
-        {actions?.map((action, index) => (
-          <ActionButton
-            key={index}
-            toggleEditMode={toggleEditMode}
-            action={action}
-          />
+      <div className="flex items-center space-x-1">
+        {actions?.map((action) => (
+          <div
+            key={action.title}
+            className={`${
+              actionsVisible || action.alwaysShow
+                ? ''
+                : 'transition duration-300 md:opacity-0 group-hover:opacity-100 group-hover:duration-150"'
+            }`}
+          >
+            <TooltipWrapper content={action.title}>
+              <ActionButton toggleEditMode={toggleEditMode} action={action} />
+            </TooltipWrapper>
+          </div>
         ))}
       </div>
       <div className="w-8 ml-2 text-right">
