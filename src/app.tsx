@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { routes, IRoute } from './pages'
 import { Layout } from 'components'
 import { useEffect } from 'react'
+import { environment } from 'utils'
 
 const Page = ({ route }: { route: IRoute }) => {
   return <route.component />
@@ -10,6 +11,8 @@ const Page = ({ route }: { route: IRoute }) => {
 export function App() {
   useEffect(() => {
     if (typeof window === 'undefined' || !window.glowCookies) return
+
+    if (environment === 'development') return
 
     window.glowCookies.start('en', {
       style: 1,
