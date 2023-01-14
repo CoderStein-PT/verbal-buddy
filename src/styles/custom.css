@@ -7,6 +7,10 @@ html, body {
     height: 100%;
 }
 
+::selection {
+	@apply bg-primary-500 bg-opacity-60;
+}
+
 .tw-text b{
 	@apply text-slate-200;
 }
