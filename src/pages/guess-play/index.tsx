@@ -18,6 +18,7 @@ import { GuessResults } from './guess-results'
 import { PageContainer } from 'components/layout/container'
 import { Navigate, Link, useParams } from 'react-router-dom'
 import { Descriptions } from './descriptions'
+import { toast } from 'react-toastify'
 
 export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [word, setWord] = useState<WordType>(() => getRandomWord({ words }))
@@ -90,6 +91,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     }))
 
     game.finish()
+    toast.success('Game finished!')
     setLastWord(word)
     useStore.setState((state) => ({
       guessStats: [
@@ -156,6 +158,12 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     <div className="flex justify-center">
       <div className="w-full">
         <PageContainer>
+          <div
+            className="hidden"
+            data-test="data-word"
+            data-test-data={word.text}
+            data-test-finished={game.finished}
+          />
           <div className="flex items-center justify-between">
             <Text>
               {categories.find((c) => c.id === word.categoryId)?.name}
@@ -202,6 +210,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
                   ? 'opacity-100 transition'
                   : 'opacity-0 scale-0 transition duration-300'
               }`}
+              data-test="last-word-text"
             >
               <Text variant="subtitle2">{lastWord?.text || '...'}</Text>
             </div>

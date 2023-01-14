@@ -103,7 +103,10 @@ export const WordEditor = ({
       />
       <Tab.Group>
         <SeparatorFull />
-        <Tab.List className="flex px-2 mt-2 space-x-1 overflow-x-auto">
+        <Tab.List
+          className="flex px-2 mt-2 space-x-1 overflow-x-auto"
+          data-test="word-editor-tabs"
+        >
           <Tab as={React.Fragment}>
             {({ selected }) => (
               <Button size="sm" color={selected ? 'gray' : undefined}>

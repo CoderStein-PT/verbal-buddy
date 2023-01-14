@@ -119,3 +119,7 @@ export const useStore = create(
     { name: 'joke-generator', version: 1 }
   )
 )
+
+if (window.Cypress) {
+  window.store = useStore
+}

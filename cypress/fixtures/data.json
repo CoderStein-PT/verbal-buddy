@@ -1,0 +1,34 @@
+{
+  "categories": [
+    {
+      "name": "People",
+      "words": [
+        {
+          "name": "Elon Musk",
+          "descriptions": ["CEO of Tesla", "CEO of SpaceX", "Rich guy"],
+          "opposites": ["poor", "unsuccessful", "dumb"]
+        },
+        {
+          "name": "Jeff Bezos",
+          "descriptions": ["CEO of Amazon", "Rich guy", "CEO of Blue Origin"],
+          "opposites": ["poor", "broke", "unsuccessful"]
+        }
+      ]
+    },
+    {
+      "name": "People (stereotypes)",
+      "words": [
+        {
+          "name": "Nerd",
+          "descriptions": ["Smart", "Geeky", "Unpopular"],
+          "opposites": ["popular", "cool", "jock"]
+        },
+        {
+          "name": "Rich",
+          "descriptions": ["Has a lot of money", "Has a yacht"],
+          "opposites": ["poor", "broke", "unsuccessful"]
+        }
+      ]
+    }
+  ]
+}

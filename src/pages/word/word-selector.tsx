@@ -54,7 +54,7 @@ export const Categories = ({
 
   return (
     <ScrollableContainer height={height} maxHeight={maxHeight}>
-      <div className="px-2 my-1">
+      <div className="px-2 my-1" data-test="categories-selector">
         {categories.map((category, index) => (
           <Category
             key={category.id}

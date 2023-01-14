@@ -122,7 +122,7 @@ export const RelatedWords = ({
   })
 
   return (
-    <div>
+    <div data-test="word-editor-related-words">
       {showWords ? (
         <div className="px-2">
           <WordSelector

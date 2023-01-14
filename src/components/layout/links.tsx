@@ -17,7 +17,7 @@ export const Links = () => {
   }, [location.pathname])
 
   return (
-    <div className="relative items-center hidden md:flex">
+    <div className="relative items-center hidden md:flex" data-test="navbar">
       {links.map((link) => (
         <Link
           ref={decoration.setRefFromKey(link.name)}

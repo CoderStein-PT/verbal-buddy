@@ -122,7 +122,10 @@ const StatsTable = ({ stats }: { stats: GuessStats[] }) => {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700 divide-dashed">
+          <tbody
+            className="divide-y divide-gray-700 divide-dashed"
+            data-test="guess-stats-main"
+          >
             {stats.map((stat, idx) => (
               <StatRow
                 stat={stat}

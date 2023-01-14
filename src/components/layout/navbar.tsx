@@ -1,18 +1,13 @@
-import { Button, Text } from 'components'
-import {
-  matchPath,
-  useNavigate,
-  Link as RouterLink,
-  useLocation
-} from 'react-router-dom'
+import { matchPath, Link as RouterLink, useLocation } from 'react-router-dom'
 import { routes } from 'pages'
 import { useMemo } from 'react'
-import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
 import { Logo } from './logo'
 import tw from 'tailwind-styled-components'
 import { MenuLauncher } from './menu-launcher'
 import { useUiStore } from 'ui-store'
 import { Links } from './links'
+import { BackButton } from './back-button'
+import { isMobile } from 'utils'
 
 export const LinkGlow = tw.div`absolute w-[100px] h-0.5 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent`
 
@@ -26,7 +21,6 @@ const noBackButtonPaths = [
 ]
 
 export const Navbar = () => {
-  const navigate = useNavigate()
   const location = useLocation()
 
   const route = useMemo(() => {
@@ -40,10 +34,6 @@ export const Navbar = () => {
     return routes[key]
   }, [location.pathname])
 
-  const navigateBack = () => {
-    navigate(-1)
-  }
-
   const showBackButton = useMemo(() => {
     if (!route) return false
     return !noBackButtonPaths.includes(route.path)
@@ -55,14 +45,9 @@ export const Navbar = () => {
     <div className="fixed top-0 left-0 right-0 z-40">
       <div className="flex items-center justify-between w-full h-12 max-w-screen-xl px-2 py-1 mx-auto bg-gray-900 md:space-x-2 md:px-16 md:py-4 md:h-16 backdrop-blur-md bg-opacity-60 ">
         <div className="absolute md:hidden top-1 left-2">
-          {showBackButton && (
+          {showBackButton && isMobile() && (
             <div>
-              <Button size="round" color="text" onClick={navigateBack}>
-                <FiChevronLeft className="w-full h-full mr-1" />
-                <Text className="mr-2 group-hover:text-primary-500">
-                  {'Back'}
-                </Text>
-              </Button>
+              <BackButton />
             </div>
           )}
         </div>
@@ -72,14 +57,9 @@ export const Navbar = () => {
           </RouterLink>
           <MenuLauncher onClick={openSidebar} />
           <div className="items-center flex-1 hidden px-2 space-x-2 border-gray-700 border-dashed md:flex border-x">
-            {showBackButton && (
+            {showBackButton && !isMobile() && (
               <div>
-                <Button size="round" color="text" onClick={navigateBack}>
-                  <FiChevronLeft className="w-full h-full mr-1" />
-                  <Text className="mr-2 group-hover:text-primary-500">
-                    {'Back'}
-                  </Text>
-                </Button>
+                <BackButton />
               </div>
             )}
           </div>

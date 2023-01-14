@@ -15,10 +15,8 @@ import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
-import { MdSend } from '@react-icons/all-files/md/MdSend'
 import { Link, useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
-import { TooltipWrapper } from 'react-tooltip'
 import { useState } from 'react'
 import { InputSendIcon } from 'components/input/input-send-icon'
 import { PageContainer } from 'components/layout/container'
@@ -95,7 +93,7 @@ export const Categories = ({
       height={isMobile() ? 250 : 400}
       scrollableContainer={scrollableContainer}
     >
-      <div className="px-2">
+      <div className="px-2" data-test="categories-list">
         {categories?.length ? (
           categories.map((category) => (
             <Category key={category.id} category={category} />
@@ -151,7 +149,7 @@ export const CategoriesPage = () => {
     <PageContainer>
       <div className="flex items-center justify-between">
         <Text variant="button">{'Categories'}</Text>
-        <Link to="/settings#presets">
+        <Link to="/settings#presets" data-test="btn-use-presets">
           <Button size="md">{'Use presets'}</Button>
         </Link>
       </div>
@@ -160,6 +158,7 @@ export const CategoriesPage = () => {
       <SeparatorFull className="my-2" />
       <Input
         onKeyDown={onKeyDown}
+        data-test="input-new-category"
         type="text"
         placeholder="New category..."
         className="w-full"

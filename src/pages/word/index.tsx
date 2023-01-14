@@ -33,18 +33,30 @@ export const WordPage = () => {
 
   return (
     <PageContainer>
-      <WordEditor height={330} word={word} />
+      <div data-test="word-editor">
+        <WordEditor height={330} word={word} />
+      </div>
       <div className="flex items-center justify-between mt-4">
         <div>
           {prevWord && (
-            <Button color="gray" size="md" onClick={goToPreviousWord}>
+            <Button
+              color="gray"
+              size="md"
+              onClick={goToPreviousWord}
+              data-test="btn-prev-word"
+            >
               {'Previous Word'}
             </Button>
           )}
         </div>
         <div>
           {nextWord && (
-            <Button color="gray" size="md" onClick={goToNextWord}>
+            <Button
+              color="gray"
+              size="md"
+              onClick={goToNextWord}
+              data-test="btn-next-word"
+            >
               {'Next Word'}
             </Button>
           )}
