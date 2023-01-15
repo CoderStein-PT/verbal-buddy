@@ -16,10 +16,10 @@ export const useRecursiveWordHeader = (word: WordType) => {
     (w) => w.id === breadcrumbs[activeBreadcrumbIndex]
   )
 
-  const onWordClick = (word: WordType) => {
+  const onWordClick = (wordId: number) => {
     const newBreadcrumbs = [
       ...breadcrumbs.slice(0, activeBreadcrumbIndex + 1),
-      word.id
+      wordId
     ]
     setBreadcrumbs(newBreadcrumbs)
     setActiveBreadcrumbIndex(newBreadcrumbs.length - 1)

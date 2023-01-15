@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware'
 
 export type WordPropType = {
   id: number
-  text: string
+  text?: string
   wordId?: number
 }
 
