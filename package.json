@@ -28,6 +28,7 @@
     "react-router-dom": "^6.6.1",
     "react-toastify": "^9.1.1",
     "react-tooltip": "^5.4.0",
+    "react-use": "^17.4.0",
     "recharts": "^2.2.0",
     "tailwind-styled-components": "^2.2.0",
     "zustand": "^4.2.0"
@@ -38,6 +39,7 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
     "@react-icons/all-files": "^4.1.0",
+    "@simbathesailor/use-what-changed": "^2.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.2.5",

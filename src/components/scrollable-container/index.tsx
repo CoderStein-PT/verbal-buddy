@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import { mergeRefs } from 'react-merge-refs'
 import React from 'react'
@@ -14,14 +14,14 @@ export const useScrollableContainer = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const scrollDown = () => {
+  const scrollDown = useCallback(() => {
     setTimeout(() => {
       containerRef.current?.scrollTo({
         top: containerRef.current.scrollHeight,
         behavior: 'smooth'
       })
     }, 0)
-  }
+  }, [])
 
   useEffect(() => {
     if (!scrollOnLoad) return
@@ -29,7 +29,10 @@ export const useScrollableContainer = ({
     scrollDown()
   }, [scrollOnLoad])
 
-  return { containerRef, scrollDown }
+  return useMemo(
+    () => ({ containerRef, scrollDown }),
+    [containerRef, scrollDown]
+  )
 }
 
 export type ScrollableContainerType = ReturnType<typeof useScrollableContainer>
@@ -59,18 +62,22 @@ export const ScrollableContainer = ({
     setIsScrollable(scrollHeight > clientHeight)
   }, [])
 
-  const onScroll = () => {
+  const onScroll = useCallback(() => {
     if (!containerRef.current) return
 
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current
 
     setScroll(scrollTop)
     setIsScrollable(scrollHeight > clientHeight)
-  }
+  }, [])
 
-  const ref = scrollableContainer
-    ? mergeRefs([containerRef, scrollableContainer?.containerRef])
-    : containerRef
+  const ref = useMemo(
+    () =>
+      scrollableContainer
+        ? mergeRefs([containerRef, scrollableContainer?.containerRef])
+        : containerRef,
+    [scrollableContainer, containerRef]
+  )
 
   return (
     <div className="relative">

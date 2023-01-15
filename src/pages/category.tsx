@@ -1,5 +1,4 @@
 import {
-  Input,
   Row,
   SeparatorFull,
   Text,
@@ -10,6 +9,7 @@ import {
   ActionType,
   InfoType
 } from 'components'
+import { useWhatChanged } from '@simbathesailor/use-what-changed'
 import { CategoryType, useStore, WordType } from 'store'
 import { capitalizeWords, findLastId } from 'utils'
 import { toast } from 'react-toastify'
@@ -18,101 +18,122 @@ import { GiPlainCircle } from '@react-icons/all-files/gi/GiPlainCircle'
 import { Navigate, useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { InputSendIcon } from 'components/input/input-send-icon'
 import { PageContainer } from 'components/layout/container'
 import { namesByKeys, PropKeyType } from 'components/word-editor/properties'
+import { ControllableListInput } from 'components/scrollable-container/controllable-list-input'
+import {
+  ControllableListType,
+  useControllableList
+} from 'components/scrollable-container/use-controllable-list'
 
-export const Word = ({ word, index }: { word: WordType; index: number }) => {
+const possibleInfo: { key: PropKeyType; icon: any; class: string }[] = [
+  {
+    key: 'definitions',
+    icon: GiPlainCircle,
+    class: 'text-2xs px-0.5'
+  },
+  {
+    key: 'props',
+    icon: GiPlainCircle,
+    class: 'text-2xs px-0.5'
+  },
+  {
+    key: 'opposites',
+    icon: GiPlainCircle,
+    class: 'text-2xs px-0.5'
+  }
+]
+
+export const Word = ({
+  word,
+  index,
+  isSelected
+}: {
+  word: WordType
+  index: number
+  isSelected?: boolean
+}) => {
   const navigate = useNavigate()
 
-  const onDelete = () => {
-    useStore.setState((s) => ({
-      words: s.words.filter((w) => w.id !== word.id)
-    }))
-  }
+  const onChange = useCallback(
+    (text: string | undefined) => {
+      if (!text) {
+        toast.error('Word cannot be empty')
+        return
+      }
 
-  const onChange = (text: string | undefined) => {
-    if (!text) {
-      toast.error('Word cannot be empty')
-      return
-    }
+      const words = useStore.getState().words
 
-    const words = useStore.getState().words
+      if (words.find((w) => w.text === text && w.id !== word.id)) {
+        toast.error('Word already exists')
+        return
+      }
 
-    if (words.find((w) => w.text === text && w.id !== word.id)) {
-      toast.error('Word already exists')
-      return
-    }
+      useStore.setState({
+        words: words.map((w) => (w.id === word.id ? { ...w, text } : w))
+      })
+    },
+    [word.id]
+  )
 
-    useStore.setState({
-      words: words.map((w) => (w.id === word.id ? { ...w, text } : w))
-    })
-  }
-
-  const onEditClick = () => {
+  const onEditClick = useCallback(() => {
     navigate(`/word/${word.id}`)
-  }
+  }, [word.id, navigate])
 
-  const actions: ActionType[] = [
-    { title: 'Edit', icon: FiEdit2, onClick: 'edit' },
-    { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
-  ]
-
-  const possibleInfo: { key: PropKeyType; icon: any; class: string }[] = [
-    {
-      key: 'definitions',
-      icon: GiPlainCircle,
-      class: 'text-2xs px-0.5'
-    },
-    {
-      key: 'props',
-      icon: GiPlainCircle,
-      class: 'text-2xs px-0.5'
-    },
-    {
-      key: 'opposites',
-      icon: GiPlainCircle,
-      class: 'text-2xs px-0.5'
+  const actions: ActionType[] = useMemo(() => {
+    const onDelete = () => {
+      useStore.setState((s) => ({
+        words: s.words.filter((w) => w.id !== word.id)
+      }))
     }
-  ]
+    return [
+      { title: 'Edit', icon: FiEdit2, onClick: 'edit' },
+      { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
+    ]
+  }, [word])
 
-  const infos: InfoType[] = possibleInfo.map((i) => ({
-    ...i,
-    title:
-      'Has' +
-      (word[i.key]?.length ? ' ' + word[i.key]?.length : ' no') +
-      ' ' +
-      namesByKeys[i.key][0].toLowerCase(),
-    class:
-      i.class +
-      ' ' +
-      (word[i.key]?.length
-        ? 'text-green-500 shadow-primary-light-sm'
-        : 'text-gray-500')
-  }))
+  const infos: InfoType[] = useMemo(() => {
+    return possibleInfo.map((i) => ({
+      ...i,
+      title:
+        'Has' +
+        (word[i.key]?.length ? ' ' + word[i.key]?.length : ' no') +
+        ' ' +
+        namesByKeys[i.key][0].toLowerCase(),
+      class:
+        i.class +
+        ' ' +
+        (word[i.key]?.length
+          ? 'text-green-500 shadow-primary-light-sm'
+          : 'text-gray-500')
+    }))
+  }, [word])
 
   return (
     <Row
       text={word.text}
       onChange={onChange}
       index={index}
+      selectedColor="primary"
       onClick={onEditClick}
       actions={actions}
+      isSelected={isSelected}
       info={infos}
     />
   )
 }
 
 export const Words = ({
-  categoryId,
-  scrollableContainer
+  words,
+  scrollableContainer,
+  controllableList
 }: {
-  categoryId: number
+  words: WordType[]
   scrollableContainer: ScrollableContainerType
+  controllableList: ControllableListType
 }) => {
-  const words = useStore((state) => state.words)
-
   if (!words.length)
     return (
       <Text color="gray-light" className="text-center">
@@ -123,11 +144,14 @@ export const Words = ({
   return (
     <ScrollableContainer scrollableContainer={scrollableContainer}>
       <div className="px-2" data-test="words-list">
-        {words
-          .filter((w) => w.categoryId === categoryId)
-          .map((word, index) => (
-            <Word key={word.id} index={index + 1} word={word} />
-          ))}
+        {words.map((word, index) => (
+          <Word
+            key={word.id}
+            index={index + 1}
+            word={word}
+            isSelected={controllableList.selectedIdx === index}
+          />
+        ))}
       </div>
     </ScrollableContainer>
   )
@@ -145,36 +169,57 @@ export const CategoryPage = () => {
 }
 
 export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
-  const scrollableContainer = useScrollableContainer({ scrollOnLoad: true })
+  const scrollableContainer = useScrollableContainer({})
   const navigate = useNavigate()
   const [newWord, setNewWord] = useState<string>('')
+  const words = useStore((state) => state.words)
 
-  const onCreateWord = () => {
+  const filteredWords = useMemo(
+    () => words.filter((w) => w.categoryId === category.id),
+    [words, category]
+  )
+
+  const controllableList = useControllableList({
+    length: filteredWords.length,
+    onEnter: (itemIdx) => {
+      navigate(`/word/${filteredWords[itemIdx].id}`)
+    },
+    scrollableContainer
+  })
+
+  const onCreateWord = useCallback(() => {
     if (!newWord) {
       toast.error('Word cannot be empty')
       return
     }
 
-    const words = useStore.getState().words
-
-    if (words.find((w) => w.text === newWord && w.categoryId === category.id)) {
+    if (
+      filteredWords.find(
+        (w) => w.text === newWord && w.categoryId === category.id
+      )
+    ) {
       toast.error('Word in this category already exists')
       return
     }
 
-    const id = findLastId(words) + 1
+    const id = findLastId(filteredWords) + 1
     const newWordObject = {
       id,
       text: capitalizeWords(newWord),
       categoryId: category.id
     }
 
-    useStore.setState({ words: [...words, newWordObject] })
+    useStore.setState({ words: [...filteredWords, newWordObject] })
     setNewWord('')
     scrollableContainer.scrollDown()
-  }
+  }, [newWord, category, scrollableContainer, filteredWords])
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      navigate(-1)
+      return
+    }
+
     if (event.key !== 'Enter') return
 
     onCreateWord()
@@ -201,22 +246,29 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
       <Text variant="button">{category?.name}</Text>
       <SeparatorFull className="w-full my-2" />
       <Words
+        controllableList={controllableList}
         scrollableContainer={scrollableContainer}
-        categoryId={category.id}
+        words={filteredWords}
       />
       <SeparatorFull className="my-2" />
-      <Input
+      <ControllableListInput
         onKeyDown={onKeyDown}
+        data-test="input-new-word"
         type="text"
-        placeholder="New Word..."
+        placeholder="New word..."
         className="w-full"
         value={newWord}
-        data-test="input-new-word"
         onChange={onChange}
         autoFocus
         big
         icon={
           <InputSendIcon onClick={onCreateWord} title={'Send (Enter key)'} />
+        }
+        controllableList={controllableList}
+        selectedItemText={
+          controllableList.selectedIdx !== null
+            ? filteredWords[controllableList.selectedIdx].text
+            : undefined
         }
       />
       <div className="flex justify-start mt-6 space-x-2">

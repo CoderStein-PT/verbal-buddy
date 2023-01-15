@@ -1,5 +1,4 @@
 import {
-  Input,
   Row,
   SeparatorFull,
   Text,
@@ -20,8 +19,16 @@ import Explanation from './explanation.mdx'
 import { useState } from 'react'
 import { InputSendIcon } from 'components/input/input-send-icon'
 import { PageContainer } from 'components/layout/container'
+import { useControllableList } from '../components/scrollable-container/use-controllable-list'
+import { ControllableListInput } from 'components/scrollable-container/controllable-list-input'
 
-export const Category = ({ category }: { category: CategoryType }) => {
+export const Category = ({
+  category,
+  isSelected
+}: {
+  category: CategoryType
+  isSelected?: boolean
+}) => {
   const navigate = useNavigate()
   const categoryWords = useStore
     .getState()
@@ -71,6 +78,8 @@ export const Category = ({ category }: { category: CategoryType }) => {
       text={category.name}
       onChange={onChange}
       onClick={onClick}
+      selectedColor="primary"
+      isSelected={isSelected}
       index={categoryWords.length}
       actions={[
         { title: 'Practice', onClick: onPracticeClick, icon: AiFillFire },
@@ -82,9 +91,11 @@ export const Category = ({ category }: { category: CategoryType }) => {
 }
 
 export const Categories = ({
-  scrollableContainer
+  scrollableContainer,
+  controllableList
 }: {
   scrollableContainer: ScrollableContainerType
+  controllableList: any
 }) => {
   const categories = useStore((state) => state.categories)
 
@@ -95,8 +106,12 @@ export const Categories = ({
     >
       <div className="px-2" data-test="categories-list">
         {categories?.length ? (
-          categories.map((category) => (
-            <Category key={category.id} category={category} />
+          categories.map((category, idx) => (
+            <Category
+              isSelected={controllableList.selectedIdx === idx}
+              key={category.id}
+              category={category}
+            />
           ))
         ) : (
           <ProseDiv>
@@ -111,6 +126,16 @@ export const Categories = ({
 export const CategoriesPage = () => {
   const scrollableContainer = useScrollableContainer({})
   const [newCategoryText, setNewCategoryText] = useState('')
+  const categories = useStore((state) => state.categories)
+  const navigate = useNavigate()
+
+  const controllableList = useControllableList({
+    length: categories.length,
+    onEnter: (itemIdx) => {
+      navigate(`/category/${categories[itemIdx].id}`)
+    },
+    scrollableContainer
+  })
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
@@ -157,14 +182,17 @@ export const CategoriesPage = () => {
         </Link>
       </div>
       <SeparatorFull className="my-2" />
-      <Categories scrollableContainer={scrollableContainer} />
+      <Categories
+        controllableList={controllableList}
+        scrollableContainer={scrollableContainer}
+      />
       <SeparatorFull className="my-2" />
-      <Input
+      <ControllableListInput
         onKeyDown={onKeyDown}
         data-test="input-new-category"
         type="text"
         placeholder="New category..."
-        className="w-full"
+        className={'w-full'}
         value={newCategoryText}
         onChange={onChange}
         autoFocus
@@ -174,6 +202,12 @@ export const CategoriesPage = () => {
             onClick={onCreateCategory}
             title={'Send (Enter key)'}
           />
+        }
+        controllableList={controllableList}
+        selectedItemText={
+          controllableList.selectedIdx !== null
+            ? categories[controllableList.selectedIdx].name
+            : undefined
         }
       />
     </PageContainer>

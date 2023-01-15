@@ -1,4 +1,5 @@
 import { Input, Button, Text, ButtonProps, TextProps } from 'components'
+import React, { useCallback } from 'react'
 import { useState, useRef } from 'react'
 import { TooltipWrapper } from 'react-tooltip'
 
@@ -32,26 +33,24 @@ const Actions = ({
   actions?: ActionType[]
   actionsVisible?: boolean
   toggleEditMode: () => void
-}) => {
-  return (
-    <div className="flex items-center space-x-1">
-      {actions?.map((action) => (
-        <div
-          key={action.title}
-          className={`${
-            actionsVisible || action.alwaysShow
-              ? ''
-              : 'transition duration-200 md:opacity-0 group-hover:opacity-100 group-hover:duration-75'
-          }`}
-        >
-          <TooltipWrapper content={action.title}>
-            <ActionButton toggleEditMode={toggleEditMode} action={action} />
-          </TooltipWrapper>
-        </div>
-      ))}
-    </div>
-  )
-}
+}) => (
+  <div className="flex items-center space-x-1">
+    {actions?.map((action) => (
+      <div
+        key={action.title}
+        className={`${
+          actionsVisible || action.alwaysShow
+            ? ''
+            : 'transition duration-200 md:opacity-0 group-hover:opacity-100 group-hover:duration-75'
+        }`}
+      >
+        <TooltipWrapper content={action.title}>
+          <ActionButton toggleEditMode={toggleEditMode} action={action} />
+        </TooltipWrapper>
+      </div>
+    ))}
+  </div>
+)
 
 const useEditableRow = ({
   onChange
@@ -61,23 +60,26 @@ const useEditableRow = ({
   const [isEditMode, setIsEditMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const toggleEditMode = () => {
+  const toggleEditMode = useCallback(() => {
     setIsEditMode(!isEditMode)
     setTimeout(() => {
       inputRef.current?.focus()
       inputRef.current?.select()
     }, 0)
-  }
+  }, [isEditMode])
 
-  const onChangeReal = () => {
+  const onChangeReal = useCallback(() => {
     setIsEditMode(false)
     onChange?.(inputRef?.current?.value)
-  }
+  }, [onChange])
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
-    onChangeReal()
-  }
+  const onKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key !== 'Enter') return
+      onChangeReal()
+    },
+    [onChangeReal]
+  )
 
   return { isEditMode, toggleEditMode, inputRef, onChangeReal, onKeyDown }
 }
@@ -132,6 +134,9 @@ export const EditableRowText = ({
               ellipsis ? 'text-ellipsis overflow-hidden whitespace-nowrap' : ''
             }`}
             color={isSelected ? selectedColor : color}
+            style={{
+              transitionDuration: isSelected ? '0s' : undefined
+            }}
           >
             {text}
           </Text>
@@ -190,6 +195,21 @@ const IdRow = ({ index }: { index?: number }) => {
   )
 }
 
+export type RowProps = {
+  text?: React.ReactNode | string
+  onClick?: () => void
+  onChange?: (text: string | undefined) => void
+  index?: number
+  actions?: ActionType[]
+  ellipsis?: boolean
+  isSelected?: boolean
+  color?: TextProps['color']
+  actionsVisible?: boolean
+  selectedColor?: TextProps['color']
+  info?: InfoType[]
+}
+
+// eslint-disable-next-line react/display-name
 export const Row = ({
   text,
   onClick,
@@ -202,19 +222,7 @@ export const Row = ({
   actionsVisible,
   selectedColor = 'gray-light',
   info
-}: {
-  text?: React.ReactNode | string
-  onClick?: () => void
-  onChange?: (text: string | undefined) => void
-  index?: number
-  actions?: ActionType[]
-  ellipsis?: boolean
-  isSelected?: boolean
-  color?: TextProps['color']
-  actionsVisible?: boolean
-  selectedColor?: TextProps['color']
-  info?: InfoType[]
-}) => {
+}: RowProps) => {
   const editableRow = useEditableRow({ onChange })
 
   return (

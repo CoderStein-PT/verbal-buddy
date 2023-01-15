@@ -35,11 +35,12 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowLeft') {
+      if (e.altKey && e.key === 'ArrowLeft') {
         e.preventDefault()
         goToPreviousWord()
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowRight') {
+
+      if (e.altKey && e.key === 'ArrowRight') {
         e.preventDefault()
         goToNextWord()
       }
