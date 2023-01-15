@@ -85,7 +85,11 @@ export const Word = ({ word, index }: { word: WordType; index: number }) => {
       ' ' +
       namesByKeys[i.key][0].toLowerCase(),
     class:
-      i.class + ' ' + (word[i.key]?.length ? 'text-green-500' : 'text-gray-500')
+      i.class +
+      ' ' +
+      (word[i.key]?.length
+        ? 'text-green-500 shadow-primary-light-sm'
+        : 'text-gray-500')
   }))
 
   return (

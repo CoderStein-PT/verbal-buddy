@@ -127,7 +127,7 @@ export const EditableRowText = ({
             className={`${
               isSelected
                 ? ''
-                : 'group-hover:text-primary-500 group-hover:transition-none'
+                : 'group-hover:text-primary-600 group-active:text-primary-500 group-hover:transition-none'
             } ${
               ellipsis ? 'text-ellipsis overflow-hidden whitespace-nowrap' : ''
             }`}
@@ -137,6 +137,25 @@ export const EditableRowText = ({
           </Text>
         </TooltipWrapper>
       )}
+    </div>
+  )
+}
+
+const Infos = ({ info }: { info?: InfoType[] }) => {
+  return (
+    <div className="flex items-stretch cursor-pointer">
+      {info?.map((info) => (
+        <div className="flex items-center" key={info.title}>
+          <TooltipWrapper
+            content={info.title}
+            className="flex items-center h-full"
+          >
+            <div className={info.class}>
+              <info.icon />
+            </div>
+          </TooltipWrapper>
+        </div>
+      ))}
     </div>
   )
 }
@@ -153,6 +172,22 @@ export type InfoType = {
   title?: string
   icon: React.FunctionComponent
   class?: string
+}
+
+const IdRow = ({ index }: { index?: number }) => {
+  return (
+    <div className="flex flex-col justify-center flex-shrink-0 w-5 mr-2 text-left">
+      {index !== undefined && (
+        <Text
+          className="group-hover:text-primary-500"
+          variant="subtitle"
+          color="gray-light"
+        >
+          {index}
+        </Text>
+      )}
+    </div>
+  )
 }
 
 export const Row = ({
@@ -184,17 +219,7 @@ export const Row = ({
 
   return (
     <div className="flex items-stretch justify-between space-x-1 group">
-      <div className="flex-shrink-0 w-5 mr-2 text-left">
-        {index !== undefined && (
-          <Text
-            className="group-hover:text-primary-500"
-            variant="subtitle"
-            color="gray-light"
-          >
-            {index}
-          </Text>
-        )}
-      </div>
+      <IdRow index={index} />
       <EditableRowText
         text={text}
         editableRow={editableRow}
@@ -204,25 +229,12 @@ export const Row = ({
         color={color}
         selectedColor={selectedColor}
       />
-      <div className="flex items-stretch cursor-pointer">
-        {info?.map((info) => (
-          <div className="flex items-center" key={info.title}>
-            <TooltipWrapper
-              content={info.title}
-              className="flex items-center h-full"
-            >
-              <div className={info.class}>
-                <info.icon />
-              </div>
-            </TooltipWrapper>
-          </div>
-        ))}
-      </div>
       <Actions
         actions={actions}
         actionsVisible={actionsVisible}
         toggleEditMode={editableRow.toggleEditMode}
       />
+      <Infos info={info} />
     </div>
   )
 }
