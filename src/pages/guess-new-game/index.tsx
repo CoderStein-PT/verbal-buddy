@@ -1,6 +1,6 @@
 import { Button, SeparatorFull, Text } from 'components'
 import { PageContainer } from 'components/layout/container'
-import { Categories } from 'pages/word/word-selector'
+import { Categories } from 'components/word-selector'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CategoryType, useStore } from 'store'

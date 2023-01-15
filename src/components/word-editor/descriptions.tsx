@@ -22,7 +22,7 @@ const Description = ({
   description: DescriptionType
   index: number
 }) => {
-  const onDeleteDescription = () => {
+  const onDelete = () => {
     useStore.setState((s) =>
       produce(s, (state) => {
         const wordIndex = state.words.findIndex((w) => w.id === word.id)
@@ -71,12 +71,7 @@ const Description = ({
       onChange={onChangeDescription}
       index={index}
       actions={[
-        {
-          title: 'Delete',
-          icon: RiCloseFill,
-          onClick: onDeleteDescription,
-          color: 'red'
-        }
+        { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
       ]}
     />
   )

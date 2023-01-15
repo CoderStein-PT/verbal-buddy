@@ -1,9 +1,14 @@
-import { Button, Row, ScrollableContainer, Text } from 'components'
+import {
+  WordSelector,
+  useWordSelector,
+  Button,
+  Row,
+  ScrollableContainer,
+  Text
+} from 'components'
 import { RelatedWordType, useStore, WordType } from 'store'
 import produce from 'immer'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { WordSelector } from './word-selector'
-import { useWordSelector } from './use-words-selector'
 import { useState } from 'react'
 import { findLastId } from 'utils'
 
