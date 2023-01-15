@@ -24,17 +24,14 @@ Cypress.Commands.add('fillData', () => {
       cy.getEl('word-editor')
         .find('input')
         .first()
-        .type(word.descriptions.join('{enter}') + '{enter}')
-      cy.getEl('word-editor-descriptions')
+        .type(word.definitions.join('{enter}') + '{enter}')
+      cy.getEl('word-editor-definitions')
         .find('>div')
         .children()
-        .should('have.length', word.descriptions.length)
+        .should('have.length', word.definitions.length)
 
       cy.getEl('word-editor-tabs').find('button').eq(1).click()
-      cy.getEl('word-editor-related-words').should(
-        'contain',
-        'No relations yet'
-      )
+      cy.getEl('word-editor-props').should('contain', 'No Properties Yet')
       cy.getEl('word-editor-tabs').find('button').eq(2).click()
       cy.getEl('word-editor')
         .find('input')

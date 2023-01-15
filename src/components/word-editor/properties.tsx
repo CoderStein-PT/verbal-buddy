@@ -58,11 +58,11 @@ export const Properties = ({
       produce(s, (state) => {
         const wordIndex = state.words.findIndex((w) => w.id === +word.id)
         const currentWord = state.words[wordIndex]
-        const descriptions = currentWord[keys]
+        const props = currentWord[keys]
         const id = findLastId(currentWord[keys] || []) + 1
         const newDescription = { id, text }
 
-        currentWord[keys] = [...(descriptions || []), newDescription]
+        currentWord[keys] = [...(props || []), newDescription]
       })
     )
 

@@ -3,37 +3,37 @@ import { WordPropType, WordType } from 'store'
 import { useMemo } from 'react'
 import { shuffleArray } from 'utils'
 
-const Description = ({
-  description,
+const Definition = ({
+  definition,
   index
 }: {
-  description: WordPropType
+  definition: WordPropType
   index: number
 }) => {
-  return <Row text={description.text} index={index} />
+  return <Row text={definition.text} index={index} />
 }
 
-export const Descriptions = ({
+export const Definitions = ({
   word,
   descriptionCount
 }: {
   word: WordType
   descriptionCount: number
 }) => {
-  const processedDescriptions = useMemo(() => {
-    if (!word.descriptions || word.descriptions.length === 0) return null
+  const processedDefinitions = useMemo(() => {
+    if (!word.definitions || word.definitions.length === 0) return null
 
-    return shuffleArray(word.descriptions)
-  }, [word.descriptions])
+    return shuffleArray(word.definitions)
+  }, [word.definitions])
 
-  if (!processedDescriptions) return null
+  if (!processedDefinitions) return null
 
   return (
     <div className="p-2 mt-2 border border-gray-600 rounded-md">
       <ScrollableContainer>
         <div className="divide-y divide-gray-600 divide-dashed">
-          {processedDescriptions.slice(0, descriptionCount).map((d, index) => (
-            <Description key={d.id} description={d} index={index + 1} />
+          {processedDefinitions.slice(0, descriptionCount).map((d, index) => (
+            <Definition key={d.id} definition={d} index={index + 1} />
           ))}
         </div>
       </ScrollableContainer>

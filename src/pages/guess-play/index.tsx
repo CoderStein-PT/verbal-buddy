@@ -17,7 +17,7 @@ import Explanation from './explanation.mdx'
 import { GuessResults } from './guess-results'
 import { PageContainer } from 'components/layout/container'
 import { Navigate, Link, useParams } from 'react-router-dom'
-import { Descriptions } from './descriptions'
+import { Definitions } from './definitions'
 import { toast } from 'react-toastify'
 
 export const GuessPageCore = ({ words }: { words: WordType[] }) => {
@@ -142,7 +142,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     game.startCountdown()
   }
 
-  const moreDescriptions = () => {
+  const moreDefinitions = () => {
     setDescriptionCount(descriptionCount + 1)
     setHintsLeft(hintsLeft - 1)
   }
@@ -152,7 +152,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   }
 
   const showHintsButton =
-    game.started && descriptionCount < (word?.descriptions?.length || 0)
+    game.started && descriptionCount < (word?.definitions?.length || 0)
 
   return (
     <div className="flex justify-center">
@@ -173,7 +173,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
           {game.started ? (
             <>
               <ScrollableContainer height={200}>
-                <Descriptions descriptionCount={descriptionCount} word={word} />
+                <Definitions descriptionCount={descriptionCount} word={word} />
               </ScrollableContainer>
             </>
           ) : !!game.countdown ? (
@@ -197,7 +197,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
                 size="sm"
                 disabled={hintsLeft < 1}
                 color="gray"
-                onClick={moreDescriptions}
+                onClick={moreDefinitions}
               >
                 {hintsLeft > 0
                   ? 'Show more (' + hintsLeft + 'x)'
@@ -252,7 +252,7 @@ export const GuessPlayPage = () => {
 
   const wordsFiltered = words.filter(
     (w) =>
-      w?.descriptions?.length &&
+      w?.definitions?.length &&
       (isDifficultWords
         ? difficultWords.find((dw) => dw.wordId === w.id)
         : categoryIds.split(',').includes(w.categoryId + ''))
