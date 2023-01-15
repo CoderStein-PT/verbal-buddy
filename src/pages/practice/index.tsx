@@ -54,7 +54,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     if (newWordsLeft !== goal || game.finished) return
 
     game.finish()
-    toast.success('You guessed all words!')
+    toast.success('You guessed all the words!')
 
     const incorrectWordsCount = categoryWords.filter(
       (w) => !practice.find((p) => compareStrings(p.text, w.text))
@@ -86,8 +86,11 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     if (!newWord) return toast.error('Word cannot be empty')
     const practice = useStore.getState().practice
 
-    if (practice.find((w) => w.text === newWord))
+    if (practice.find((w) => w.text === newWord)) {
+      event.currentTarget.select()
+
       return toast.error('Word already exists')
+    }
 
     useStore.setState(() => {
       const newPractice = { id: findLastId(practice) + 1, text: newWord }
