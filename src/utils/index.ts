@@ -99,4 +99,10 @@ export const shuffleArray = (array: any[]) => {
   return [...array].sort(() => 0.5 - Math.random())
 }
 
+export const capitalizeWords = (string: string) =>
+  string
+    .split(' ')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
+
 export * from './math'

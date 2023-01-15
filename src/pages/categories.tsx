@@ -10,7 +10,7 @@ import {
   ProseDiv
 } from 'components'
 import { useStore, CategoryType } from 'store'
-import { findLastId, isMobile } from 'utils'
+import { capitalizeWords, findLastId, isMobile } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
@@ -134,7 +134,10 @@ export const CategoriesPage = () => {
     useStore.setState((state) => ({
       categories: [
         ...state.categories,
-        { id: findLastId(state.categories) + 1, name: newCategoryText }
+        {
+          id: findLastId(state.categories) + 1,
+          name: capitalizeWords(newCategoryText)
+        }
       ]
     }))
     setNewCategoryText('')
