@@ -10,6 +10,9 @@ module.exports = {
       fontFamily: {
         title: "'Rowdies', sans-serif"
       },
+      fontSize: {
+        '2xs': '4px'
+      },
       colors: {
         primary: colors.green,
         gray: colors.slate

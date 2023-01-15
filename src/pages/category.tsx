@@ -7,19 +7,21 @@ import {
   ScrollableContainerType,
   useScrollableContainer,
   Button,
-  ActionType
+  ActionType,
+  InfoType
 } from 'components'
 import { CategoryType, useStore, WordType } from 'store'
 import { capitalizeWords, findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { BsDot } from '@react-icons/all-files/bs/BsDot'
+import { GiPlainCircle } from '@react-icons/all-files/gi/GiPlainCircle'
 import { Navigate, useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { InputSendIcon } from 'components/input/input-send-icon'
 import { PageContainer } from 'components/layout/container'
+import { namesByKeys, PropKeyType } from 'components/word-editor/properties'
 
 export const Word = ({ word, index }: { word: WordType; index: number }) => {
   const navigate = useNavigate()
@@ -54,18 +56,37 @@ export const Word = ({ word, index }: { word: WordType; index: number }) => {
 
   const actions: ActionType[] = [
     { title: 'Edit', icon: FiEdit2, onClick: 'edit' },
-    { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' },
-    ...(!!word?.descriptions?.length
-      ? [
-          {
-            title: 'Has descriptions',
-            icon: BsDot,
-            color: 'textPrimary',
-            alwaysShow: true
-          } as ActionType
-        ]
-      : [])
+    { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
   ]
+
+  const possibleInfo: { key: PropKeyType; icon: any; class: string }[] = [
+    {
+      key: 'definitions',
+      icon: GiPlainCircle,
+      class: 'text-2xs px-0.5'
+    },
+    {
+      key: 'props',
+      icon: GiPlainCircle,
+      class: 'text-2xs px-0.5'
+    },
+    {
+      key: 'opposites',
+      icon: GiPlainCircle,
+      class: 'text-2xs px-0.5'
+    }
+  ]
+
+  const infos: InfoType[] = possibleInfo.map((i) => ({
+    ...i,
+    title:
+      'Has' +
+      (word[i.key]?.length ? ' ' + word[i.key]?.length : ' no') +
+      ' ' +
+      namesByKeys[i.key][0].toLowerCase(),
+    class:
+      i.class + ' ' + (word[i.key]?.length ? 'text-green-500' : 'text-gray-500')
+  }))
 
   return (
     <Row
@@ -74,6 +95,7 @@ export const Word = ({ word, index }: { word: WordType; index: number }) => {
       index={index}
       onClick={onEditClick}
       actions={actions}
+      info={infos}
     />
   )
 }
