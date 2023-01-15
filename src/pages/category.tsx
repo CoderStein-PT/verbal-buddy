@@ -10,7 +10,7 @@ import {
   ActionType
 } from 'components'
 import { CategoryType, useStore, WordType } from 'store'
-import { findLastId } from 'utils'
+import { capitalizeWords, findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { BsDot } from '@react-icons/all-files/bs/BsDot'
@@ -137,7 +137,11 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
     }
 
     const id = findLastId(words) + 1
-    const newWordObject = { id, text: newWord, categoryId: category.id }
+    const newWordObject = {
+      id,
+      text: capitalizeWords(newWord),
+      categoryId: category.id
+    }
 
     useStore.setState({ words: [...words, newWordObject] })
     setNewWord('')
