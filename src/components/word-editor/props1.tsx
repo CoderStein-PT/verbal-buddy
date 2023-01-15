@@ -3,20 +3,23 @@ import { useStore, WordPropType, WordType } from 'store'
 import produce from 'immer'
 import { namesByKeys, PropKeyType } from './properties'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { BsDot } from '@react-icons/all-files/bs/BsDot'
+import { GiPlainCircle } from '@react-icons/all-files/gi/GiPlainCircle'
+import { ControllableListType } from 'components/scrollable-container/use-controllable-list'
 
 export const Prop = ({
   prop,
   index,
   onDelete,
   words,
-  onClick
+  onClick,
+  isSelected
 }: {
   prop: WordPropType
   index: number
   onDelete: () => void
   words: WordType[]
   onClick?: (id: number) => void
+  isSelected?: boolean
 }) => {
   const text = prop.wordId
     ? words.find((w) => w.id === prop.id)?.text
@@ -34,18 +37,21 @@ export const Prop = ({
       index={index}
       onClick={onRealClick}
       ellipsis={false}
-      actions={[
-        { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' },
-        ...(prop.wordId
+      selectedColor="primary"
+      isSelected={isSelected}
+      info={
+        prop.wordId
           ? [
               {
                 title: 'Word',
-                icon: BsDot,
-                color: 'textPrimary',
-                alwaysShow: true
-              } as ActionType
+                icon: GiPlainCircle,
+                class: 'text-green-500 shadow-primary-light-sm text-2xs px-0.5'
+              }
             ]
-          : [])
+          : undefined
+      }
+      actions={[
+        { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
       ]}
     />
   )
@@ -55,12 +61,14 @@ export const Props = ({
   word,
   keys = 'props',
   nameByKey = namesByKeys[keys],
-  onClick
+  onClick,
+  controllableList
 }: {
   word: WordType
   keys?: PropKeyType
   nameByKey?: string[]
   onClick?: (id: number) => void
+  controllableList?: ControllableListType
 }) => {
   const props = word[keys]
   const words = useStore((state) => state.words)
@@ -90,6 +98,7 @@ export const Props = ({
             onDelete={() => onDeleteOneProp(d.id)}
             words={words}
             onClick={onClick}
+            isSelected={controllableList?.selectedIdx === index}
           />
         ))
       ) : (

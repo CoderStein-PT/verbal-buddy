@@ -11,6 +11,8 @@ import { findLastId } from 'utils'
 import { InputSendIcon } from 'components/input/input-send-icon'
 import { useEffect, useState } from 'react'
 import { Props } from './props1'
+import { ControllableListInput } from 'components/scrollable-container/controllable-list-input'
+import { useControllableList } from 'components/scrollable-container/use-controllable-list'
 
 export type PropKeyType = keyof Pick<
   WordType,
@@ -37,6 +39,7 @@ export const Properties = ({
   onWordClick?: (id: number) => void
 }) => {
   const scrollableContainer = useScrollableContainer({})
+
   const [text, setText] = useState('')
   const [foundWords, setFoundWords] = useState<WordType[]>([])
 
@@ -73,6 +76,20 @@ export const Properties = ({
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') return
 
+    if (event.shiftKey) {
+      const id = findLastId(words) + 1
+      useStore.setState((s) =>
+        produce(s, (state) => {
+          const newWord = { id, text }
+
+          state.words = [...state.words, newWord]
+        })
+      )
+
+      addWord(id)
+      return
+    }
+
     addProp()
   }
 
@@ -106,6 +123,34 @@ export const Properties = ({
     scrollableContainer.scrollDown()
   }
 
+  const controllableList = useControllableList({
+    scrollableContainer,
+    length: foundWords.length || word[keys]?.length || 0,
+    onEnter: (index) => {
+      if (foundWords.length) {
+        addWord(foundWords[index].id)
+        return
+      }
+
+      const wordId = word[keys]?.[index]?.id
+      if (!wordId) return
+
+      onWordClick?.(wordId)
+    },
+    onDelete: (index) => {
+      useStore.setState((s) =>
+        produce(s, (state) => {
+          const wordIndex = state.words.findIndex((w) => w.id === +word.id)
+          const currentWord = state.words[wordIndex]
+          const props = currentWord[keys]
+          const newProps = props?.filter((_, i) => i !== index)
+
+          currentWord[keys] = newProps
+        })
+      )
+    }
+  })
+
   return (
     <div>
       <ScrollableContainer
@@ -116,9 +161,13 @@ export const Properties = ({
         <div className="px-2" data-test={'word-editor-' + keys}>
           {!!foundWords.length ? (
             <div>
-              {foundWords.map((w) => (
+              {foundWords.map((w, idx) => (
                 <div key={w.id}>
-                  <Row onClick={() => addWord(w.id)} text={w.text}></Row>
+                  <Row
+                    isSelected={controllableList.selectedIdx === idx}
+                    onClick={() => addWord(w.id)}
+                    text={w.text}
+                  />
                 </div>
               ))}
             </div>
@@ -128,21 +177,35 @@ export const Properties = ({
               word={word}
               keys={keys}
               nameByKey={nameByKey}
+              controllableList={controllableList}
             />
           )}
         </div>
       </ScrollableContainer>
       <div className="relative mt-2">
-        <Input
+        <ControllableListInput
           onKeyDown={onKeyDown}
           type="text"
           placeholder={`Add ${nameByKey[0]}`}
-          className="w-full"
-          autoFocus
-          onChange={onChange}
+          className={'w-full'}
           value={text}
+          onChange={onChange}
+          autoFocus
           big
           icon={<InputSendIcon onClick={addProp} title={'Add (Enter key)'} />}
+          controllableList={controllableList}
+          selectedItemText={
+            controllableList.selectedIdx !== null
+              ? foundWords[controllableList.selectedIdx]?.text ||
+                word[keys]?.[controllableList.selectedIdx]?.text ||
+                words.find((w) =>
+                  controllableList.selectedIdx
+                    ? w.id ===
+                      word[keys]?.[controllableList.selectedIdx]?.wordId
+                    : false
+                )?.text
+              : undefined
+          }
         />
       </div>
     </div>

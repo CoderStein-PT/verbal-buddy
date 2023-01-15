@@ -6,10 +6,12 @@ export type ControllableListType = ReturnType<typeof useControllableList>
 
 export const useControllableList = ({
   onEnter,
+  onDelete,
   length,
   scrollableContainer
 }: {
   onEnter: (itemIdx: number) => void
+  onDelete?: (itemIdx: number) => void
   length: number
   scrollableContainer: ScrollableContainerType
 }) => {
@@ -61,11 +63,13 @@ export const useControllableList = ({
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'ArrowUp') {
+        if (length === 0) return false
         setSelectedIdx((s) => Math.max(0, (s || 0) - 1))
         return true
       }
 
       if (event.key === 'ArrowDown') {
+        if (length === 0) return false
         setSelectedIdx((s) => Math.min(length - 1, (s || 0) + 1))
         return true
       }
@@ -76,11 +80,18 @@ export const useControllableList = ({
         return true
       }
 
+      if (event.key === 'Backspace' || event.key === 'Delete') {
+        if (selectedIdx === null) return false
+        onDelete?.(selectedIdx)
+        setSelectedIdx(null)
+        return true
+      }
+
       setSelectedIdx(null)
 
       return false
     },
-    [selectedIdx, length, onEnter]
+    [selectedIdx, length, onEnter, onDelete]
   )
 
   return useMemo(
