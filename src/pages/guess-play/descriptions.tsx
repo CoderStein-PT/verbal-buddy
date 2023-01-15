@@ -1,5 +1,5 @@
 import { Row, ScrollableContainer } from 'components'
-import { DescriptionType, WordType } from 'store'
+import { WordPropType, WordType } from 'store'
 import { useMemo } from 'react'
 import { shuffleArray } from 'utils'
 
@@ -7,7 +7,7 @@ const Description = ({
   description,
   index
 }: {
-  description: DescriptionType
+  description: WordPropType
   index: number
 }) => {
   return <Row text={description.text} index={index} />

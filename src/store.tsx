@@ -2,9 +2,10 @@ import { PresetType } from 'presets/types'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export type DescriptionType = {
+export type WordPropType = {
   id: number
   text: string
+  wordId?: number
 }
 
 export type PremiseType = {
@@ -28,17 +29,12 @@ export type JournalEntryType = {
   updatedAt: string
 }
 
-export type RelatedWordType = {
-  id: number
-  wordId: number
-}
-
 export type WordType = {
   id: number
   text: string
-  descriptions?: DescriptionType[]
-  opposites?: DescriptionType[]
-  relatedWords?: RelatedWordType[]
+  definitions?: WordPropType[]
+  opposites?: WordPropType[]
+  props?: WordPropType[]
   categoryId?: number
 }
 

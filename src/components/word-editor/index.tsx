@@ -1,7 +1,6 @@
 import { Button, ListContainer, SeparatorFull } from 'components'
 import { WordType } from 'store'
-import { Descriptions } from './descriptions'
-import { RelatedWords } from './related-words'
+import { Properties, PropKeyType } from './properties'
 import { Tab } from '@headlessui/react'
 import React from 'react'
 import { useRecursiveWordHeader } from './use-recursive-word'
@@ -22,23 +21,17 @@ export const WordEditor = ({
 
   if (!recursiveWord.activeWord) return null
 
-  const contentProps = { height, maxHeight, word: recursiveWord.activeWord }
+  const contentProps = {
+    height,
+    maxHeight,
+    word: recursiveWord.activeWord,
+    onWordClick: recursiveWord.onWordClick
+  }
 
-  const content = [
-    { name: 'Descriptions', component: <Descriptions {...contentProps} /> },
-    {
-      name: 'Related Words',
-      component: (
-        <RelatedWords
-          {...contentProps}
-          onWordClick={recursiveWord.onWordClick}
-        />
-      )
-    },
-    {
-      name: 'Opposites',
-      component: <Descriptions {...contentProps} keys="opposites" />
-    }
+  const content: { keys: PropKeyType; name: string }[] = [
+    { keys: 'definitions', name: 'Definitions' },
+    { keys: 'props', name: 'Properties' },
+    { keys: 'opposites', name: 'Opposites' }
   ]
 
   return (
@@ -51,7 +44,7 @@ export const WordEditor = ({
           data-test="word-editor-tabs"
         >
           {content.map((c) => (
-            <Tab key={c.name} as={React.Fragment}>
+            <Tab key={c.keys} as={React.Fragment}>
               {({ selected }) => (
                 <Button size="sm" color={selected ? 'gray' : undefined}>
                   {c.name}
@@ -63,7 +56,9 @@ export const WordEditor = ({
         <SeparatorFull className="my-2" />
         <Tab.Panels>
           {content.map((c) => (
-            <Tab.Panel key={c.name}>{c.component}</Tab.Panel>
+            <Tab.Panel key={c.name}>
+              <Properties {...contentProps} keys={c.keys} />
+            </Tab.Panel>
           ))}
         </Tab.Panels>
       </Tab.Group>
