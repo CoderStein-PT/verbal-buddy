@@ -10,7 +10,7 @@ import produce from 'immer'
 import { findLastId } from 'utils'
 import { InputSendIcon } from 'components/input/input-send-icon'
 import { useEffect, useState } from 'react'
-import { Props } from './props'
+import { Props } from './props1'
 
 export type PropKeyType = keyof Pick<
   WordType,
