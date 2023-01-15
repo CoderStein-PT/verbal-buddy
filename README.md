@@ -55,7 +55,3 @@ The tools are:
 ### Run
 
 `yarn dev`
-
-### License
-
-MIT
