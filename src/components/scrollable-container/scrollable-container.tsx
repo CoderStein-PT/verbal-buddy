@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import { mergeRefs } from 'react-merge-refs'
 import React from 'react'
+import { useWhatChanged } from '@simbathesailor/use-what-changed'
 
 export const Gradient = tw.div`absolute transition duration-300 z-10 left-0 right-0 h-16 from-transparent to-gray-900 pointer-events-none`
 export const GradientTop = tw(Gradient)`top-0 bg-gradient-to-t`
@@ -14,22 +15,25 @@ export const useScrollableContainer = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const scrollDown = () => {
+  const scrollDown = useCallback(() => {
     setTimeout(() => {
       containerRef.current?.scrollTo({
         top: containerRef.current.scrollHeight,
         behavior: 'smooth'
       })
     }, 0)
-  }
+  }, [])
 
   useEffect(() => {
     if (!scrollOnLoad) return
 
     scrollDown()
-  }, [scrollOnLoad])
+  }, [scrollOnLoad, scrollDown])
 
-  return { containerRef, scrollDown }
+  return useMemo(
+    () => ({ containerRef, scrollDown }),
+    [containerRef, scrollDown]
+  )
 }
 
 export type ScrollableContainerType = ReturnType<typeof useScrollableContainer>
@@ -59,18 +63,22 @@ export const ScrollableContainer = ({
     setIsScrollable(scrollHeight > clientHeight)
   }, [])
 
-  const onScroll = () => {
+  const onScroll = useCallback(() => {
     if (!containerRef.current) return
 
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current
 
     setScroll(scrollTop)
     setIsScrollable(scrollHeight > clientHeight)
-  }
+  }, [])
 
-  const ref = scrollableContainer
-    ? mergeRefs([containerRef, scrollableContainer?.containerRef])
-    : containerRef
+  const ref = useMemo(
+    () =>
+      scrollableContainer
+        ? mergeRefs([containerRef, scrollableContainer?.containerRef])
+        : containerRef,
+    [scrollableContainer, containerRef]
+  )
 
   return (
     <div className="relative">

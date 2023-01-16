@@ -1,13 +1,6 @@
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import {
-  Button,
-  ProseDiv,
-  Row,
-  ScrollableContainer,
-  SeparatorFull,
-  Text
-} from 'components'
-import { PageContainer } from 'components/layout/container'
+import { Row, ScrollableContainer, PageContainer } from 'components'
+import { Button, ProseDiv, SeparatorFull, Text } from 'ui'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import { JournalEntryType, useStore } from 'store'

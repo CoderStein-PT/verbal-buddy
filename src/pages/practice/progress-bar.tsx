@@ -1,4 +1,4 @@
-import { Text } from 'components'
+import { Text } from 'ui'
 
 export const ProgressBar = ({
   wordsLeft,

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 import tw from 'tailwind-styled-components'
-import { Loading, Text, TextProps } from 'components'
+import { Loading, Text, TextProps } from 'ui'
 
 const sizeClasses = {
   round: 'p-2 rounded-full',

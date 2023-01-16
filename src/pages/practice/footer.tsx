@@ -1,4 +1,4 @@
-import { Button, Input } from 'components'
+import { Button, Input } from 'ui'
 import { ChangeEventHandler } from 'react'
 import { ProgressBar } from './progress-bar'
 import { GameType } from './use-game'

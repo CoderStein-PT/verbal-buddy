@@ -10,6 +10,9 @@ module.exports = {
       fontFamily: {
         title: "'Rowdies', sans-serif"
       },
+      fontSize: {
+        '2xs': '4px'
+      },
       colors: {
         primary: colors.green,
         gray: colors.slate
@@ -19,6 +22,7 @@ module.exports = {
       },
       boxShadow: {
         'primary-light': '0 3px 15px 0 rgba(100, 255, 100, 0.4)',
+        'primary-light-sm': '0 0px 8px 0 rgba(100, 255, 100, 0.4)',
         'red-light': '0 3px 15px 0 rgba(255, 50, 50, 0.4)'
       },
       typography: ({ theme }) => ({

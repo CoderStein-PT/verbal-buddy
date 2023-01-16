@@ -1,4 +1,4 @@
-import { Button, Input, ProseDiv, Text } from 'components'
+import { Button, Input, ProseDiv, Text } from 'ui'
 import { useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useParams } from 'react-router-dom'
@@ -135,7 +135,7 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
           </ProseDiv>
         ) : (
           <Input
-            className="w-full resize-none text-lg"
+            className="w-full text-lg resize-none"
             style={{ padding: '1rem', height: '400px' }}
             placeholder="Write your journal entry here..."
             value={entry.text}

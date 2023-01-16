@@ -1,15 +1,8 @@
-import {
-  Input,
-  Text,
-  ListContainer,
-  Row,
-  ScrollableContainer,
-  SeparatorFull
-} from 'components'
+import { ListContainer, Row, ScrollableContainer } from 'components'
 import { useStore, PremiseType, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import produce from 'immer'
-import { InputSendIcon } from 'components/input/input-send-icon'
+import { SeparatorFull, Input, Text, InputSendIcon } from 'ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { findLastId } from 'utils'

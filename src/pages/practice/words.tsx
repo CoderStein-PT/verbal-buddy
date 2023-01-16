@@ -1,4 +1,4 @@
-import { Text } from 'components'
+import { Text } from 'ui'
 import { CategoryType, useStore, WordType } from 'store'
 import { Word } from './word'
 

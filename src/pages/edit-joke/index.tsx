@@ -1,4 +1,4 @@
-import { InputCore, Text } from 'components'
+import { InputCore, Text } from 'ui'
 import { useStore, JokeType } from 'store'
 import { useParams } from 'react-router-dom'
 import { WordManager } from './word-manager'

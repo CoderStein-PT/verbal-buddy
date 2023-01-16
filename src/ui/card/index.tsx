@@ -1,6 +1,6 @@
 import React from 'react'
 import tw from 'tailwind-styled-components'
-import { Text } from 'components'
+import { Text } from 'ui'
 
 export const CardNotRounded = tw.div`bg-white dark:bg-gray-800 shadow-xl border border-gray-300 dark:border-gray-700 overflow-hidden relative`
 

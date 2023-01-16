@@ -1,6 +1,6 @@
 import tw from 'tailwind-styled-components'
 import { CrossButton } from './cross-button'
-import { Text } from 'components'
+import { Text } from 'ui'
 import { useNavigate } from 'react-router-dom'
 import { links, LinkType } from './links-list'
 import { useUiStore } from 'ui-store'

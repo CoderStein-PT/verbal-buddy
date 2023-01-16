@@ -1,12 +1,5 @@
-import {
-  Text,
-  Button,
-  Input,
-  Label,
-  SeparatorFull,
-  Switch,
-  ScrollableContainer
-} from 'components'
+import { Text, Button, Input, Label, SeparatorFull, Switch } from 'ui'
+import { ScrollableContainer } from 'components'
 import { presets } from 'presets'
 import { PresetType } from 'presets/types'
 import { useStore } from 'store'

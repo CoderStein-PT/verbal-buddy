@@ -1,13 +1,7 @@
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
 import { FiCheck } from '@react-icons/all-files/fi/FiCheck'
-import {
-  Button,
-  Text,
-  ScrollableContainer,
-  ListContainer,
-  SeparatorFull,
-  Row
-} from 'components'
+import { ScrollableContainer, ListContainer, Row } from 'components'
+import { Button, Text, SeparatorFull } from 'ui'
 import { useStore, CategoryType, WordType } from 'store'
 import { WordSelectorType } from './use-words-selector'
 
@@ -32,9 +26,12 @@ export const Category = ({
       isSelected={active}
       onClick={onClick}
       index={index}
-      actionsVisible
       selectedColor="primary"
-      actions={active ? [{ icon: FiCheck, color: 'textPrimary' }] : []}
+      info={
+        active
+          ? [{ title: 'Selected', icon: FiCheck, class: 'text-green-500' }]
+          : undefined
+      }
     />
   )
 }
@@ -94,9 +91,12 @@ export const Word = ({
       isSelected={isSelected}
       onClick={onClick}
       index={index}
-      actionsVisible
       selectedColor="primary"
-      actions={isSelected ? [{ icon: FiCheck, color: 'textPrimary' }] : []}
+      info={
+        isSelected
+          ? [{ title: 'Selected', icon: FiCheck, class: 'text-green-500' }]
+          : undefined
+      }
     />
   )
 }

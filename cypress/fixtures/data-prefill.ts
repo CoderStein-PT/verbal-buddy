@@ -10,7 +10,7 @@ export const dataPrefill: StoreType = {
       c.words.map((w, idx2) => ({
         id: idx2 + 1 + idx * 100,
         categoryId: idx + 1,
-        descriptions: w.descriptions.map((d, idx3) => ({
+        definitions: w.definitions.map((d, idx3) => ({
           id: idx3 + 1 + idx2 * 100 + idx * 1000,
           text: d
         })),

@@ -1,10 +1,9 @@
-import { Button, Text } from 'components'
+import { Button, Text } from 'ui'
 import { useStore, WordType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
 import { findLastId, isMobile, shuffleArray } from 'utils'
-import { WordSelector } from './word/word-selector'
-import { useWordSelector } from './word/use-words-selector'
+import { WordSelector, useWordSelector } from 'components'
 
 export const Word = ({ word }: { word: WordType }) => {
   const isSelected = useStore((state) =>

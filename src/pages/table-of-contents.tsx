@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server'
-import { Text } from 'components'
+import { Text } from 'ui'
 import { useEffect, useState } from 'react'
 
 const getHeadings = (source: string) => {
