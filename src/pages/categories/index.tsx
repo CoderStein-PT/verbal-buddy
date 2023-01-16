@@ -5,7 +5,9 @@ import {
   ScrollableContainerType,
   useScrollableContainer,
   useControllableList,
-  ControllableListInput
+  ControllableListInput,
+  ControllableListContext,
+  FloatingSelector
 } from 'components'
 import { Button, ProseDiv, SeparatorFull, Text, InputSendIcon } from 'ui'
 import { useStore, CategoryType } from 'store'
@@ -17,6 +19,7 @@ import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
 import { Link, useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
 import { useState } from 'react'
+import React from 'react'
 
 export const Category = ({
   category,
@@ -81,13 +84,11 @@ export const Category = ({
   )
 }
 
-export const Categories = ({
+export const CategoriesCore = ({
   scrollableContainer,
-  controllableList,
   onDelete
 }: {
   scrollableContainer: ScrollableContainerType
-  controllableList: any
   onDelete: (category: CategoryType) => void
 }) => {
   const categories = useStore((state) => state.categories)
@@ -99,9 +100,8 @@ export const Categories = ({
     >
       <div className="px-2" data-test="categories-list">
         {categories?.length ? (
-          categories.map((category, idx) => (
+          categories.map((category) => (
             <Category
-              isSelected={controllableList.selectedIdx === idx}
               key={category.id}
               category={category}
               onDelete={onDelete}
@@ -113,9 +113,12 @@ export const Categories = ({
           </ProseDiv>
         )}
       </div>
+      <FloatingSelector scrollableContainer={scrollableContainer} />
     </ScrollableContainer>
   )
 }
+
+export const Categories = React.memo(CategoriesCore)
 
 export const CategoriesPage = () => {
   const scrollableContainer = useScrollableContainer({})
@@ -178,42 +181,43 @@ export const CategoriesPage = () => {
 
   return (
     <PageContainer>
-      <div className="flex items-center justify-between">
-        <Text variant="button">{'Categories'}</Text>
-        <Link to="/settings#presets" data-test="btn-use-presets">
-          <Button size="md">{'Use presets'}</Button>
-        </Link>
-      </div>
-      <SeparatorFull className="my-2" />
-      <Categories
-        controllableList={controllableList}
-        scrollableContainer={scrollableContainer}
-        onDelete={onDelete}
-      />
-      <SeparatorFull className="my-2" />
-      <ControllableListInput
-        onKeyDown={onKeyDown}
-        data-test="input-new-category"
-        type="text"
-        placeholder="New category..."
-        className="w-full"
-        value={newCategoryText}
-        onChange={onChange}
-        autoFocus
-        big
-        icon={
-          <InputSendIcon
-            onClick={onCreateCategory}
-            title={'Send (Enter key)'}
-          />
-        }
-        controllableList={controllableList}
-        selectedItemText={
-          controllableList.selectedIdx !== null
-            ? categories[controllableList.selectedIdx].name
-            : undefined
-        }
-      />
+      <ControllableListContext.Provider value={controllableList}>
+        <div className="flex items-center justify-between">
+          <Text variant="button">{'Categories'}</Text>
+          <Link to="/settings#presets" data-test="btn-use-presets">
+            <Button size="md">{'Use presets'}</Button>
+          </Link>
+        </div>
+        <SeparatorFull className="my-2" />
+        <Categories
+          scrollableContainer={scrollableContainer}
+          onDelete={onDelete}
+        />
+        <SeparatorFull className="my-2" />
+        <ControllableListInput
+          onKeyDown={onKeyDown}
+          data-test="input-new-category"
+          type="text"
+          placeholder="New category..."
+          className="w-full"
+          value={newCategoryText}
+          onChange={onChange}
+          autoFocus
+          big
+          icon={
+            <InputSendIcon
+              onClick={onCreateCategory}
+              title={'Send (Enter key)'}
+            />
+          }
+          controllableList={controllableList}
+          selectedItemText={
+            controllableList.selectedIdx !== null
+              ? categories[controllableList.selectedIdx].name
+              : undefined
+          }
+        />
+      </ControllableListContext.Provider>
     </PageContainer>
   )
 }
