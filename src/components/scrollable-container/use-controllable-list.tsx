@@ -31,6 +31,8 @@ export const useControllableList = ({
       'div'
     ) as HTMLDivElement
 
+    if (!div) return
+
     const element = div.children[selectedIdx] as HTMLDivElement
 
     if (!element) return
