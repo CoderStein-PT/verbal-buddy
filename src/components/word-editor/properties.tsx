@@ -5,7 +5,9 @@ import {
   ControllableListInput,
   useControllableList,
   RecursiveWordType,
-  UseWordEditorType
+  UseWordEditorType,
+  FloatingSelector,
+  ControllableListContext
 } from 'components'
 import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
@@ -177,63 +179,59 @@ export const Properties = ({
   })
 
   return (
-    <div>
-      <ScrollableContainer
-        height={height}
-        maxHeight={maxHeight}
-        scrollableContainer={scrollableContainer}
-      >
-        <div className="px-2" data-test={'word-editor-' + keys}>
-          {!!foundWords.length ? (
-            <div>
-              {foundWords.map((w, idx) => (
-                <div key={w.id}>
-                  <Row
-                    isSelected={controllableList.selectedIdx === idx}
-                    selectedColor="primary"
-                    onClick={() => addWord(w.id)}
-                    text={w.text}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <Props
-              onClick={onWordClick}
-              word={word}
-              keys={keys}
-              nameByKey={nameByKey}
-              controllableList={controllableList}
-            />
-          )}
+    <ControllableListContext.Provider value={controllableList}>
+      <div>
+        <ScrollableContainer
+          height={height}
+          maxHeight={maxHeight}
+          scrollableContainer={scrollableContainer}
+        >
+          <div
+            className="z-[1] relative px-2"
+            data-test={'word-editor-' + keys}
+          >
+            {!!foundWords.length ? (
+              foundWords.map((w) => (
+                <Row key={w.id} onClick={() => addWord(w.id)} text={w.text} />
+              ))
+            ) : (
+              <Props
+                onClick={onWordClick}
+                word={word}
+                keys={keys}
+                nameByKey={nameByKey}
+              />
+            )}
+          </div>
+          <FloatingSelector scrollableContainer={scrollableContainer} />
+        </ScrollableContainer>
+        <div className="relative mt-2">
+          <ControllableListInput
+            onKeyDown={onRealKeyDown}
+            type="text"
+            placeholder={`Add ${nameByKey[0]}`}
+            className={'w-full'}
+            value={text}
+            onChange={onChange}
+            autoFocus
+            big
+            icon={<InputSendIcon onClick={addProp} title={'Add (Enter key)'} />}
+            controllableList={controllableList}
+            selectedItemText={
+              controllableList.selectedIdx !== null
+                ? foundWords[controllableList.selectedIdx]?.text ||
+                  word[keys]?.[controllableList.selectedIdx]?.text ||
+                  words.find((w) =>
+                    controllableList.selectedIdx
+                      ? w.id ===
+                        word[keys]?.[controllableList.selectedIdx]?.wordId
+                      : false
+                  )?.text
+                : undefined
+            }
+          />
         </div>
-      </ScrollableContainer>
-      <div className="relative mt-2">
-        <ControllableListInput
-          onKeyDown={onRealKeyDown}
-          type="text"
-          placeholder={`Add ${nameByKey[0]}`}
-          className={'w-full'}
-          value={text}
-          onChange={onChange}
-          autoFocus
-          big
-          icon={<InputSendIcon onClick={addProp} title={'Add (Enter key)'} />}
-          controllableList={controllableList}
-          selectedItemText={
-            controllableList.selectedIdx !== null
-              ? foundWords[controllableList.selectedIdx]?.text ||
-                word[keys]?.[controllableList.selectedIdx]?.text ||
-                words.find((w) =>
-                  controllableList.selectedIdx
-                    ? w.id ===
-                      word[keys]?.[controllableList.selectedIdx]?.wordId
-                    : false
-                )?.text
-              : undefined
-          }
-        />
       </div>
-    </div>
+    </ControllableListContext.Provider>
   )
 }
