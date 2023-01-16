@@ -1,4 +1,4 @@
-import { Row, ControllableListType } from 'components'
+import { Row } from 'components'
 import { Text } from 'ui'
 import { useStore, WordPropType, WordType } from 'store'
 import produce from 'immer'
@@ -11,15 +11,13 @@ export const Prop = ({
   index,
   onDelete,
   words,
-  onClick,
-  isSelected
+  onClick
 }: {
   prop: WordPropType
   index: number
   onDelete: () => void
   words: WordType[]
   onClick?: (id: number) => void
-  isSelected?: boolean
 }) => {
   const text = prop.wordId
     ? words.find((w) => w.id === prop.wordId)?.text
@@ -37,8 +35,6 @@ export const Prop = ({
       index={index}
       onClick={onRealClick}
       ellipsis={false}
-      selectedColor="primary"
-      isSelected={isSelected}
       info={
         prop.wordId
           ? [
@@ -61,14 +57,12 @@ export const Props = ({
   word,
   keys = 'props',
   nameByKey = namesByKeys[keys],
-  onClick,
-  controllableList
+  onClick
 }: {
   word: WordType
   keys?: PropKeyType
   nameByKey?: string[]
   onClick?: (id: number) => void
-  controllableList?: ControllableListType
 }) => {
   const props = word[keys]
   const words = useStore((state) => state.words)
@@ -88,7 +82,7 @@ export const Props = ({
   }
 
   return (
-    <div>
+    <>
       {props?.length ? (
         props.map((d, index) => (
           <Prop
@@ -98,7 +92,6 @@ export const Props = ({
             onDelete={() => onDeleteOneProp(d.id)}
             words={words}
             onClick={onClick}
-            isSelected={controllableList?.selectedIdx === index}
           />
         ))
       ) : (
@@ -106,6 +99,6 @@ export const Props = ({
           {`No ${nameByKey[0]} Yet 🧐`}
         </Text>
       )}
-    </div>
+    </>
   )
 }

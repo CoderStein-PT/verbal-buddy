@@ -14,6 +14,13 @@
 Cypress.Commands.add('getEl', (selector: string) => {
   return cy.get('[data-test="' + selector + '"]')
 })
+
+Cypress.Commands.add('checkFloatingSelector', (y: number) => {
+  return cy
+    .getEl('list-floating-selector')
+    .should('be.visible')
+    .should('have.css', 'transform', 'matrix(1, 0, 0, 1, 8, ' + y + ')')
+})
 //
 //
 // -- This is a child command --
@@ -32,6 +39,10 @@ declare global {
   namespace Cypress {
     interface Chainable {
       getEl(selector: string): Chainable
+      /**
+       * Checks floating selector vertical position
+       */
+      checkFloatingSelector(y: number): Chainable
     }
   }
 }

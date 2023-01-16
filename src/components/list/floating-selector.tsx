@@ -53,6 +53,7 @@ export const FloatingSelector = ({
         height: floatingSelectorPosition.height + 'px',
         opacity: controllableList?.selectedIdx === null ? 0 : undefined
       }}
+      data-test="list-floating-selector"
     />
   )
 }

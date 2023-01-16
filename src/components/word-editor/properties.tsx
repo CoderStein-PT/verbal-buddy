@@ -4,7 +4,10 @@ import {
   useScrollableContainer,
   ControllableListInput,
   useControllableList,
-  RecursiveWordType
+  RecursiveWordType,
+  UseWordEditorType,
+  FloatingSelector,
+  ControllableListContext
 } from 'components'
 import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
@@ -33,7 +36,8 @@ export const Properties = ({
   keys = 'definitions',
   onWordClick,
   recursiveWord,
-  onKeyDown
+  onKeyDown,
+  wordEditor
 }: {
   word: WordType
   height?: number
@@ -42,10 +46,11 @@ export const Properties = ({
   onWordClick?: (id: number) => void
   recursiveWord: RecursiveWordType
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  wordEditor: UseWordEditorType
 }) => {
   const scrollableContainer = useScrollableContainer({})
+  const { text, setText } = wordEditor
 
-  const [text, setText] = useState('')
   const [foundWords, setFoundWords] = useState<WordType[]>([])
 
   const nameByKey = namesByKeys[keys]
@@ -81,13 +86,13 @@ export const Properties = ({
   const onRealKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (onKeyDown?.(e)) return
 
-    if (isHotkey('shift+left', e)) {
+    if (!text && isHotkey('shift+left', e)) {
       e.preventDefault()
       recursiveWord.makePrevActive()
       return
     }
 
-    if (isHotkey('shift+right', e)) {
+    if (!text && isHotkey('shift+right', e)) {
       e.preventDefault()
       recursiveWord.makeNextActive()
       return
@@ -120,7 +125,10 @@ export const Properties = ({
     if (!text) return setFoundWords([])
 
     const foundWords = words.filter((w) =>
-      w.text.toLowerCase().includes(text.toLowerCase())
+      w.text
+        .toLowerCase()
+        .replace(/[- ]/g, '')
+        .includes(text.toLowerCase().replace(/[- ]/g, ''))
     )
     setFoundWords(foundWords)
   }, [text, words])
@@ -174,63 +182,60 @@ export const Properties = ({
   })
 
   return (
-    <div>
-      <ScrollableContainer
-        height={height}
-        maxHeight={maxHeight}
-        scrollableContainer={scrollableContainer}
-      >
-        <div className="px-2" data-test={'word-editor-' + keys}>
-          {!!foundWords.length ? (
-            <div>
-              {foundWords.map((w, idx) => (
-                <div key={w.id}>
-                  <Row
-                    isSelected={controllableList.selectedIdx === idx}
-                    selectedColor="primary"
-                    onClick={() => addWord(w.id)}
-                    text={w.text}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <Props
-              onClick={onWordClick}
-              word={word}
-              keys={keys}
-              nameByKey={nameByKey}
-              controllableList={controllableList}
-            />
-          )}
+    <ControllableListContext.Provider value={controllableList}>
+      <div>
+        <ScrollableContainer
+          height={height}
+          maxHeight={maxHeight}
+          scrollableContainer={scrollableContainer}
+        >
+          <div
+            className="z-[1] relative px-2"
+            data-test={'word-editor-' + keys}
+          >
+            {!!foundWords.length ? (
+              foundWords.map((w) => (
+                <Row key={w.id} onClick={() => addWord(w.id)} text={w.text} />
+              ))
+            ) : (
+              <Props
+                onClick={onWordClick}
+                word={word}
+                keys={keys}
+                nameByKey={nameByKey}
+              />
+            )}
+          </div>
+          <FloatingSelector scrollableContainer={scrollableContainer} />
+        </ScrollableContainer>
+        <div className="relative mt-2">
+          <ControllableListInput
+            onKeyDown={onRealKeyDown}
+            type="text"
+            placeholder={`Add ${nameByKey[0]}`}
+            className={'w-full'}
+            value={text}
+            data-test={'input-add-' + keys}
+            onChange={onChange}
+            autoFocus
+            big
+            icon={<InputSendIcon onClick={addProp} title={'Add (Enter key)'} />}
+            controllableList={controllableList}
+            selectedItemText={
+              controllableList.selectedIdx !== null
+                ? foundWords[controllableList.selectedIdx]?.text ||
+                  word[keys]?.[controllableList.selectedIdx]?.text ||
+                  words.find((w) =>
+                    controllableList.selectedIdx
+                      ? w.id ===
+                        word[keys]?.[controllableList.selectedIdx]?.wordId
+                      : false
+                  )?.text
+                : undefined
+            }
+          />
         </div>
-      </ScrollableContainer>
-      <div className="relative mt-2">
-        <ControllableListInput
-          onKeyDown={onRealKeyDown}
-          type="text"
-          placeholder={`Add ${nameByKey[0]}`}
-          className={'w-full'}
-          value={text}
-          onChange={onChange}
-          autoFocus
-          big
-          icon={<InputSendIcon onClick={addProp} title={'Add (Enter key)'} />}
-          controllableList={controllableList}
-          selectedItemText={
-            controllableList.selectedIdx !== null
-              ? foundWords[controllableList.selectedIdx]?.text ||
-                word[keys]?.[controllableList.selectedIdx]?.text ||
-                words.find((w) =>
-                  controllableList.selectedIdx
-                    ? w.id ===
-                      word[keys]?.[controllableList.selectedIdx]?.wordId
-                    : false
-                )?.text
-              : undefined
-          }
-        />
       </div>
-    </div>
+    </ControllableListContext.Provider>
   )
 }

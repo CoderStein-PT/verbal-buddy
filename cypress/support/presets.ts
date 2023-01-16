@@ -26,7 +26,6 @@ Cypress.Commands.add('fillData', () => {
         .first()
         .type(word.definitions.join('{enter}') + '{enter}')
       cy.getEl('word-editor-definitions')
-        .find('>div')
         .children()
         .should('have.length', word.definitions.length)
 
@@ -39,7 +38,6 @@ Cypress.Commands.add('fillData', () => {
         .type(word.opposites.join('{enter}') + '{enter}')
 
       cy.getEl('word-editor-opposites')
-        .find('>div')
         .children()
         .should('have.length', word.opposites.length)
 

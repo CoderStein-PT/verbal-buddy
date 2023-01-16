@@ -76,12 +76,12 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   }, [newWord, words, category, scrollableContainer, filteredWords])
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (isHotkey(['mod+left', 'ctrl+left'], e)) {
+    if (!newWord && isHotkey(['mod+left', 'ctrl+left'], e)) {
       navigate(-1)
       return
     }
 
-    if (isHotkey(['mod+right', 'ctrl+right'], e)) {
+    if (!newWord && isHotkey(['mod+right', 'ctrl+right'], e)) {
       navigate(1)
       return
     }

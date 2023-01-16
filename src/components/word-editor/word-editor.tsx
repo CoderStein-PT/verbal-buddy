@@ -3,7 +3,7 @@ import { ListContainer, UseWordEditorType } from 'components'
 import { WordType } from 'store'
 import { Properties, PropKeyType } from './properties'
 import { Tab } from '@headlessui/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { useRecursiveWordHeader } from './use-recursive-word'
 import { Header } from './header'
 import { UseWordNavigationType } from 'pages/word/use-word-navigation'
@@ -20,7 +20,7 @@ export const WordEditor = ({
   height?: number
   maxHeight?: number
   onDeleteClick?: () => void
-  wordEditor?: UseWordEditorType
+  wordEditor: UseWordEditorType
   wordNav?: UseWordNavigationType
 }) => {
   const recursiveWord = useRecursiveWordHeader(word)
@@ -33,6 +33,7 @@ export const WordEditor = ({
     word: recursiveWord.activeWord,
     onWordClick: recursiveWord.onWordClick,
     recursiveWord,
+    wordEditor,
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (wordNav?.onKeyDown(e, wordEditor, recursiveWord)) return
     }

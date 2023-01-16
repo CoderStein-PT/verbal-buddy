@@ -1,6 +1,11 @@
 import { Text } from 'ui'
 import { useStore, JokeType, WordType } from 'store'
-import { WordEditor, WordSelector, useWordSelector } from 'components'
+import {
+  WordEditor,
+  WordSelector,
+  useWordSelector,
+  useWordEditor
+} from 'components'
 import { HiPlus } from '@react-icons/all-files/hi/HiPlus'
 import { useState } from 'react'
 import produce from 'immer'
@@ -62,6 +67,7 @@ const AddNewWord = ({
 }
 export const WordManager = ({ joke }: { joke: JokeType }) => {
   const words = useStore((state) => state.words)
+  const wordEditor = useWordEditor({ length: 3 })
 
   const wordsToLoop =
     (joke.wordIds
@@ -89,6 +95,7 @@ export const WordManager = ({ joke }: { joke: JokeType }) => {
               height={200}
               word={word}
               onDeleteClick={() => onDeleteClick(word)}
+              wordEditor={wordEditor}
             />
           </Column>
         ))}

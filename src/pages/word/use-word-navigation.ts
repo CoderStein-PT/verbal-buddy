@@ -1,7 +1,7 @@
 import { useStore, WordType } from 'store'
 import { useNavigate } from 'react-router-dom'
 import isHotKey from 'is-hotkey'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { RecursiveWordType, UseWordEditorType } from 'components'
 
 export type UseWordNavigationType = ReturnType<typeof useWordNavigation>
@@ -32,28 +32,13 @@ export const useWordNavigation = ({ word }: { word: WordType }) => {
     navigate(`/word/${nextWord.id}`, { replace: true })
   }, [nextWord, navigate])
 
-  const onGlobalKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (isHotKey(['ctrl+left', 'mod+left'], e)) {
-        e.preventDefault()
-        navigate(-1)
-      }
-
-      if (isHotKey(['mod+right', 'ctrl+right'], e)) {
-        navigate(1)
-        return
-      }
-    },
-    [navigate]
-  )
-
   const onKeyDown = useCallback(
     (
       e: React.KeyboardEvent,
       wordEditor?: UseWordEditorType,
       recursiveWord?: RecursiveWordType
     ) => {
-      if (!wordEditor) return false
+      if (!wordEditor || wordEditor.text) return false
 
       if (isHotKey('left', e) && recursiveWord?.activeBreadcrumbIndex === 0) {
         e.preventDefault()
@@ -83,14 +68,6 @@ export const useWordNavigation = ({ word }: { word: WordType }) => {
     },
     [goToPreviousWord, goToNextWord]
   )
-
-  useEffect(() => {
-    window.addEventListener('keydown', onGlobalKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', onGlobalKeyDown)
-    }
-  }, [onGlobalKeyDown])
 
   return useMemo(
     () => ({
