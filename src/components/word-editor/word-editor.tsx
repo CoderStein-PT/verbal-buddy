@@ -1,5 +1,5 @@
 import { Button, SeparatorFull } from 'ui'
-import { ListContainer } from 'components'
+import { ListContainer, UseWordEditorType } from 'components'
 import { WordType } from 'store'
 import { Properties, PropKeyType } from './properties'
 import { Tab } from '@headlessui/react'
@@ -11,12 +11,14 @@ export const WordEditor = ({
   word,
   height,
   maxHeight,
-  onDeleteClick
+  onDeleteClick,
+  wordEditor
 }: {
   word: WordType
   height?: number
   maxHeight?: number
   onDeleteClick?: () => void
+  wordEditor?: UseWordEditorType
 }) => {
   const recursiveWord = useRecursiveWordHeader(word)
 
@@ -38,7 +40,10 @@ export const WordEditor = ({
   return (
     <ListContainer>
       <Header recursiveWord={recursiveWord} onDeleteClick={onDeleteClick} />
-      <Tab.Group>
+      <Tab.Group
+        selectedIndex={wordEditor?.selectedIndex}
+        onChange={wordEditor?.setSelectedIndex}
+      >
         <SeparatorFull />
         <Tab.List
           className="flex px-2 mt-2 space-x-1 overflow-x-auto"

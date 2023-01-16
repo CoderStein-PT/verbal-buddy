@@ -1,12 +1,13 @@
 import { useStore, WordType } from 'store'
 import { useNavigate, useParams } from 'react-router-dom'
-import { WordEditor, PageContainer } from 'components'
+import { WordEditor, PageContainer, useWordEditor } from 'components'
 import { Button } from 'ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import { TooltipWrapper } from 'react-tooltip'
 
 export const WordPageCore = ({ word }: { word: WordType }) => {
   const navigate = useNavigate()
+  const wordEditor = useWordEditor({ length: 3 })
 
   const words = useStore((state) => state.words)
 
@@ -34,21 +35,21 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.altKey && e.key === 'ArrowLeft') {
+      if (e.key === 'ArrowLeft') {
         e.preventDefault()
-        goToPreviousWord()
+        e.altKey ? wordEditor.selectPrev() : goToPreviousWord()
       }
 
-      if (e.altKey && e.key === 'ArrowRight') {
+      if (e.key === 'ArrowRight') {
         e.preventDefault()
-        goToNextWord()
+        e.altKey ? wordEditor.selectNext() : goToNextWord()
       }
 
       if (e.key === 'Escape') {
         navigate(-1)
       }
     },
-    [navigate, goToPreviousWord, goToNextWord]
+    [navigate, goToPreviousWord, goToNextWord, wordEditor]
   )
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
   return (
     <PageContainer>
       <div data-test="word-editor">
-        <WordEditor height={330} word={word} />
+        <WordEditor height={330} word={word} wordEditor={wordEditor} />
       </div>
       <div className="flex items-center justify-between mt-4">
         <div>

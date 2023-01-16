@@ -6,11 +6,11 @@ import {
 import { Text } from 'ui'
 import { WordType } from 'store'
 import { Word } from './word'
-import { useContext, useMemo } from 'react'
+import { useContext, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import React from 'react'
 
-const FloatingSelectorDiv = tw.div`absolute top-0 left-0 bg-gradient-to-r from-green-500 to-transparent w-full opacity-25 rounded-sm transition duration-75 ease-cool`
+const FloatingSelectorDiv = tw.div`absolute top-0 left-0 bg-gradient-to-r from-green-500 to-transparent w-3/4 opacity-25 rounded-sm transition duration-75 ease-cool`
 
 const FloatingSelector = ({
   scrollableContainer
@@ -19,17 +19,22 @@ const FloatingSelector = ({
 }) => {
   const controllableList = useContext(ControllableListContext)
 
-  // floating selector has to be positioned over the scrollableContainer.containerRef.current's inside div's child that is selected by controllableList.selectedIdx
-  // so we need to get the position of that child and set the position of the floating selector to that position
+  const divContainer = useRef<HTMLDivElement>(null)
+
   const floatingSelectorPosition = useMemo(() => {
-    if (!controllableList) return { top: 0, left: 0 }
-    if (controllableList.selectedIdx === null) return { top: 0, left: 0 }
+    if (!controllableList || controllableList.selectedIdx === null)
+      return { top: 0, left: 0 }
 
-    const div = scrollableContainer.containerRef?.current?.querySelector(
-      'div'
-    ) as HTMLDivElement
+    if (!divContainer.current) {
+      const div = scrollableContainer.containerRef?.current?.querySelector(
+        'div'
+      ) as HTMLDivElement
+      divContainer.current = div
+    }
 
-    const element = div.children[controllableList.selectedIdx] as HTMLDivElement
+    const element = divContainer.current?.children[
+      controllableList.selectedIdx
+    ] as HTMLDivElement
 
     if (!element) return { top: 0, left: 0 }
 
@@ -39,7 +44,8 @@ const FloatingSelector = ({
     const elementLeft = element.offsetLeft
 
     return { top: elementTop, left: elementLeft, height: elementHeight }
-  }, [controllableList, scrollableContainer])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controllableList, divContainer])
 
   const transform = useMemo(() => {
     return `translate(${floatingSelectorPosition.left}px, ${floatingSelectorPosition.top}px)`
@@ -47,7 +53,11 @@ const FloatingSelector = ({
 
   return (
     <FloatingSelectorDiv
-      style={{ transform, height: floatingSelectorPosition.height + 'px' }}
+      style={{
+        transform,
+        height: floatingSelectorPosition.height + 'px',
+        opacity: controllableList?.selectedIdx === null ? 0 : undefined
+      }}
     />
   )
 }
