@@ -20,6 +20,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
 import { useState } from 'react'
 import React from 'react'
+import isHotkey from 'is-hotkey'
 
 export const Category = ({
   category,
@@ -148,8 +149,13 @@ export const CategoriesPage = () => {
     scrollableContainer
   })
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isHotkey(['mod+right', 'ctrl+right'], e)) {
+      navigate(1)
+      return
+    }
+
+    if (e.key !== 'Enter') return
 
     onCreateCategory()
   }

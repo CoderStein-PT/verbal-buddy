@@ -32,7 +32,8 @@ export const Properties = ({
   maxHeight,
   keys = 'definitions',
   onWordClick,
-  recursiveWord
+  recursiveWord,
+  onKeyDown
 }: {
   word: WordType
   height?: number
@@ -40,6 +41,7 @@ export const Properties = ({
   keys?: PropKeyType
   onWordClick?: (id: number) => void
   recursiveWord: RecursiveWordType
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }) => {
   const scrollableContainer = useScrollableContainer({})
 
@@ -76,7 +78,9 @@ export const Properties = ({
     scrollableContainer.scrollDown()
   }
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onRealKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (onKeyDown?.(e)) return
+
     if (isHotkey('shift+left', e)) {
       e.preventDefault()
       recursiveWord.makePrevActive()
@@ -203,7 +207,7 @@ export const Properties = ({
       </ScrollableContainer>
       <div className="relative mt-2">
         <ControllableListInput
-          onKeyDown={onKeyDown}
+          onKeyDown={onRealKeyDown}
           type="text"
           placeholder={`Add ${nameByKey[0]}`}
           className={'w-full'}

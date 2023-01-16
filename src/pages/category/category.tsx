@@ -81,9 +81,14 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
       return
     }
 
-    if (isHotkey('enter', e)) return
+    if (isHotkey(['mod+right', 'ctrl+right'], e)) {
+      navigate(1)
+      return
+    }
 
-    onCreateWord()
+    if (isHotkey('enter', e)) {
+      onCreateWord()
+    }
   }
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
