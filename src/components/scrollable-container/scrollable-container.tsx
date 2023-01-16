@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import { mergeRefs } from 'react-merge-refs'
 import React from 'react'
-import { useWhatChanged } from '@simbathesailor/use-what-changed'
 
 export const Gradient = tw.div`absolute transition duration-300 z-10 left-0 right-0 h-16 from-transparent to-gray-900 pointer-events-none`
 export const GradientTop = tw(Gradient)`top-0 bg-gradient-to-t`
