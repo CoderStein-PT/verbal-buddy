@@ -13,7 +13,10 @@ export const Header = ({
   const words = useStore((state) => state.words)
 
   return (
-    <div className="flex items-center justify-between py-1 pl-2 pr-1 space-x-2 overflow-x-auto">
+    <div
+      data-test="word-editor-header"
+      className="flex items-center justify-between py-1 pl-2 pr-1 space-x-2 overflow-x-auto"
+    >
       <Text variant="button" className="whitespace-nowrap">
         {recursiveWord.breadcrumbs.map((breadcrumb, index) => (
           <span

@@ -125,7 +125,10 @@ export const Properties = ({
     if (!text) return setFoundWords([])
 
     const foundWords = words.filter((w) =>
-      w.text.toLowerCase().includes(text.toLowerCase())
+      w.text
+        .toLowerCase()
+        .replace(/[- ]/g, '')
+        .includes(text.toLowerCase().replace(/[- ]/g, ''))
     )
     setFoundWords(foundWords)
   }, [text, words])
