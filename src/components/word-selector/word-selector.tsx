@@ -91,7 +91,6 @@ export const Word = ({
       isSelected={isSelected}
       onClick={onClick}
       index={index}
-      actionsVisible
       selectedColor="primary"
       info={
         isSelected
