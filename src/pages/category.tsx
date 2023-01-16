@@ -24,21 +24,9 @@ import { useNavigate } from 'react-router-dom'
 import { useCallback, useMemo, useState } from 'react'
 
 const possibleInfo: { key: PropKeyType; icon: any; class: string }[] = [
-  {
-    key: 'definitions',
-    icon: GiPlainCircle,
-    class: 'text-2xs px-0.5'
-  },
-  {
-    key: 'props',
-    icon: GiPlainCircle,
-    class: 'text-2xs px-0.5'
-  },
-  {
-    key: 'opposites',
-    icon: GiPlainCircle,
-    class: 'text-2xs px-0.5'
-  }
+  { key: 'definitions', icon: GiPlainCircle, class: 'text-2xs px-0.5' },
+  { key: 'props', icon: GiPlainCircle, class: 'text-2xs px-0.5' },
+  { key: 'opposites', icon: GiPlainCircle, class: 'text-2xs px-0.5' }
 ]
 
 export const Word = ({
@@ -240,6 +228,15 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
     <PageContainer>
       <Text variant="button">{category?.name}</Text>
       <SeparatorFull className="w-full my-2" />
+      <div className="flex justify-between space-x-2">
+        <Button size="sm" color="gray" onClick={resetCategoryWords}>
+          {'Reset'}
+        </Button>
+        <Button size="sm" onClick={onPracticeClick}>
+          {'Practice Category'}
+        </Button>
+      </div>
+      <SeparatorFull className="w-full my-2" />
       <Words
         controllableList={controllableList}
         scrollableContainer={scrollableContainer}
@@ -266,14 +263,6 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
             : undefined
         }
       />
-      <div className="flex justify-start mt-6 space-x-2">
-        <Button size="md" onClick={onPracticeClick}>
-          {'Practice Category'}
-        </Button>
-        <Button size="md" color="gray" onClick={resetCategoryWords}>
-          {'Reset'}
-        </Button>
-      </div>
     </PageContainer>
   )
 }
