@@ -26,6 +26,11 @@ export const ControllableListInput = React.forwardRef<
       onKeyDown?.(e)
     }
 
+    const onRealKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (controllableList.onKeyUp(e)) return
+      onKeyDown?.(e)
+    }
+
     return (
       <div className="relative w-full">
         <div
@@ -35,6 +40,7 @@ export const ControllableListInput = React.forwardRef<
             ref={ref}
             onKeyDown={onRealKeyDown}
             onBlur={onRealBlur}
+            onKeyUp={onRealKeyUp}
             {...props}
           />
           <div className="pt-2">
