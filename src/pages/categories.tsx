@@ -1,13 +1,10 @@
 import {
   Row,
-  SeparatorFull,
-  Text,
   ScrollableContainer,
   ScrollableContainerType,
-  useScrollableContainer,
-  Button,
-  ProseDiv
+  useScrollableContainer
 } from 'components'
+import { Button, ProseDiv, SeparatorFull, Text } from 'ui'
 import { useStore, CategoryType } from 'store'
 import { capitalizeWords, findLastId, isMobile } from 'utils'
 import { toast } from 'react-toastify'
@@ -17,7 +14,7 @@ import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
 import { Link, useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
 import { useState } from 'react'
-import { InputSendIcon } from 'components/input/input-send-icon'
+import { InputSendIcon } from 'ui/input/input-send-icon'
 import { PageContainer } from 'components/layout/container'
 import { useControllableList } from '../components/scrollable-container/use-controllable-list'
 import { ControllableListInput } from 'components/scrollable-container/controllable-list-input'

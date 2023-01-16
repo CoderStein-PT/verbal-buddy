@@ -1,4 +1,4 @@
-import { Button, Text } from 'components'
+import { Button, Text } from 'ui'
 import { useStore, WordType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'

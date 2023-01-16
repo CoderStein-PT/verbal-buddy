@@ -1,14 +1,9 @@
-import {
-  Input,
-  Row,
-  ScrollableContainer,
-  useScrollableContainer
-} from 'components'
+import { Row, ScrollableContainer, useScrollableContainer } from 'components'
 import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
 import produce from 'immer'
 import { findLastId } from 'utils'
-import { InputSendIcon } from 'components/input/input-send-icon'
+import { InputSendIcon } from 'ui/input/input-send-icon'
 import { useEffect, useState } from 'react'
 import { Props } from './props1'
 import { ControllableListInput } from 'components/scrollable-container/controllable-list-input'

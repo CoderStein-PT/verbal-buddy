@@ -29,7 +29,6 @@ export const useControllableList = ({
 
     if (!element) return
 
-    // scroll scrollableContainer.containerRef to element
     const containerHeight =
       scrollableContainer.containerRef?.current?.clientHeight
     const elementHeight = element.clientHeight
@@ -64,13 +63,13 @@ export const useControllableList = ({
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'ArrowUp') {
         if (length === 0) return false
-        setSelectedIdx((s) => Math.max(0, (s || 0) - 1))
+        setSelectedIdx((s) => Math.max(0, s === null ? 0 : s - 1))
         return true
       }
 
       if (event.key === 'ArrowDown') {
         if (length === 0) return false
-        setSelectedIdx((s) => Math.min(length - 1, (s || 0) + 1))
+        setSelectedIdx((s) => Math.min(length - 1, s === null ? 0 : s + 1))
         return true
       }
 

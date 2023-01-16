@@ -1,4 +1,4 @@
-import { Button, Text } from 'components'
+import { Button, Text } from 'ui'
 import { Link } from 'react-router-dom'
 
 export const Placeholder = ({ categoryId }: { categoryId: number }) => (

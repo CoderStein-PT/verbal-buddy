@@ -1,4 +1,5 @@
-import { Text, ScrollableContainer, Button, ProseDiv } from 'components'
+import { Text, Button, ProseDiv } from 'ui'
+import { ScrollableContainer } from 'components'
 import { useStore, WordType, GuessWordType } from 'store'
 import { useEffect, useState } from 'react'
 import {

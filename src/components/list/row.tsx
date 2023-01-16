@@ -1,4 +1,4 @@
-import { Input, Button, Text, ButtonProps, TextProps } from 'components'
+import { Input, Button, Text, ButtonProps, TextProps } from 'ui'
 import React, { useCallback } from 'react'
 import { useState, useRef } from 'react'
 import { TooltipWrapper } from 'react-tooltip'

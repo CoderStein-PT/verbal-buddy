@@ -1,4 +1,4 @@
-import { Button, SeparatorFull, Text } from 'components'
+import { Button, SeparatorFull, Text } from 'ui'
 import { Link } from 'react-router-dom'
 
 export const Placeholder = () => (

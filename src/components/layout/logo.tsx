@@ -1,4 +1,4 @@
-import { Text, TextProps } from 'components'
+import { Text, TextProps } from 'ui'
 import { GiAcorn } from '@react-icons/all-files/gi/GiAcorn'
 
 export const Logo = ({ size }: { size?: TextProps['variant'] }) => {

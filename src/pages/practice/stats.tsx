@@ -1,4 +1,5 @@
-import { Text, ScrollableContainer, SeparatorFull, TextProps } from 'components'
+import { ScrollableContainer } from 'components'
+import { Text, SeparatorFull, TextProps } from 'ui'
 import { PracticeStatsType, useStore } from 'store'
 import {
   BetterOrWorse,

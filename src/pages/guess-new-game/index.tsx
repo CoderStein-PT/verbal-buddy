@@ -1,4 +1,4 @@
-import { Button, SeparatorFull, Text } from 'components'
+import { Button, SeparatorFull, Text } from 'ui'
 import { PageContainer } from 'components/layout/container'
 import { Categories } from 'components/word-selector'
 import { useState } from 'react'

@@ -1,4 +1,5 @@
-import { Button, ListContainer, SeparatorFull } from 'components'
+import { Button, SeparatorFull } from 'ui'
+import { ListContainer } from 'components'
 import { WordType } from 'store'
 import { Properties, PropKeyType } from './properties'
 import { Tab } from '@headlessui/react'

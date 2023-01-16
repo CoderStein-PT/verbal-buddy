@@ -1,4 +1,4 @@
-import { Input, InputProps, Text } from 'components'
+import { Input, InputProps, Text } from 'ui'
 import React from 'react'
 import { ControllableListType } from './use-controllable-list'
 

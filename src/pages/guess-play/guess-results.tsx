@@ -1,4 +1,5 @@
-import { Text, ScrollableContainer, SeparatorFull } from 'components'
+import { ScrollableContainer } from 'components'
+import { Text, SeparatorFull } from 'ui'
 import moment from 'moment'
 import { GuessWordType, useStore, WordType } from 'store'
 import { convertDelays } from 'utils'

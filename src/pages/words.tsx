@@ -1,4 +1,4 @@
-import { Button, Input, Text } from 'components'
+import { Button, Input, Text } from 'ui'
 import { useStore, WordType } from 'store'
 import { findLastId } from 'utils'
 import { toast } from 'react-toastify'

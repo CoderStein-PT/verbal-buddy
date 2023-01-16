@@ -1,4 +1,4 @@
-import { Button, Text } from 'components'
+import { Button, Text } from 'ui'
 import { useNavigate } from 'react-router-dom'
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
 

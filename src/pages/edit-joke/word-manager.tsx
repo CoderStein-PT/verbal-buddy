@@ -1,9 +1,8 @@
-import { Text } from 'components'
+import { Text } from 'ui'
 import { useStore, JokeType, WordType } from 'store'
-import { WordEditor } from 'components'
+import { WordEditor, WordSelector, useWordSelector } from 'components'
 import { HiPlus } from '@react-icons/all-files/hi/HiPlus'
 import { useState } from 'react'
-import { WordSelector, useWordSelector } from 'components'
 import produce from 'immer'
 import tw from 'tailwind-styled-components'
 

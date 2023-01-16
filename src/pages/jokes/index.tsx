@@ -1,10 +1,5 @@
-import {
-  Button,
-  Row,
-  SeparatorFull,
-  ScrollableContainer,
-  ProseDiv
-} from 'components'
+import { Button, SeparatorFull, ProseDiv } from 'ui'
+import { Row, ScrollableContainer } from 'components'
 import { useStore, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'

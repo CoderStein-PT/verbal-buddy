@@ -1,10 +1,5 @@
-import {
-  Text,
-  ScrollableContainer,
-  SeparatorFull,
-  TextProps,
-  Button
-} from 'components'
+import { Text, SeparatorFull, TextProps, Button } from 'ui'
+import { ScrollableContainer } from 'components'
 import { GuessWordType, GuessStats, useStore } from 'store'
 import {
   BetterOrWorse,

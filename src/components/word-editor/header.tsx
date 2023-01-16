@@ -1,4 +1,4 @@
-import { Button, Text } from 'components'
+import { Button, Text } from 'ui'
 import { useStore } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { RecursiveWordType } from './use-recursive-word'

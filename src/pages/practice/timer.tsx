@@ -1,4 +1,4 @@
-import { Text } from 'components'
+import { Text } from 'ui'
 import moment from 'moment'
 
 export const Timer = ({

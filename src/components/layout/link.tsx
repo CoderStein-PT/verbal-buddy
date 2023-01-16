@@ -1,4 +1,4 @@
-import { Text } from 'components'
+import { Text } from 'ui'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { LinkType } from './links-list'

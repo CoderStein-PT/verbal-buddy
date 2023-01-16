@@ -1,6 +1,5 @@
-import React from 'react'
 import tw from 'tailwind-styled-components'
-import { Text } from 'components'
+import { Text } from 'ui'
 
 export const Label = tw((props) => (
   <Text variant="subtitle" color="no" {...props} />

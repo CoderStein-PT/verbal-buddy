@@ -1,15 +1,12 @@
 import {
   Row,
-  SeparatorFull,
-  Text,
   ScrollableContainer,
   ScrollableContainerType,
   useScrollableContainer,
-  Button,
   ActionType,
   InfoType
 } from 'components'
-import { useWhatChanged } from '@simbathesailor/use-what-changed'
+import { Button, SeparatorFull, Text } from 'ui'
 import { CategoryType, useStore, WordType } from 'store'
 import { capitalizeWords, findLastId } from 'utils'
 import { toast } from 'react-toastify'
@@ -19,7 +16,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { useNavigate } from 'react-router-dom'
 import { useCallback, useMemo, useState } from 'react'
-import { InputSendIcon } from 'components/input/input-send-icon'
+import { InputSendIcon } from 'ui/input/input-send-icon'
 import { PageContainer } from 'components/layout/container'
 import { namesByKeys, PropKeyType } from 'components/word-editor/properties'
 import { ControllableListInput } from 'components/scrollable-container/controllable-list-input'
