@@ -4,7 +4,8 @@ import {
   useScrollableContainer,
   ControllableListInput,
   useControllableList,
-  RecursiveWordType
+  RecursiveWordType,
+  UseWordEditorType
 } from 'components'
 import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
@@ -33,7 +34,8 @@ export const Properties = ({
   keys = 'definitions',
   onWordClick,
   recursiveWord,
-  onKeyDown
+  onKeyDown,
+  wordEditor
 }: {
   word: WordType
   height?: number
@@ -42,10 +44,11 @@ export const Properties = ({
   onWordClick?: (id: number) => void
   recursiveWord: RecursiveWordType
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  wordEditor: UseWordEditorType
 }) => {
   const scrollableContainer = useScrollableContainer({})
+  const { text, setText } = wordEditor
 
-  const [text, setText] = useState('')
   const [foundWords, setFoundWords] = useState<WordType[]>([])
 
   const nameByKey = namesByKeys[keys]
@@ -81,13 +84,13 @@ export const Properties = ({
   const onRealKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (onKeyDown?.(e)) return
 
-    if (isHotkey('shift+left', e)) {
+    if (!text && isHotkey('shift+left', e)) {
       e.preventDefault()
       recursiveWord.makePrevActive()
       return
     }
 
-    if (isHotkey('shift+right', e)) {
+    if (!text && isHotkey('shift+right', e)) {
       e.preventDefault()
       recursiveWord.makeNextActive()
       return
