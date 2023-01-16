@@ -28,7 +28,8 @@ export const WordEditor = ({
     height,
     maxHeight,
     word: recursiveWord.activeWord,
-    onWordClick: recursiveWord.onWordClick
+    onWordClick: recursiveWord.onWordClick,
+    recursiveWord
   }
 
   const content: { keys: PropKeyType; name: string }[] = [

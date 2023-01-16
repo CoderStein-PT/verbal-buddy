@@ -57,6 +57,7 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
       }
 
       if (isHotKey(['ctrl+left', 'mod+left'], e)) {
+        e.preventDefault()
         navigate(-1)
       }
     },

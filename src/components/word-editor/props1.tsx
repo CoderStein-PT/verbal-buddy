@@ -22,7 +22,7 @@ export const Prop = ({
   isSelected?: boolean
 }) => {
   const text = prop.wordId
-    ? words.find((w) => w.id === prop.id)?.text
+    ? words.find((w) => w.id === prop.wordId)?.text
     : prop.text
 
   const onRealClick = () => {

@@ -43,6 +43,7 @@
     "@simbathesailor/use-what-changed": "^2.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@types/is-hotkey": "^0.1.7",
     "@types/jest": "^29.2.5",
     "@types/mdx": "^2.0.3",
     "@types/node": "^18.11.18",

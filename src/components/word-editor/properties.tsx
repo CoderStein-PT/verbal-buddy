@@ -3,7 +3,8 @@ import {
   ScrollableContainer,
   useScrollableContainer,
   ControllableListInput,
-  useControllableList
+  useControllableList,
+  RecursiveWordType
 } from 'components'
 import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
@@ -12,6 +13,7 @@ import { findLastId } from 'utils'
 import { InputSendIcon } from 'ui'
 import { useEffect, useState } from 'react'
 import { Props } from './props1'
+import isHotkey from 'is-hotkey'
 
 export type PropKeyType = keyof Pick<
   WordType,
@@ -29,13 +31,15 @@ export const Properties = ({
   height,
   maxHeight,
   keys = 'definitions',
-  onWordClick
+  onWordClick,
+  recursiveWord
 }: {
   word: WordType
   height?: number
   maxHeight?: number
   keys?: PropKeyType
   onWordClick?: (id: number) => void
+  recursiveWord: RecursiveWordType
 }) => {
   const scrollableContainer = useScrollableContainer({})
 
@@ -51,7 +55,7 @@ export const Properties = ({
       return
     }
 
-    if (words.find((w) => w.text === text && w.id === +word.id)) {
+    if (word?.[keys]?.find((p) => p.text === text)) {
       toast.error(`${nameByKey[1]} already exists`)
       return
     }
@@ -72,10 +76,22 @@ export const Properties = ({
     scrollableContainer.scrollDown()
   }
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isHotkey('shift+left', e)) {
+      e.preventDefault()
+      recursiveWord.makePrevActive()
+      return
+    }
 
-    if (event.shiftKey) {
+    if (isHotkey('shift+right', e)) {
+      e.preventDefault()
+      recursiveWord.makeNextActive()
+      return
+    }
+
+    if (e.key !== 'Enter') return
+
+    if (e.shiftKey) {
       const id = findLastId(words) + 1
       useStore.setState((s) =>
         produce(s, (state) => {
@@ -112,7 +128,10 @@ export const Properties = ({
 
         const currentWord = state.words[wordIndex]
         const props = currentWord[keys]
-        const newProp = { id, wordId: id }
+        const newProp = {
+          id: findLastId(currentWord[keys] || []) + 1,
+          wordId: id
+        }
 
         currentWord[keys] = [...(props || []), newProp]
       })
