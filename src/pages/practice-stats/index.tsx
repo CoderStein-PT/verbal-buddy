@@ -1,4 +1,4 @@
-import { PageContainer } from 'components/layout/container'
+import { PageContainer } from 'components'
 import { Text } from 'ui'
 import { Stats } from 'pages/practice/stats'
 import { useParams } from 'react-router-dom'

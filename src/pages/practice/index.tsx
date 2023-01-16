@@ -1,4 +1,9 @@
-import { ScrollableContainer, useScrollableContainer } from 'components'
+import {
+  ScrollableContainer,
+  useScrollableContainer,
+  PageContainer,
+  Timer
+} from 'components'
 import { Text, SeparatorFull, Button, ProseDiv } from 'ui'
 import { CategoryType, useStore } from 'store'
 import {
@@ -12,12 +17,10 @@ import { useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Stats } from './stats'
 import { Words } from './words'
-import { Timer } from './timer'
 import Explanation from './explanation.mdx'
 import { useGame } from './use-game'
 import { Footer } from './footer'
 import { Placeholder } from './placeholder'
-import { PageContainer } from 'components/layout/container'
 
 export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const words = useStore((state) => state.words)

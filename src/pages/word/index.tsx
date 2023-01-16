@@ -1,8 +1,7 @@
 import { useStore, WordType } from 'store'
 import { useNavigate, useParams } from 'react-router-dom'
-import { WordEditor } from 'components'
+import { WordEditor, PageContainer } from 'components'
 import { Button } from 'ui'
-import { PageContainer } from 'components/layout/container'
 import { useCallback, useEffect, useMemo } from 'react'
 import { TooltipWrapper } from 'react-tooltip'
 

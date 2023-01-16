@@ -1,10 +1,13 @@
 import {
   Row,
+  PageContainer,
   ScrollableContainer,
   ScrollableContainerType,
-  useScrollableContainer
+  useScrollableContainer,
+  useControllableList,
+  ControllableListInput
 } from 'components'
-import { Button, ProseDiv, SeparatorFull, Text } from 'ui'
+import { Button, ProseDiv, SeparatorFull, Text, InputSendIcon } from 'ui'
 import { useStore, CategoryType } from 'store'
 import { capitalizeWords, findLastId, isMobile } from 'utils'
 import { toast } from 'react-toastify'
@@ -14,33 +17,20 @@ import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
 import { Link, useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
 import { useState } from 'react'
-import { InputSendIcon } from 'ui/input/input-send-icon'
-import { PageContainer } from 'components/layout/container'
-import { useControllableList } from '../../components/scrollable-container/use-controllable-list'
-import { ControllableListInput } from 'components/scrollable-container/controllable-list-input'
 
 export const Category = ({
   category,
-  isSelected
+  isSelected,
+  onDelete
 }: {
   category: CategoryType
   isSelected?: boolean
+  onDelete: (category: CategoryType) => void
 }) => {
   const navigate = useNavigate()
   const categoryWords = useStore
     .getState()
     .words.filter((w) => w.categoryId === category.id)
-
-  const onDelete = () => {
-    const confirmation = window.confirm(
-      `Are you sure you want to delete category "${category.name}"?`
-    )
-    if (!confirmation) return
-
-    useStore.setState((state) => ({
-      categories: state.categories.filter((c) => c.id !== category.id)
-    }))
-  }
 
   const onChange = (text: string | undefined) => {
     if (!text) {
@@ -70,6 +60,10 @@ export const Category = ({
     navigate(`/practice/${category.id}`)
   }
 
+  const onDelete2 = () => {
+    onDelete(category)
+  }
+
   return (
     <Row
       text={category.name}
@@ -81,7 +75,7 @@ export const Category = ({
       actions={[
         { title: 'Practice', onClick: onPracticeClick, icon: AiFillFire },
         { title: 'Edit', onClick: 'edit', icon: FiEdit2 },
-        { title: 'Delete', onClick: onDelete, icon: RiCloseFill, color: 'red' }
+        { title: 'Delete', onClick: onDelete2, icon: RiCloseFill, color: 'red' }
       ]}
     />
   )
@@ -89,10 +83,12 @@ export const Category = ({
 
 export const Categories = ({
   scrollableContainer,
-  controllableList
+  controllableList,
+  onDelete
 }: {
   scrollableContainer: ScrollableContainerType
   controllableList: any
+  onDelete: (category: CategoryType) => void
 }) => {
   const categories = useStore((state) => state.categories)
 
@@ -108,6 +104,7 @@ export const Categories = ({
               isSelected={controllableList.selectedIdx === idx}
               key={category.id}
               category={category}
+              onDelete={onDelete}
             />
           ))
         ) : (
@@ -126,10 +123,24 @@ export const CategoriesPage = () => {
   const categories = useStore((state) => state.categories)
   const navigate = useNavigate()
 
+  const onDelete = (category: CategoryType) => {
+    const confirmation = window.confirm(
+      `Are you sure you want to delete category "${category.name}"?`
+    )
+    if (!confirmation) return
+
+    useStore.setState((state) => ({
+      categories: state.categories.filter((c) => c.id !== category.id)
+    }))
+  }
+
   const controllableList = useControllableList({
     length: categories.length,
     onEnter: (itemIdx) => {
       navigate(`/category/${categories[itemIdx].id}`)
+    },
+    onDelete: (itemIdx) => {
+      onDelete(categories[itemIdx])
     },
     scrollableContainer
   })
@@ -146,22 +157,17 @@ export const CategoriesPage = () => {
       return
     }
 
-    if (
-      useStore.getState().categories.find((c) => c.name === newCategoryText)
-    ) {
+    if (categories.find((c) => c.name === newCategoryText)) {
       toast.error('Category already exists')
       return
     }
 
-    useStore.setState((state) => ({
-      categories: [
-        ...state.categories,
-        {
-          id: findLastId(state.categories) + 1,
-          name: capitalizeWords(newCategoryText)
-        }
-      ]
-    }))
+    const newId = findLastId(categories) + 1
+    const newName = capitalizeWords(newCategoryText)
+
+    useStore.setState({
+      categories: [...categories, { id: newId, name: newName }]
+    })
     setNewCategoryText('')
     scrollableContainer.scrollDown()
   }
@@ -182,6 +188,7 @@ export const CategoriesPage = () => {
       <Categories
         controllableList={controllableList}
         scrollableContainer={scrollableContainer}
+        onDelete={onDelete}
       />
       <SeparatorFull className="my-2" />
       <ControllableListInput
@@ -189,7 +196,7 @@ export const CategoriesPage = () => {
         data-test="input-new-category"
         type="text"
         placeholder="New category..."
-        className={'w-full'}
+        className="w-full"
         value={newCategoryText}
         onChange={onChange}
         autoFocus

@@ -1,11 +1,10 @@
-import { Row } from 'components'
+import { Row, ControllableListType } from 'components'
 import { Text } from 'ui'
 import { useStore, WordPropType, WordType } from 'store'
 import produce from 'immer'
 import { namesByKeys, PropKeyType } from './properties'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { GiPlainCircle } from '@react-icons/all-files/gi/GiPlainCircle'
-import { ControllableListType } from 'components/scrollable-container/use-controllable-list'
 
 export const Prop = ({
   prop,

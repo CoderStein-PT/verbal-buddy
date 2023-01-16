@@ -1,5 +1,5 @@
 import { Text, Button, ProseDiv } from 'ui'
-import { ScrollableContainer } from 'components'
+import { ScrollableContainer, PageContainer, Timer } from 'components'
 import { useStore, WordType, GuessWordType } from 'store'
 import { useEffect, useState } from 'react'
 import {
@@ -10,13 +10,11 @@ import {
   getAverageDelay,
   getRandomWord
 } from 'utils'
-import { Timer } from 'pages/practice/timer'
 import { Placeholder } from './placeholder'
 import { Footer } from 'pages/practice/footer'
 import { useGame } from 'pages/practice/use-game'
 import Explanation from './explanation.mdx'
 import { GuessResults } from './guess-results'
-import { PageContainer } from 'components/layout/container'
 import { Navigate, Link, useParams } from 'react-router-dom'
 import { Definitions } from './definitions'
 import { toast } from 'react-toastify'

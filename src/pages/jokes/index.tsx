@@ -1,11 +1,10 @@
 import { Button, SeparatorFull, ProseDiv } from 'ui'
-import { Row, ScrollableContainer } from 'components'
+import { Row, PageContainer, ScrollableContainer } from 'components'
 import { useStore, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
 import ExplanationEmpty from './explanation-empty.mdx'
-import { PageContainer } from 'components/layout/container'
 
 export const Joke = ({ joke, index }: { joke: JokeType; index: number }) => {
   const words = useStore((state) => state.words)
