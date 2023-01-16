@@ -7,6 +7,7 @@ import {
   ScrollableContainerType
 } from 'components'
 import { SeparatorFull, Text, InputSendIcon } from 'ui'
+import isHotkey from 'is-hotkey'
 import { CategoryType, useStore, WordType } from 'store'
 import { capitalizeWords, compareStrings, findLastId } from 'utils'
 import { toast } from 'react-toastify'
@@ -62,25 +63,25 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
       return
     }
 
-    const id = findLastId(filteredWords) + 1
+    const id = findLastId(words) + 1
     const newWordObject = {
       id,
       text: capitalizeWords(newWord),
       categoryId: category.id
     }
 
-    useStore.setState({ words: [...filteredWords, newWordObject] })
+    useStore.setState({ words: [...words, newWordObject] })
     setNewWord('')
     scrollableContainer.scrollDown()
-  }, [newWord, category, scrollableContainer, filteredWords])
+  }, [newWord, words, category, scrollableContainer, filteredWords])
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Escape') {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isHotkey(['mod+left', 'ctrl+left'], e)) {
       navigate(-1)
       return
     }
 
-    if (event.key !== 'Enter') return
+    if (isHotkey('enter', e)) return
 
     onCreateWord()
   }

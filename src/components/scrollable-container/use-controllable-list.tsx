@@ -107,6 +107,7 @@ export const useControllableList = ({
       if (event.key === 'Enter') {
         if (selectedIdx === null) return false
         onEnter(selectedIdx)
+        setSelectedIdx(null)
         return true
       }
 

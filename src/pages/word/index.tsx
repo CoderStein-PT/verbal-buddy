@@ -2,6 +2,7 @@ import { useStore, WordType } from 'store'
 import { useNavigate, useParams } from 'react-router-dom'
 import { WordEditor, PageContainer, useWordEditor } from 'components'
 import { Button } from 'ui'
+import isHotKey from 'is-hotkey'
 import { useCallback, useEffect, useMemo } from 'react'
 import { TooltipWrapper } from 'react-tooltip'
 
@@ -35,17 +36,27 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
+      if (isHotKey('left', e)) {
         e.preventDefault()
-        e.altKey ? wordEditor.selectPrev() : goToPreviousWord()
+        goToPreviousWord()
       }
 
-      if (e.key === 'ArrowRight') {
+      if (isHotKey('right', e)) {
         e.preventDefault()
-        e.altKey ? wordEditor.selectNext() : goToNextWord()
+        goToNextWord()
       }
 
-      if (e.key === 'Escape') {
+      if (isHotKey('opt+left', e)) {
+        e.preventDefault()
+        wordEditor.selectPrev()
+      }
+
+      if (isHotKey('opt+right', e)) {
+        e.preventDefault()
+        wordEditor.selectNext()
+      }
+
+      if (isHotKey(['ctrl+left', 'mod+left'], e)) {
         navigate(-1)
       }
     },

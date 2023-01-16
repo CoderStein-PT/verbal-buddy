@@ -13,7 +13,14 @@ export const ControllableListInput = React.forwardRef<
   }
 >(
   (
-    { controllableList, selectedItemText, onBlur, onKeyDown, ...props },
+    {
+      controllableList,
+      selectedItemText,
+      onBlur,
+      onKeyDown,
+      onKeyUp,
+      ...props
+    },
     ref
   ) => {
     const onRealBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -28,7 +35,7 @@ export const ControllableListInput = React.forwardRef<
 
     const onRealKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (controllableList.onKeyUp(e)) return
-      onKeyDown?.(e)
+      onKeyUp?.(e)
     }
 
     return (
