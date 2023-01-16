@@ -1,5 +1,5 @@
 import { PageContainer } from 'components/layout/container'
-import { Text } from 'components'
+import { Text } from 'ui'
 import { Stats } from 'pages/practice/stats'
 import { useParams } from 'react-router-dom'
 import { useStore } from 'store'

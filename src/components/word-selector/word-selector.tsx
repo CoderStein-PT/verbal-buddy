@@ -1,13 +1,7 @@
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft'
 import { FiCheck } from '@react-icons/all-files/fi/FiCheck'
-import {
-  Button,
-  Text,
-  ScrollableContainer,
-  ListContainer,
-  SeparatorFull,
-  Row
-} from 'components'
+import { ScrollableContainer, ListContainer, Row } from 'components'
+import { Button, Text, SeparatorFull } from 'ui'
 import { useStore, CategoryType, WordType } from 'store'
 import { WordSelectorType } from './use-words-selector'
 

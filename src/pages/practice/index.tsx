@@ -1,11 +1,5 @@
-import {
-  Text,
-  ScrollableContainer,
-  useScrollableContainer,
-  SeparatorFull,
-  Button,
-  ProseDiv
-} from 'components'
+import { ScrollableContainer, useScrollableContainer } from 'components'
+import { Text, SeparatorFull, Button, ProseDiv } from 'ui'
 import { CategoryType, useStore } from 'store'
 import {
   compareStrings,

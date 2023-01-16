@@ -127,7 +127,7 @@ export const Properties = ({
         return
       }
 
-      const wordId = word[keys]?.[index]?.id
+      const wordId = word[keys]?.[index]?.wordId
       if (!wordId) return
 
       onWordClick?.(wordId)
@@ -160,6 +160,7 @@ export const Properties = ({
                 <div key={w.id}>
                   <Row
                     isSelected={controllableList.selectedIdx === idx}
+                    selectedColor="primary"
                     onClick={() => addWord(w.id)}
                     text={w.text}
                   />

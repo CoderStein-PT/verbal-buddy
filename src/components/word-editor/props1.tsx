@@ -1,4 +1,5 @@
-import { ActionType, Row, Text } from 'components'
+import { Row } from 'components'
+import { Text } from 'ui'
 import { useStore, WordPropType, WordType } from 'store'
 import produce from 'immer'
 import { namesByKeys, PropKeyType } from './properties'

@@ -1,4 +1,4 @@
-import { Button, ProseDiv, SeparatorFull } from 'components'
+import { Button, ProseDiv, SeparatorFull } from 'ui'
 import { Stats } from 'pages/guess-stats/stats'
 import { Link } from 'react-router-dom'
 import { useStore } from 'store'
