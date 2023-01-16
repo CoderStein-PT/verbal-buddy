@@ -212,6 +212,7 @@ export const Properties = ({
             placeholder={`Add ${nameByKey[0]}`}
             className={'w-full'}
             value={text}
+            data-test={'input-add-' + keys}
             onChange={onChange}
             autoFocus
             big
