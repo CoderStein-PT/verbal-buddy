@@ -16,7 +16,7 @@ import Explanation from './explanation.mdx'
 import { useState } from 'react'
 import { InputSendIcon } from 'ui/input/input-send-icon'
 import { PageContainer } from 'components/layout/container'
-import { useControllableList } from '../components/scrollable-container/use-controllable-list'
+import { useControllableList } from '../../components/scrollable-container/use-controllable-list'
 import { ControllableListInput } from 'components/scrollable-container/controllable-list-input'
 
 export const Category = ({
