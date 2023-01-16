@@ -26,9 +26,12 @@ export const Category = ({
       isSelected={active}
       onClick={onClick}
       index={index}
-      actionsVisible
       selectedColor="primary"
-      actions={active ? [{ icon: FiCheck, color: 'textPrimary' }] : []}
+      info={
+        active
+          ? [{ title: 'Selected', icon: FiCheck, class: 'text-green-500' }]
+          : undefined
+      }
     />
   )
 }
@@ -90,7 +93,11 @@ export const Word = ({
       index={index}
       actionsVisible
       selectedColor="primary"
-      actions={isSelected ? [{ icon: FiCheck, color: 'textPrimary' }] : []}
+      info={
+        isSelected
+          ? [{ title: 'Selected', icon: FiCheck, class: 'text-green-500' }]
+          : undefined
+      }
     />
   )
 }

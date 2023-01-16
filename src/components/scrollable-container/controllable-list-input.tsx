@@ -39,7 +39,7 @@ export const ControllableListInput = React.forwardRef<
           />
           <div className="pt-2">
             <Text variant="subtitle" color="gray-light">
-              {'Use arrow (↑↓) keys to navigate'}
+              {'Use ↑↓ keys to navigate'}
             </Text>
           </div>
         </div>
@@ -47,7 +47,9 @@ export const ControllableListInput = React.forwardRef<
           <div className="absolute top-0 left-0 flex items-center justify-center w-full h-full text-center">
             <div>
               <Text variant="button">{selectedItemText}</Text>
-              <Text color="gray-light">{'Press Enter to open'}</Text>
+              <Text color="gray-light">
+                {'Enter to open | Delete to remove'}
+              </Text>
             </div>
           </div>
         )}

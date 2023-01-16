@@ -82,7 +82,7 @@ export const useControllableList = ({
       if (event.key === 'Backspace' || event.key === 'Delete') {
         if (selectedIdx === null) return false
         onDelete?.(selectedIdx)
-        setSelectedIdx(null)
+        setSelectedIdx((s) => Math.max(0, s === null ? 0 : s - 1))
         return true
       }
 
