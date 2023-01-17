@@ -64,6 +64,8 @@ export const useControllableList = ({
   }, [])
 
   useEffect(() => {
+    if (!scrollAccumulatorInterval.current) return
+
     scrollToSelected(debouncedSelectedIdx || 0)
   }, [debouncedSelectedIdx, scrollToSelected])
 
