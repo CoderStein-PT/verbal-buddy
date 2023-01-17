@@ -80,7 +80,7 @@ export const ScrollableContainer = ({
   )
 
   return (
-    <div className="relative">
+    <div className="relative z-0">
       {isScrollable && (
         <GradientTop className={scroll > 0 ? '' : 'opacity-0'} />
       )}

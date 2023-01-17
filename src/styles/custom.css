@@ -25,6 +25,10 @@ html, body {
 	color: #dde;
 }
 
+.key-span {
+	@apply px-1 text-lg border rounded-md text-slate-200 border-slate-200;
+}
+
 /*  */
 
 ::-webkit-scrollbar {
