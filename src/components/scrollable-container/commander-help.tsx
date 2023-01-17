@@ -6,6 +6,7 @@ import gifEnter from 'public/help-enter.gif'
 import gifRemoving from 'public/help-removing.gif'
 import gifWordProps from 'public/help-word-props.gif'
 import gifWordNav from 'public/help-word-nav.gif'
+import gifGlobalNav from 'public/help-global-nav.gif'
 import gifWordDeepNav from 'public/help-word-deep-nav.gif'
 import gifFocusCommander from 'public/focus-commander.gif'
 
@@ -77,7 +78,7 @@ const helpSlides = [
     title: 'Navigate pages',
     description:
       "You can use the <span class='key-span'>Ctrl + Left</span> or <span class='key-span'>Ctrl + Right</span> keys to navigate between pages.",
-    gifSrc: gifWordDeepNav
+    gifSrc: gifGlobalNav
   }
 ]
 
