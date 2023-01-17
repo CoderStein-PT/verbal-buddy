@@ -126,6 +126,7 @@ export const CategoriesPage = () => {
   const [newCategoryText, setNewCategoryText] = useState('')
   const categories = useStore((state) => state.categories)
   const navigate = useNavigate()
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   const onDelete = (category: CategoryType) => {
     const confirmation = window.confirm(
@@ -168,6 +169,7 @@ export const CategoriesPage = () => {
 
     if (categories.find((c) => c.name === newCategoryText)) {
       toast.error('Category already exists')
+      inputRef.current?.select()
       return
     }
 
@@ -209,6 +211,7 @@ export const CategoriesPage = () => {
           value={newCategoryText}
           onChange={onChange}
           autoFocus
+          ref={inputRef}
           big
           icon={
             <InputSendIcon
