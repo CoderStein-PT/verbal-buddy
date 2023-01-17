@@ -146,14 +146,16 @@ export const HelpIcon = ({ title }: { title: string }) => {
   }
 
   return (
-    <div
-      className="absolute z-[5] cursor-pointer top-2 left-2 group"
-      onClick={openCommanderHelp}
-    >
+    <>
       <ModalBase modal={modal} hideModal={hideModal} />
-      <TooltipWrapper content={title} place="top">
-        <FaQuestionCircle className="text-gray-500 transition group-hover:text-primary-500" />
-      </TooltipWrapper>
-    </div>
+      <div
+        className="absolute z-[5] cursor-pointer top-2 left-2 group"
+        onClick={openCommanderHelp}
+      >
+        <TooltipWrapper content={title} place="top">
+          <FaQuestionCircle className="text-gray-500 transition group-hover:text-primary-500" />
+        </TooltipWrapper>
+      </div>
+    </>
   )
 }
