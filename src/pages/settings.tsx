@@ -94,7 +94,7 @@ const Preset = ({
   )
 }
 
-const Explanation = ({ title }: { title: string }) => (
+export const Explanation = ({ title }: { title: string }) => (
   <div className="absolute top-0 right-0 cursor-pointer">
     <TooltipWrapper content={title} place="right">
       <FaQuestionCircle className="text-gray-400" />
