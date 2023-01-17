@@ -35,7 +35,7 @@ const helpSlides = [
   {
     title: 'Focus on the commander',
     description:
-      "Make sure you have the <span class='key-span'>Commander</span> focused. You can do this by clicking on it.",
+      "Make sure you have the <span class='key-span'>Commander</span> <b>focused</b> and <b>empty.</b> You focus on it by clicking on it.",
     gifSrc: gifFocusCommander
   },
   {
