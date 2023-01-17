@@ -9,11 +9,11 @@ import {
 import { SeparatorFull, Text, InputSendIcon } from 'ui'
 import isHotkey from 'is-hotkey'
 import { CategoryType, useStore, WordType } from 'store'
-import { capitalizeWords, compareStrings, findLastId } from 'utils'
+import { capitalizeWords, compareStrings, findLastId, pronounce } from 'utils'
 import { toast } from 'react-toastify'
 import { Navigate, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { Words } from './words'
 import { Header } from './header'
 
@@ -34,6 +34,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   const navigate = useNavigate()
   const [newWord, setNewWord] = useState<string>('')
   const words = useStore((state) => state.words)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const filteredWords = useMemo(
     () => words.filter((w) => w.categoryId === category.id),
@@ -42,6 +43,10 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
 
   const controllableList = useControllableList({
     length: filteredWords.length,
+    onPronounce: (itemIdx) => {
+      const word = filteredWords[itemIdx]
+      pronounce(word.text)
+    },
     onEnter: (itemIdx) => {
       navigate(`/word/${filteredWords[itemIdx].id}`)
     },
@@ -60,6 +65,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
       )
     ) {
       toast.error('Word in this category already exists')
+      inputRef.current?.select()
       return
     }
 
@@ -113,6 +119,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
           className="w-full"
           value={newWord}
           onChange={onChange}
+          ref={inputRef}
           autoFocus
           big
           icon={

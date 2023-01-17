@@ -54,7 +54,14 @@ export const ControllableListInputCore = (
         <div className="absolute top-0 left-0 flex items-center justify-center w-full h-full text-center">
           <div>
             <Text variant="button">{selectedItemText}</Text>
-            <Text color="gray-light">{'Enter to open | Delete to remove'}</Text>
+            <Text
+              color="gray-light"
+              variant="subtitle"
+              dangerouslySetInnerHTML={{
+                __html:
+                  '<span class="key-span" >Enter</span> to open, <span class="key-span" >Del</span> to remove, <span class="key-span" >Ctrl + S</span> to pronounce.'
+              }}
+            />
           </div>
         </div>
       )}

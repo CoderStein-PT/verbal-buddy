@@ -1,19 +1,32 @@
-import { Text, Button, Input, Label, SeparatorFull, Switch } from 'ui'
+import {
+  Select,
+  Text,
+  Button,
+  Input,
+  Label,
+  SeparatorFull,
+  Switch,
+  OptionType
+} from 'ui'
 import { ScrollableContainer } from 'components'
 import { presets } from 'presets'
 import { PresetType } from 'presets/types'
 import { useStore } from 'store'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
-import { findLastId } from 'utils'
+import { findLastId, getCurrentVoice, pronounce } from 'utils'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FaQuestionCircle } from '@react-icons/all-files/fa/FaQuestionCircle'
 import { TooltipWrapper } from 'react-tooltip'
+import { useVoiceStore } from 'voice-store'
 
 const explanations = {
   jokes: {
     randomWords:
       'Number of random words to select from the list to create random jokes.'
+  },
+  pronunciation: {
+    voice: 'Voice to use for pronunciation.'
   },
   guess: {
     maxWords:
@@ -151,6 +164,9 @@ const Presets = () => {
 
 export const SettingsPage = () => {
   const settings = useStore((state) => state.settings)
+  const voices = useVoiceStore((state) => state.voices)
+
+  const currentVoice = getCurrentVoice()
 
   const onChangePracticeMaxWords = (e: React.ChangeEvent<HTMLInputElement>) => {
     useStore.setState((state) => ({
@@ -192,6 +208,13 @@ export const SettingsPage = () => {
     }))
   }
 
+  const onChangeVoice = (option: OptionType) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, voice: option.value }
+    }))
+    pronounce('Hello, this is your new voice')
+  }
+
   return (
     <div className="justify-between block md:space-x-12 md:flex">
       <div className="md:w-[480px] w-full">
@@ -221,6 +244,29 @@ export const SettingsPage = () => {
                 onChange={onChangeGuessMaxWords}
               />
               <Explanation title={explanations.guess.maxWords} />
+            </div>
+            <SeparatorFull />
+            <Text variant="button">{'Pronunciation'}</Text>
+            <div className="relative flex flex-col">
+              <Label>{'Voice'}</Label>
+              {voices ? (
+                <Select
+                  options={voices.map((voice) => ({
+                    name:
+                      voice.name +
+                      ' (' +
+                      voice.lang +
+                      ')' +
+                      (voice.default ? ' (default)' : ''),
+                    value: voice.voiceURI
+                  }))}
+                  value={currentVoice?.voiceURI}
+                  onChange={onChangeVoice}
+                />
+              ) : (
+                <Text color="gray-light">{'Loading voices...'}</Text>
+              )}
+              <Explanation title={explanations.pronunciation.voice} />
             </div>
             <SeparatorFull />
             <Text variant="button">{'Practice'}</Text>

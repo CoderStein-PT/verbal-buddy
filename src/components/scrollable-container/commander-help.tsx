@@ -22,7 +22,7 @@ const SliderWithGif = ({
       color="gray-light"
       dangerouslySetInnerHTML={{ __html: description }}
     />
-    {!!gifSrc && <img src={gifSrc} />}
+    {!!gifSrc && <img className="select-none" src={gifSrc} />}
   </div>
 )
 
@@ -35,7 +35,7 @@ const helpSlides = [
   {
     title: 'Focus on the commander',
     description:
-      "Make sure you have the <span class='key-span'>Commander</span> focused. You can do this by clicking on it.",
+      "Make sure you have the <span class='key-span'>Commander</span> <b>focused</b> and <b>empty.</b> You focus on it by clicking on it.",
     gifSrc: gifFocusCommander
   },
   {
@@ -79,6 +79,11 @@ const helpSlides = [
     description:
       "You can use the <span class='key-span'>Ctrl + Left</span> or <span class='key-span'>Ctrl + Right</span> keys to navigate between pages.",
     gifSrc: gifGlobalNav
+  },
+  {
+    title: 'Pronounce',
+    description:
+      "After selecting a word you can use the <span class='key-span'>Ctrl + S</span> key to pronounce the word. You can change the voice in the app settings."
   }
 ]
 
@@ -141,14 +146,16 @@ export const HelpIcon = ({ title }: { title: string }) => {
   }
 
   return (
-    <div
-      className="absolute z-[5] cursor-pointer top-2 left-2 group"
-      onClick={openCommanderHelp}
-    >
+    <>
       <ModalBase modal={modal} hideModal={hideModal} />
-      <TooltipWrapper content={title} place="top">
-        <FaQuestionCircle className="text-gray-500 transition group-hover:text-primary-500" />
-      </TooltipWrapper>
-    </div>
+      <div
+        className="absolute z-[5] cursor-pointer top-2 left-2 group"
+        onClick={openCommanderHelp}
+      >
+        <TooltipWrapper content={title} place="top">
+          <FaQuestionCircle className="text-gray-500 transition group-hover:text-primary-500" />
+        </TooltipWrapper>
+      </div>
+    </>
   )
 }

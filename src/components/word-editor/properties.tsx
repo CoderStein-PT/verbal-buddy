@@ -12,7 +12,7 @@ import {
 import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
 import produce from 'immer'
-import { findLastId } from 'utils'
+import { findLastId, pronounce } from 'utils'
 import { InputSendIcon } from 'ui'
 import { useEffect, useState } from 'react'
 import { Props } from './props1'
@@ -156,6 +156,9 @@ export const Properties = ({
   const controllableList = useControllableList({
     scrollableContainer,
     length: foundWords.length || word[keys]?.length || 0,
+    onPronounce: (itemIdx) => {
+      pronounce(foundWords[itemIdx]?.text || word[keys]?.[itemIdx]?.text || '')
+    },
     onEnter: (index) => {
       if (foundWords.length) {
         addWord(foundWords[index].id)

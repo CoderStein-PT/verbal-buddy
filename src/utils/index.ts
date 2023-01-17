@@ -1,5 +1,6 @@
+import { useVoiceStore } from './../voice-store'
 import { useRef } from 'react'
-import { WordType } from 'store'
+import { useStore, WordType } from 'store'
 
 export const findLastId = (array: any[]) => {
   if (array.length === 0) return 0
@@ -104,5 +105,31 @@ export const capitalizeWords = (string: string) =>
     .split(' ')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
+
+export const pronounce = (text: string) => {
+  const utterance = new SpeechSynthesisUtterance(text)
+  const voice = getCurrentVoice()
+
+  if (!voice) return
+
+  utterance.voice = voice
+  speechSynthesis.speak(utterance)
+}
+
+export const getCurrentVoice = () => {
+  const voiceURI = useStore.getState().settings.voice
+  return useVoiceStore
+    .getState()
+    .voices?.find((voice) => voice.voiceURI === voiceURI)
+}
+
+export const getVoices = () => {
+  return window.speechSynthesis.getVoices().sort(function (a, b) {
+    const aname = a.name.toUpperCase()
+    const bname = b.name.toUpperCase()
+
+    return aname < bname ? -1 : aname == bname ? 0 : +1
+  })
+}
 
 export * from './math'

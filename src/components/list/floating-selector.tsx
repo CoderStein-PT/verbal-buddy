@@ -5,7 +5,7 @@ import {
 import { useContext, useRef, useMemo } from 'react'
 import tw from 'tailwind-styled-components'
 
-const FloatingSelectorDiv = tw.div`absolute top-0 left-0 bg-gradient-to-r from-green-500 to-transparent w-3/4 opacity-25 rounded-sm transition duration-75 ease-cool`
+const FloatingSelectorDiv = tw.div`absolute top-0 left-0 bg-gradient-to-r from-green-500 to-transparent w-3/4 opacity-25 rounded-sm transition duration-75 ease-cool pointer-events-none`
 
 export const FloatingSelector = ({
   scrollableContainer
