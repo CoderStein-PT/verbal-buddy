@@ -64,14 +64,14 @@ export const ModalBase = ({
   modal: ModalDataType
   hideModal: () => void
 }) => {
-  const onOkClick = async () => {
-    const result = await modal.onOkClick()
+  const onOkClick = () => {
+    const result = modal.onOkClick()
     if (!result) return
     hideModal()
   }
 
-  const onCancelClick = async () => {
-    const result = await modal.onCancelClick()
+  const onCancelClick = () => {
+    const result = modal.onCancelClick()
     if (!result) return
     hideModal()
   }

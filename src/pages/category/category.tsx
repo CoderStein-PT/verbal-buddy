@@ -9,7 +9,7 @@ import {
 import { SeparatorFull, Text, InputSendIcon } from 'ui'
 import isHotkey from 'is-hotkey'
 import { CategoryType, useStore, WordType } from 'store'
-import { capitalizeWords, compareStrings, findLastId } from 'utils'
+import { capitalizeWords, compareStrings, findLastId, pronounce } from 'utils'
 import { toast } from 'react-toastify'
 import { Navigate, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
@@ -43,6 +43,10 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
 
   const controllableList = useControllableList({
     length: filteredWords.length,
+    onPronounce: (itemIdx) => {
+      const word = filteredWords[itemIdx]
+      pronounce(word.text)
+    },
     onEnter: (itemIdx) => {
       navigate(`/word/${filteredWords[itemIdx].id}`)
     },

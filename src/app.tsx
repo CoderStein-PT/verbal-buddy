@@ -3,12 +3,38 @@ import { routes, IRoute } from './pages'
 import { Layout } from 'components'
 import { useEffect } from 'react'
 import { environment } from 'utils/helpers'
+import { useStore } from 'store'
+import { getVoices } from 'utils'
+import { useVoiceStore } from 'voice-store'
 
 const Page = ({ route }: { route: IRoute }) => {
   return <route.component />
 }
 
+const useSetupVoice = () => {
+  const voice = useStore((state) => state.settings.voice)
+
+  useEffect(() => {
+    window.speechSynthesis.onvoiceschanged = () => {
+      const voices = getVoices()
+      useVoiceStore.setState({ voices })
+      const voiceURI = getVoices().find(
+        (v) => v.voiceURI === (voice || 'Google US English')
+      )
+
+      if (!voiceURI) return
+
+      useStore.setState((s) => ({
+        ...s,
+        settings: { ...s.settings, voice: voiceURI.voiceURI }
+      }))
+    }
+  }, [])
+}
+
 export function App() {
+  useSetupVoice()
+
   useEffect(() => {
     if (typeof window === 'undefined' || !window.glowCookies) return
 

@@ -6,6 +6,8 @@ import { GiPlainCircle } from '@react-icons/all-files/gi/GiPlainCircle'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { useNavigate } from 'react-router-dom'
 import { useCallback, useMemo } from 'react'
+import { AiFillSound } from '@react-icons/all-files/ai/AiFillSound'
+import { pronounce } from 'utils'
 
 const possibleInfo: { key: PropKeyType; icon: any; class: string }[] = [
   { key: 'definitions', icon: GiPlainCircle, class: 'text-2xs px-0.5' },
@@ -49,6 +51,10 @@ export const Word = ({
     navigate(`/word/${word.id}`)
   }, [word.id, navigate])
 
+  const onPronounce = () => {
+    pronounce(word.text)
+  }
+
   const actions: ActionType[] = useMemo(() => {
     const onDelete = () => {
       useStore.setState((s) => ({
@@ -56,6 +62,12 @@ export const Word = ({
       }))
     }
     return [
+      {
+        title: 'Pronounce',
+        onClick: onPronounce,
+        icon: AiFillSound,
+        color: 'gray'
+      },
       { title: 'Edit', icon: FiEdit2, onClick: 'edit' },
       { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
     ]

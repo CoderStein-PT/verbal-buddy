@@ -3,7 +3,6 @@ import { Tooltip, TooltipProvider } from 'react-tooltip'
 import { Navbar } from './navbar'
 import { Footer } from './footer'
 import { Sidebar } from './sidebar'
-import { Modal } from 'ui'
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -27,7 +26,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           pauseOnHover
         />
         <Tooltip className="tooltip" />
-        <Modal />
       </div>
     </TooltipProvider>
   )

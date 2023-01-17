@@ -77,6 +77,10 @@ export type SettingsType = {
   practiceCountdown: number
   practiceStartRightAway: boolean
   guessMaxWords: number
+  /**
+   * voiceURI of the selected voice
+   */
+  voice: string | null
 }
 
 export type StoreType = {
@@ -109,10 +113,16 @@ export const useStore = create(
         practiceDelayTolerance: 1,
         practiceCountdown: 3,
         practiceStartRightAway: false,
-        guessMaxWords: 10
+        guessMaxWords: 10,
+        voice: null
       }
     }),
-    { name: 'joke-generator', version: 1 }
+    {
+      name: 'joke-generator',
+      version: 1
+
+      // remove voice
+    }
   )
 )
 

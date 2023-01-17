@@ -22,7 +22,7 @@ const SliderWithGif = ({
       color="gray-light"
       dangerouslySetInnerHTML={{ __html: description }}
     />
-    {!!gifSrc && <img src={gifSrc} />}
+    {!!gifSrc && <img className="select-none" src={gifSrc} />}
   </div>
 )
 
@@ -79,6 +79,11 @@ const helpSlides = [
     description:
       "You can use the <span class='key-span'>Ctrl + Left</span> or <span class='key-span'>Ctrl + Right</span> keys to navigate between pages.",
     gifSrc: gifGlobalNav
+  },
+  {
+    title: 'Pronounce',
+    description:
+      "After selecting a word you can use the <span class='key-span'>Ctrl + S</span> key to pronounce the word. You can change the voice in the app settings."
   }
 ]
 

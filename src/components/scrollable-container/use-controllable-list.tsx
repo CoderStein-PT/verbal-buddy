@@ -1,4 +1,5 @@
 import { ScrollableContainerType } from 'components'
+import isHotkey from 'is-hotkey'
 import React, { useRef } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useThrottle } from 'react-use'
@@ -12,12 +13,14 @@ export const useControllableList = ({
   onEnter,
   onDelete,
   length,
-  scrollableContainer
+  scrollableContainer,
+  onPronounce
 }: {
   onEnter: (itemIdx: number) => void
   onDelete?: (itemIdx: number) => void
   length: number
   scrollableContainer: ScrollableContainerType
+  onPronounce?: (itemIdx: number) => void
 }) => {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
   const debouncedSelectedIdx = useThrottle(selectedIdx, 60)
@@ -95,27 +98,38 @@ export const useControllableList = ({
   }, [length, scrollAccumulator, startScrollAccumulator])
 
   const onKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'ArrowUp') {
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (isHotkey(['mod', 'opt'], e)) {
+        return false
+      }
+
+      if (isHotkey('up', e)) {
         if (length === 0) return false
         subtractIdx()
         return true
       }
 
-      if (event.key === 'ArrowDown') {
+      if (isHotkey('down', e)) {
         if (length === 0) return false
         addIdx()
         return true
       }
 
-      if (event.key === 'Enter') {
+      if (isHotkey('enter', e)) {
         if (selectedIdx === null) return false
         onEnter(selectedIdx)
         setSelectedIdx(null)
         return true
       }
 
-      if (event.key === 'Backspace' || event.key === 'Delete') {
+      if (isHotkey('mod+s', e)) {
+        if (selectedIdx === null) return false
+        e.preventDefault()
+        onPronounce?.(selectedIdx)
+        return true
+      }
+
+      if (isHotkey(['del', 'backspace'], e)) {
         if (selectedIdx === null) return false
         onDelete?.(selectedIdx)
         subtractIdx()

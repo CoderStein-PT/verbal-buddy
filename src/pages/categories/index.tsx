@@ -11,11 +11,12 @@ import {
 } from 'components'
 import { Button, ProseDiv, SeparatorFull, Text, InputSendIcon } from 'ui'
 import { useStore, CategoryType } from 'store'
-import { capitalizeWords, findLastId, isMobile } from 'utils'
+import { capitalizeWords, findLastId, isMobile, pronounce } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
+import { AiFillSound } from '@react-icons/all-files/ai/AiFillSound'
 import { Link, useNavigate } from 'react-router-dom'
 import Explanation from './explanation.mdx'
 import { useState } from 'react'
@@ -68,6 +69,10 @@ export const Category = ({
     onDelete(category)
   }
 
+  const onPronounce = () => {
+    pronounce(category.name)
+  }
+
   return (
     <Row
       text={category.name}
@@ -77,6 +82,12 @@ export const Category = ({
       isSelected={isSelected}
       index={categoryWords.length}
       actions={[
+        {
+          title: 'Pronounce',
+          onClick: onPronounce,
+          icon: AiFillSound,
+          color: 'gray'
+        },
         { title: 'Practice', onClick: onPracticeClick, icon: AiFillFire },
         { title: 'Edit', onClick: 'edit', icon: FiEdit2 },
         { title: 'Delete', onClick: onDelete2, icon: RiCloseFill, color: 'red' }
@@ -141,6 +152,9 @@ export const CategoriesPage = () => {
 
   const controllableList = useControllableList({
     length: categories.length,
+    onPronounce: (itemIdx) => {
+      pronounce(categories[itemIdx]?.name)
+    },
     onEnter: (itemIdx) => {
       navigate(`/category/${categories[itemIdx].id}`)
     },
