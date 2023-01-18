@@ -50,6 +50,30 @@ export const Explanation = ({ title }: { title: string }) => (
   </div>
 )
 
+const voiceGreetingsByLanguage = {
+  en: 'Hello, this is your new voice',
+  es: 'Hola, esta es tu nueva voz',
+  fr: 'Bonjour, ceci est votre nouvelle voix',
+  de: 'Hallo, das ist deine neue Stimme',
+  it: 'Ciao, questa è la tua nuova voce',
+  pt: 'Olá, esta é a sua nova voz',
+  ru: 'Привет, это ваш новый голос',
+  ja: 'こんにちは、これはあなたの新しい声です',
+  ko: '안녕하세요, 이것은 당신의 새로운 목소리입니다',
+  zh: '你好，这是你的新声音',
+  sk: 'Ahoj, to je tvoj nový hlas',
+  pl: 'Cześć, to jest twój nowy głos',
+  ro: 'Salut, acesta este noul tău glas',
+  nl: 'Hallo, dit is je nieuwe stem',
+  ar: 'مرحبا، هذه هي صوتك الجديد',
+  el: 'Γεια σας, αυτή είναι η νέα φωνή σας',
+  he: 'שלום, זה הקול החדש שלך',
+  hi: 'नमस्ते, यह आपकी नई आवाज है',
+  id: 'Halo, ini adalah suara baru Anda',
+  cs: 'Ahoj, to je tvůj nový hlas',
+  nb: 'Hei, dette er stemmen din'
+}
+
 export const SettingsPage = () => {
   const settings = useStore((state) => state.settings)
   const voices = useVoiceStore((state) => state.voices)
@@ -100,7 +124,10 @@ export const SettingsPage = () => {
     useStore.setState((state) => ({
       settings: { ...state.settings, voice: option.value }
     }))
-    pronounce('Hello, this is your new voice')
+    const voiceCode = voices
+      ?.find((v) => v.voiceURI === option.value)
+      ?.lang.split('-')[0] as keyof typeof voiceGreetingsByLanguage | undefined
+    pronounce(voiceGreetingsByLanguage[voiceCode || 'en'])
   }
 
   return (
