@@ -78,6 +78,10 @@ export type SettingsType = {
   practiceStartRightAway: boolean
   guessMaxWords: number
   /**
+   * Whether to pronounce definitions when guessing
+   */
+  guessPronounceDefinitions: boolean
+  /**
    * voiceURI of the selected voice
    */
   voice: string | null
@@ -114,6 +118,7 @@ export const useStore = create(
         practiceCountdown: 3,
         practiceStartRightAway: false,
         guessMaxWords: 10,
+        guessPronounceDefinitions: false,
         voice: null
       }
     }),
