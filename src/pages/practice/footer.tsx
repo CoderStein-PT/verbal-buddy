@@ -12,7 +12,8 @@ export const Footer = ({
   startCountdown,
   wordsLeft,
   skipWord,
-  placeholder
+  placeholder,
+  onEndClick
 }: {
   game: GameType
   goal: number
@@ -23,6 +24,7 @@ export const Footer = ({
   wordsLeft: number
   skipWord?: () => void
   placeholder?: string
+  onEndClick?: () => void
 }) => (
   <>
     {!game.pressedStart || game.finished ? null : (
@@ -46,9 +48,20 @@ export const Footer = ({
     )}
     <div className="flex mt-2 space-x-2">
       {game.started && (
-        <Button className="w-full" onClick={resetPractice} color="grayPrimary">
-          {'Reset'}
-        </Button>
+        <>
+          <Button
+            className="w-full"
+            onClick={resetPractice}
+            color="grayPrimary"
+          >
+            {'Reset'}
+          </Button>
+          {!game.finished && !!onEndClick && (
+            <Button className="w-full" onClick={onEndClick} color="red">
+              {'End'}
+            </Button>
+          )}
+        </>
       )}
       {skipWord && game.started && !game.finished && (
         <Button className="w-full" color="grayPrimary" onClick={skipWord}>

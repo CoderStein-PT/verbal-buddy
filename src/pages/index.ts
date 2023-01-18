@@ -50,7 +50,7 @@ export const routes: {
     component: GuessStats
   },
   guessNewGame: {
-    name: 'New Guess Game',
+    name: 'Guess',
     path: '/guess/new-game',
     component: GuessNewGamePage
   },
