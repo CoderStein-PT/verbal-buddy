@@ -105,6 +105,12 @@ export const capitalizeWords = (string: string) =>
     .split(' ')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join('-')
+    .split('(')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join('(')
 
 export const pronounce = (text: string) => {
   const utterance = new SpeechSynthesisUtterance(text)
