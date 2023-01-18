@@ -13,16 +13,14 @@ export type OptionType = {
 export type SelectType = {
   options: OptionType[]
   onChange?: any
-  value: string
+  value: string | null
+  placeholder?: string
 }
 
-export const OptionBase = tw.div`transition ease-in-out relative py-2 px-4`
+export const OptionBase = tw.div`transition ease-out relative py-1 px-3`
 
 export const OptionContainer = ({ children, ...props }) => (
-  <OptionBase
-    className="cursor-pointer hover:bg-primary-100 dark:hover:bg-slate-700"
-    {...props}
-  >
+  <OptionBase className="cursor-pointer group" {...props}>
     <Text variant="subtitle">{children}</Text>
   </OptionBase>
 )
@@ -64,7 +62,12 @@ const useSelectPopper = () => {
   )
 }
 
-export const Select = ({ options, onChange, value }: SelectType) => {
+export const Select = ({
+  options,
+  onChange,
+  value,
+  placeholder
+}: SelectType) => {
   const selectedOption = options.find((option) => option.value === value)
   const { setButton, button, setPopper, styles, attributes } = useSelectPopper()
 
@@ -76,7 +79,7 @@ export const Select = ({ options, onChange, value }: SelectType) => {
             className="relative flex items-center justify-between w-full truncate cursor-pointer"
             $as="button"
           >
-            {selectedOption?.name}
+            {selectedOption?.name || placeholder}
             <span className="-mr-1">
               <GoChevronDown className="w-5 h-5" />
             </span>
@@ -85,11 +88,11 @@ export const Select = ({ options, onChange, value }: SelectType) => {
         <Portal>
           <Listbox.Options
             ref={setPopper}
-            className="z-20"
+            className="z-20 outline-none"
             style={styles.popper}
             {...attributes.popper}
           >
-            <Card className="my-2" style={{ minWidth: button?.offsetWidth }}>
+            <Card style={{ minWidth: button?.offsetWidth }}>
               <div className="overflow-y-auto max-h-[200px]">
                 {options.map((option) => (
                   <Listbox.Option
@@ -100,10 +103,12 @@ export const Select = ({ options, onChange, value }: SelectType) => {
                     {({ active, selected }) => (
                       <OptionBase
                         className={`cursor-pointer ${
-                          active ? 'bg-primary-100 dark:bg-slate-700' : ''
+                          active ? 'bg-primary-100 dark:bg-slate-900' : ''
                         }`}
                       >
-                        <Text color={selected ? 'primary' : undefined}>
+                        <Text
+                          color={selected || active ? 'primary' : undefined}
+                        >
                           {option.name}
                         </Text>
                       </OptionBase>

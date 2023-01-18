@@ -1,4 +1,4 @@
-const words = [
+export const pt = [
   'Gato',
   'Cachorro',
   'Pássaro',

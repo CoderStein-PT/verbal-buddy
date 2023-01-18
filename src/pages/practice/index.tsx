@@ -157,7 +157,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
               className="flex flex-col"
               to={`/practice/${category.id}/stats`}
             >
-              <Button color="gray">{'See Stats'}</Button>
+              <Button color="grayPrimary">{'See Stats'}</Button>
             </Link>
           </div>
         </PageContainer>

@@ -115,7 +115,7 @@ export const JournalPage = () => {
       <Entries />
       <SeparatorFull className="my-4" />
       <div className="flex justify-between mt-4">
-        <Button color="gray" size="md" onClick={clearJournal}>
+        <Button color="grayPrimary" size="md" onClick={clearJournal}>
           {'Clear Journal'}
         </Button>
         <Button size="md" onClick={createNewEntry}>

@@ -46,12 +46,12 @@ export const Footer = ({
     )}
     <div className="flex mt-2 space-x-2">
       {game.started && (
-        <Button className="w-full" onClick={resetPractice} color="gray">
+        <Button className="w-full" onClick={resetPractice} color="grayPrimary">
           {'Reset'}
         </Button>
       )}
       {skipWord && game.started && !game.finished && (
-        <Button className="w-full" color="gray" onClick={skipWord}>
+        <Button className="w-full" color="grayPrimary" onClick={skipWord}>
           {'Skip Word'}
         </Button>
       )}

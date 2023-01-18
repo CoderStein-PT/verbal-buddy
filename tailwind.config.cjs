@@ -10,6 +10,11 @@ module.exports = {
       fontFamily: {
         title: "'Rowdies', sans-serif"
       },
+      letterSpacing: {
+        wide: '0.04em',
+        wider: '0.09em',
+        widest: '0.14em'
+      },
       fontSize: {
         '2xs': '4px'
       },

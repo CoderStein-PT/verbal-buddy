@@ -1,4 +1,4 @@
-export const words = [
+export const it = [
   'Gatto',
   'Cane',
   'Uccello',

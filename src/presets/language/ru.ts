@@ -1,4 +1,4 @@
-export const words = [
+export const ru = [
   'Кошка',
   'Собака',
   'Птица',

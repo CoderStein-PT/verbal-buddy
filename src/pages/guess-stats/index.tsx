@@ -35,17 +35,19 @@ export const GuessStats = () => {
         <div className="flex flex-col space-x-0 space-y-2 md:flex-row md:space-x-2 md:space-y-0">
           {!!stats.length && (
             <div>
-              <Button color="gray" size="md" onClick={resetStats}>
+              <Button color="grayPrimary" size="md" onClick={resetStats}>
                 {'Reset Stats'}
               </Button>
             </div>
           )}
           <Link to="/guess/difficult-words">
-            <Button size="md">{'Guess difficult words'}</Button>
+            <Button color="grayPrimary" size="md">
+              {'Guess Difficult Words'}
+            </Button>
           </Link>
         </div>
         <Link to="/guess/new-game" data-test="btn-new-game">
-          <Button>{'New Game'}</Button>
+          <Button size="md">{'New Game'}</Button>
         </Link>
       </div>
     </div>
