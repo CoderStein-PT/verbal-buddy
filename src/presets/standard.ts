@@ -6,94 +6,28 @@ export const standard: PresetType = {
   description: 'Has everything you need to start playing.',
   data: {
     categories: [
-      {
-        id: 1,
-        name: 'Animals'
-      },
-      {
-        id: 2,
-        name: 'Food'
-      },
-      {
-        id: 3,
-        name: 'Colors'
-      },
-      {
-        id: 4,
-        name: 'Shapes'
-      },
-      {
-        id: 5,
-        name: 'Human states'
-      },
-      {
-        id: 6,
-        name: 'Clothes'
-      },
-      {
-        id: 7,
-        name: 'Body parts'
-      },
-      {
-        id: 8,
-        name: 'Furniture'
-      },
-      {
-        id: 9,
-        name: 'Kitchen'
-      },
-      {
-        id: 10,
-        name: 'Sports'
-      },
-      {
-        id: 11,
-        name: 'Transport'
-      },
-      {
-        id: 12,
-        name: 'Jobs'
-      },
-      {
-        id: 13,
-        name: 'Hobbies'
-      },
-      {
-        id: 14,
-        name: 'Nature'
-      },
-      {
-        id: 15,
-        name: 'Weather'
-      },
-      {
-        id: 16,
-        name: 'People (famous)'
-      },
-      {
-        id: 17,
-        name: 'People (family)'
-      },
-      {
-        id: 18,
-        name: 'Characters (famous)'
-      },
-      {
-        id: 19,
-        name: 'Characters (stereotypes)'
-      },
-      {
-        id: 20,
-        name: 'Car brands'
-      },
-      {
-        id: 21,
-        name: 'Countries'
-      },
-      {
-        id: 22,
-        name: 'Cities'
-      },
+      { id: 1, name: 'Animals' },
+      { id: 2, name: 'Food' },
+      { id: 3, name: 'Colors' },
+      { id: 4, name: 'Shapes' },
+      { id: 5, name: 'Human states' },
+      { id: 6, name: 'Clothes' },
+      { id: 7, name: 'Body parts' },
+      { id: 8, name: 'Furniture' },
+      { id: 9, name: 'Kitchen' },
+      { id: 10, name: 'Sports' },
+      { id: 11, name: 'Transport' },
+      { id: 12, name: 'Jobs' },
+      { id: 13, name: 'Hobbies' },
+      { id: 14, name: 'Nature' },
+      { id: 15, name: 'Weather' },
+      { id: 16, name: 'People (famous)' },
+      { id: 17, name: 'People (family)' },
+      { id: 18, name: 'Characters (famous)' },
+      { id: 19, name: 'Characters (stereotypes)' },
+      { id: 20, name: 'Car brands' },
+      { id: 21, name: 'Countries' },
+      { id: 22, name: 'Cities' },
       {
         id: 23,
         name: 'Places'
@@ -103,17 +37,63 @@ export const standard: PresetType = {
       {
         id: 1,
         text: 'Cat',
-        categoryId: 1
+        categoryId: 1,
+        definitions: [
+          {
+            id: 1,
+            text: 'A small domesticated carnivorous mammal with soft fur, a short snout, and retractile claws.'
+          },
+          {
+            id: 2,
+            text: 'It is widely kept as a pet or for catching mice, and many breeds have been developed.'
+          }
+        ],
+        props: [
+          { id: 1, text: 'small' },
+          { id: 2, text: 'silent' },
+          { id: 3, text: 'domesticated' },
+          { id: 4, text: 'playful' },
+          { id: 5, text: 'furry' },
+          { id: 6, text: 'big eyes' }
+        ]
       },
       {
         id: 2,
         text: 'Dog',
-        categoryId: 1
+        categoryId: 1,
+        definitions: [
+          {
+            id: 1,
+            text: 'A domesticated carnivorous mammal that typically has a long snout, an acute sense of smell, nonretractile claws, and a barking, howling, or whining voice.'
+          },
+          {
+            id: 2,
+            text: 'It is widely kept as a pet or for work or field sports.'
+          }
+        ]
       },
       {
         id: 3,
         text: 'Bird',
-        categoryId: 1
+        categoryId: 1,
+        definitions: [
+          {
+            id: 1,
+            text: 'A warm-blooded egg-laying feathered vertebrate animal, characterized by the possession of wings and the ability to fly.'
+          },
+          {
+            id: 2,
+            text: 'A diverse class of avian species, characterized by their beaks, feathers, and two pairs of wings.'
+          }
+        ],
+        props: [
+          { id: 1, text: 'winged' },
+          { id: 2, text: 'feathered' },
+          { id: 3, text: 'lay eggs' },
+          { id: 4, text: 'various colors' },
+          { id: 5, text: 'diverse species' },
+          { id: 6, text: 'can fly' }
+        ]
       },
       {
         id: 4,
