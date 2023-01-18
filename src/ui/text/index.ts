@@ -10,17 +10,17 @@ const colorClasses = {
 }
 
 const variantClasses = {
-  h1: 'text-6xl md:text-7xl font-title md:leading-tight',
-  h2: 'text-5xl md:text-6xl font-title md:leading-tight',
-  h3: 'text-4xl md:text-5xl font-title md:leading-tight',
-  h4: 'text-3xl md:text-4xl font-title',
-  h5: 'text-2xl md:text-3xl font-title',
-  h6: 'text-xl md:text-2xl font-title',
-  bodyBig: 'md:text-lg md:leading-relaxed',
-  body: '',
-  subtitle: 'text-sm md:text-sm',
+  h1: 'text-6xl md:text-7xl font-title md:leading-tight tracking-wider',
+  h2: 'text-5xl md:text-6xl font-title md:leading-tight tracking-wider',
+  h3: 'text-4xl md:text-5xl font-title md:leading-tight tracking-wider',
+  h4: 'text-3xl md:text-4xl font-title tracking-wider',
+  h5: 'text-2xl md:text-3xl font-title tracking-wider',
+  h6: 'text-xl md:text-2xl font-title tracking-wider',
+  bodyBig: 'md:text-lg md:leading-relaxed tracking-wide',
+  body: 'tracking-wide',
+  subtitle: 'text-sm md:text-sm tracking-wide',
   subtitle2: 'text-base md:text-base tracking-wide',
-  button: 'text-base md:text-lg font-title uppercase',
+  button: 'text-base md:text-lg font-title uppercase tracking-wider',
   caption: 'text-xs md:text-xs font-title',
   overline: 'text-xs md:text-xs'
 }

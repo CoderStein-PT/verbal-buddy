@@ -43,16 +43,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     [practice, categoryWords]
   )
 
-  const checkIfFinished = () => {
-    const newWordsLeft = categoryWords.filter((w) =>
-      useStore.getState().practice.find((p) => compareStrings(p.text, w.text))
-    ).length
-
-    if (newWordsLeft !== goal || game.finished) return
-
+  const endGame = () => {
     game.finish()
     toast.success('You guessed all the words!')
-
     const incorrectWordsCount = categoryWords.filter(
       (w) => !practice.find((p) => compareStrings(p.text, w.text))
     ).length
@@ -65,12 +58,22 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
           delay: game.time,
           categoryId: category.id,
           avgDelayBetweenWords: getAverageDelay(delays),
-          wordsCount: goal,
+          wordsCount: practice.length,
           incorrectWordsCount: incorrectWordsCount,
           delays: convertDelays(delays)
         }
       ]
     }))
+  }
+
+  const checkIfFinished = () => {
+    const newWordsLeft = categoryWords.filter((w) =>
+      useStore.getState().practice.find((p) => compareStrings(p.text, w.text))
+    ).length
+
+    if (newWordsLeft !== goal || game.finished) return
+
+    endGame()
   }
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -118,7 +121,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full md:pl-64">
+      <div className="w-full md:pl-48">
         <PageContainer>
           <div className="flex items-end justify-between">
             <Text variant="button" className="text-center">
@@ -151,18 +154,19 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
             wordsLeft={wordsLeft}
             onKeyDown={onKeyDown}
             resetPractice={resetPractice}
+            onEndClick={endGame}
           />
           <div className="flex flex-col mt-2 md:hidden">
             <Link
               className="flex flex-col"
               to={`/practice/${category.id}/stats`}
             >
-              <Button color="gray">{'See Stats'}</Button>
+              <Button color="grayPrimary">{'See Stats'}</Button>
             </Link>
           </div>
         </PageContainer>
       </div>
-      <div className="md:block hidden w-[360px] flex-shrink-0">
+      <div className="md:block hidden w-[390px] flex-shrink-0">
         <Stats categoryId={category.id} />
       </div>
     </div>

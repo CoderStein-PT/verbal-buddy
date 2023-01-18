@@ -21,7 +21,7 @@ export const Header = ({ category }: { category: CategoryType }) => {
     <>
       <SeparatorFull className="w-full my-2" />
       <div className="flex justify-between space-x-2">
-        <Button size="sm" color="gray" onClick={resetCategoryWords}>
+        <Button size="sm" color="grayPrimary" onClick={resetCategoryWords}>
           {'Reset'}
         </Button>
         <Button size="sm" onClick={onPracticeClick}>

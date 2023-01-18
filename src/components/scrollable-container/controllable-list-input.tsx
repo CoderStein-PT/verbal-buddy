@@ -53,7 +53,11 @@ export const ControllableListInputCore = (
       {controllableList.selectedIdx !== null && (
         <div className="absolute top-0 left-0 flex items-center justify-center w-full h-full text-center">
           <div>
-            <Text variant="button">{selectedItemText}</Text>
+            <Text variant="button">
+              {selectedItemText && selectedItemText?.length > 30
+                ? selectedItemText.slice(0, 30) + '...'
+                : selectedItemText}
+            </Text>
             <Text
               color="gray-light"
               variant="subtitle"

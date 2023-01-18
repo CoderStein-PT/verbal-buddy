@@ -207,7 +207,9 @@ export const CategoriesPage = () => {
         <div className="flex items-center justify-between">
           <Text variant="button">{'Categories'}</Text>
           <Link to="/settings#presets" data-test="btn-use-presets">
-            <Button size="md">{'Use presets'}</Button>
+            <Button color="grayPrimary" size="md">
+              {'Use presets'}
+            </Button>
           </Link>
         </div>
         <SeparatorFull className="my-2" />

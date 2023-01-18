@@ -15,7 +15,8 @@ export const links = [
   },
   {
     name: 'Guess',
-    link: '/guess'
+    link: '/guess',
+    matches: ['/guess', '/guess/new-game', '/guess/:categoryIds']
   },
   {
     name: 'Jokes',

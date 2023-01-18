@@ -5,6 +5,7 @@ import { Logo } from './logo'
 import tw from 'tailwind-styled-components'
 import { MenuLauncher } from './menu-launcher'
 import { useUiStore } from 'ui-store'
+import { Text } from 'ui'
 import { Links } from './links'
 import { BackButton } from './back-button'
 import { isMobile } from 'utils'
@@ -41,6 +42,8 @@ export const Navbar = () => {
 
   const openSidebar = useUiStore((state) => state.openSidebar)
 
+  const currentPageName = route?.name || ''
+
   return (
     <div className="fixed top-0 left-0 right-0 z-40">
       <div className="flex items-center justify-between w-full h-12 max-w-screen-xl px-2 py-1 mx-auto bg-gray-900 md:space-x-2 md:px-16 md:py-4 md:h-16 backdrop-blur-md bg-opacity-60 ">
@@ -62,6 +65,9 @@ export const Navbar = () => {
                 <BackButton />
               </div>
             )}
+            <Text variant="button" color="gray-light" className="px-4">
+              {currentPageName}
+            </Text>
           </div>
         </div>
         <Links />

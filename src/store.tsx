@@ -118,10 +118,8 @@ export const useStore = create(
       }
     }),
     {
-      name: 'joke-generator',
+      name: 'verbal-content',
       version: 1
-
-      // remove voice
     }
   )
 )

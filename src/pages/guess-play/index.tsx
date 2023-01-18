@@ -195,7 +195,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
               <Button
                 size="sm"
                 disabled={hintsLeft < 1}
-                color="gray"
+                color="grayPrimary"
                 onClick={moreDefinitions}
               >
                 {hintsLeft > 0
@@ -226,7 +226,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
           />
           <div className="flex flex-col mt-2 md:hidden">
             <Link className="flex flex-col" to={`/guess`}>
-              <Button color="gray">{'See Stats'}</Button>
+              <Button color="grayPrimary">{'See Stats'}</Button>
             </Link>
           </div>
         </PageContainer>

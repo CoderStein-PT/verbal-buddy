@@ -18,7 +18,11 @@ const ActionButton = ({
 
   return (
     <div>
-      <Button onClick={onClick} size="icon" color={action.color}>
+      <Button
+        onClick={onClick}
+        size="icon"
+        color={action.color || 'grayPrimary'}
+      >
         <action.icon />
       </Button>
     </div>

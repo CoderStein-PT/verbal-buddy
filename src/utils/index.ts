@@ -125,8 +125,8 @@ export const getCurrentVoice = () => {
 
 export const getVoices = () => {
   return window.speechSynthesis.getVoices().sort(function (a, b) {
-    const aname = a.name.toUpperCase()
-    const bname = b.name.toUpperCase()
+    const aname = a.lang.toUpperCase()
+    const bname = b.lang.toUpperCase()
 
     return aname < bname ? -1 : aname == bname ? 0 : +1
   })

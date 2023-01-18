@@ -121,7 +121,7 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
           <Text>{moment(entry.createdAt).format('DD.MM.YYYY | hh:mm')}</Text>
           <Button
             size="md"
-            color="gray"
+            color="grayPrimary"
             onClick={() => setIsPreview(!isPreview)}
           >
             {isPreview ? 'Edit' : 'Preview'}

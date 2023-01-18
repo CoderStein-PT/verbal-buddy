@@ -51,7 +51,7 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
           {wordNav.prevWord && (
             <TooltipWrapper content="CTRL+Left">
               <Button
-                color="gray"
+                color="grayPrimary"
                 size="md"
                 onClick={wordNav.goToPreviousWord}
                 data-test="btn-prev-word"
@@ -65,7 +65,7 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
           {wordNav.nextWord && (
             <TooltipWrapper content="CTRL+Right">
               <Button
-                color="gray"
+                color="grayPrimary"
                 size="md"
                 onClick={wordNav.goToNextWord}
                 data-test="btn-next-word"
