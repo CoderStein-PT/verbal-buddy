@@ -253,7 +253,7 @@ export const SettingsPage = () => {
                 <Select
                   options={voices.map((voice) => ({
                     name:
-                      voice.name +
+                      voice.voiceURI +
                       ' (' +
                       voice.lang +
                       ')' +
