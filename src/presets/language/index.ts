@@ -6,10 +6,10 @@ import { ua } from './ua'
 import { ru } from './ru'
 
 export const languagePresets = [
-  { name: 'English', preset: en },
-  { name: 'Português', preset: pt },
-  { name: 'Deutsch', preset: de },
-  { name: 'Italiano', preset: it },
-  { name: 'Українська', preset: ua },
-  { name: 'Русский', preset: ru }
+  { name: 'English', data: en },
+  { name: 'Português', data: pt },
+  { name: 'Deutsch', data: de },
+  { name: 'Italiano', data: it },
+  { name: 'Українська', data: ua },
+  { name: 'Русский', data: ru }
 ]

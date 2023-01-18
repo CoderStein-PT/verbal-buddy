@@ -13,12 +13,12 @@ const Page = ({ route }: { route: IRoute }) => {
 export function App() {
   useSetupVoice()
 
-  useEffect(() => {
-    const haha = presets[1].data.words.map((word) => {
-      return word.text
-    })
-    console.log(haha)
-  }, [])
+  // useEffect(() => {
+  //   const haha = presets[1].data.words.map((word) => {
+  //     return word.text
+  //   })
+  //   console.log(haha)
+  // }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.glowCookies) return

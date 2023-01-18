@@ -1,10 +1,13 @@
 import { Text, Button, Select, Label, OptionType } from 'ui'
-import { languagePresets } from 'presets'
+import { presets, languagePresets } from 'presets'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { useStore } from 'store'
 
 export const LanguagePresets = () => {
   const [native, setNative] = useState(null)
   const [desired, setDesired] = useState(null)
+  const [applied, setApplied] = useState(false)
 
   const languagePresetsOptions = languagePresets.map((preset) => ({
     value: preset.name,
@@ -17,6 +20,48 @@ export const LanguagePresets = () => {
 
   const onChangeDesired = (option: OptionType) => {
     setDesired(option.value)
+  }
+
+  const applyLanguagePreset = () => {
+    // having that languagePresets is an object with categories and words and categories and words are simple arrays like ['hello', 'world']
+    // we just run through every category and word of presets[0].data and replace the words and categories of it to the ones of the languagePreset that is desired.
+
+    const desiredPreset = languagePresets.find(
+      (preset) => preset.name === desired
+    )
+
+    const nativePreset = languagePresets.find(
+      (preset) => preset.name === native
+    )
+
+    if (!desiredPreset || !nativePreset) return
+
+    const newPreset = { ...presets[1] }
+    newPreset.data.categories = newPreset.data.categories.map((c, idx) => {
+      return {
+        ...c,
+        name: desiredPreset.data.categories[idx]
+      }
+    })
+    newPreset.data.words = newPreset.data.words.map((w, idx) => {
+      return {
+        ...w,
+        text: desiredPreset.data.words[idx],
+        definitions: [{ id: 1, text: nativePreset.data.words[idx] }]
+      }
+    })
+
+    useStore.setState((state) => ({
+      ...state,
+      ...newPreset.data,
+      practiceStats: [],
+      guessStats: [],
+      selectedWords: [],
+      jokes: []
+    }))
+    toast.success('Preset applied!')
+    setApplied(true)
+    setTimeout(() => setApplied(false), 3000)
   }
 
   return (
@@ -48,8 +93,13 @@ export const LanguagePresets = () => {
             />
           </div>
         </div>
-        <Button size="md" color="grayPrimary">
-          {'Apply'}
+        <Button
+          size="sm"
+          color="grayPrimary"
+          disabled={applied}
+          onClick={applyLanguagePreset}
+        >
+          {applied ? 'Applied' : 'Apply'}
         </Button>
       </div>
     </div>
