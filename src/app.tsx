@@ -4,7 +4,6 @@ import { Layout } from 'components'
 import { useEffect } from 'react'
 import { environment } from 'utils/helpers'
 import { useSetupVoice } from './utils/use-setup-voice'
-import { presets } from 'presets'
 
 const Page = ({ route }: { route: IRoute }) => {
   return <route.component />
@@ -12,13 +11,6 @@ const Page = ({ route }: { route: IRoute }) => {
 
 export function App() {
   useSetupVoice()
-
-  // useEffect(() => {
-  //   const haha = presets[1].data.words.map((word) => {
-  //     return word.text
-  //   })
-  //   console.log(haha)
-  // }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.glowCookies) return

@@ -26,7 +26,8 @@ export const explanations = {
   },
   guess: {
     maxWords:
-      "Maximum number of words to play in Guess Games. Avoid practicing too many words at once if you're not ready."
+      "Maximum number of words to play in Guess Games. Avoid practicing too many words at once if you're not ready.",
+    pronounceDefinitions: 'Pronounces definitions when new words are shown.'
   },
   practice: {
     maxWords:
@@ -114,6 +115,12 @@ export const SettingsPage = () => {
     }))
   }
 
+  const onChangePronounceDefinitions = (checked: boolean) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, guessPronounceDefinitions: checked }
+    }))
+  }
+
   const onChangeGuessMaxWords = (e: React.ChangeEvent<HTMLInputElement>) => {
     useStore.setState((state) => ({
       settings: { ...state.settings, guessMaxWords: +e.target.value }
@@ -148,6 +155,14 @@ export const SettingsPage = () => {
             onChange={onChangeGuessMaxWords}
           />
           <Explanation title={explanations.guess.maxWords} />
+        </div>
+        <div className="relative flex flex-col">
+          <Label>{'Pronounce definitions'}</Label>
+          <Switch
+            checked={settings.guessPronounceDefinitions}
+            onChange={onChangePronounceDefinitions}
+          />
+          <Explanation title={explanations.guess.pronounceDefinitions} />
         </div>
         <SeparatorFull />
         <Text variant="button">{'Pronunciation'}</Text>

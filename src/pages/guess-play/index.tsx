@@ -8,7 +8,8 @@ import {
   convertDelays,
   findLastId,
   getAverageDelay,
-  getRandomWord
+  getRandomWord,
+  pronounce
 } from 'utils'
 import { Placeholder } from './placeholder'
 import { Footer } from 'pages/practice/footer'
@@ -25,7 +26,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const settings = useStore((s) => s.settings)
   const [guessedWords, setGuessedWords] = useState<WordType[]>([])
   const goal = Math.min(words.length, settings.guessMaxWords)
-  const game = useGame()
+  const game = useGame({ onStart: () => pronounceWordDefinitions(word) })
   const [skippedWords, setSkippedWords] = useState<WordType[]>([])
   const [delays, setDelays] = useState<GuessWordType[]>([])
   const [lastWord, setLastWord] = useState<WordType | null>(null)
@@ -58,6 +59,16 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     resetDescriptionCount()
 
     setWord(newRandomWord)
+
+    pronounceWordDefinitions(newRandomWord)
+  }
+
+  const pronounceWordDefinitions = (word: WordType) => {
+    const definitions = word?.definitions
+
+    if (settings.guessPronounceDefinitions && definitions?.length) {
+      pronounce(definitions.map((d) => d.text).join(', '))
+    }
   }
 
   const checkIfFinished = (
