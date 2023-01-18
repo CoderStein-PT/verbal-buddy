@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from 'react'
 import { useStore } from 'store'
 import { useInterval } from 'usehooks-ts'
 
-export const useGame = ({ onStart }: { onStart?: () => void }) => {
+export const useGame = ({ onStart }: { onStart?: () => void } = {}) => {
   const [countdown, setCountdown] = useState(0)
   const [isCounting, setIsCounting] = useState(false)
   const [time, setTime] = useState(0)
