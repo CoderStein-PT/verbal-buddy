@@ -4,14 +4,38 @@ import { WordEditor, PageContainer, useWordEditor } from 'components'
 import { Button } from 'ui'
 import { TooltipWrapper } from 'react-tooltip'
 import { useWordNavigation } from './use-word-navigation'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import isHotkey from 'is-hotkey'
 
 export const WordPageCore = ({ word }: { word: WordType }) => {
   const wordEditor = useWordEditor({ length: 3 })
-  const wordNav = useWordNavigation({ word })
-
   const navigate = useNavigate()
+
+  const words = useStore((state) => state.words)
+
+  const prevWord = useMemo(
+    () => words.find((c) => c.id === word.id - 1),
+    [word, words]
+  )
+
+  const nextWord = useMemo(
+    () => words.find((c) => c.id === word.id + 1),
+    [word, words]
+  )
+
+  const goToWord = useCallback(
+    (word: WordType | undefined) => {
+      if (!word) return
+
+      navigate(`/word/${word.id}`, { replace: true })
+    },
+    [navigate]
+  )
+
+  const wordNav = useWordNavigation({
+    onLeft: () => goToWord(prevWord),
+    onRight: () => goToWord(nextWord)
+  })
 
   const onGlobalKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -48,12 +72,12 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
       </div>
       <div className="flex items-center justify-between mt-4">
         <div>
-          {wordNav.prevWord && (
+          {prevWord && (
             <TooltipWrapper content="CTRL+Left">
               <Button
                 color="grayPrimary"
                 size="md"
-                onClick={wordNav.goToPreviousWord}
+                onClick={() => goToWord(prevWord)}
                 data-test="btn-prev-word"
               >
                 {'Previous Word'}
@@ -62,12 +86,12 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
           )}
         </div>
         <div>
-          {wordNav.nextWord && (
+          {nextWord && (
             <TooltipWrapper content="CTRL+Right">
               <Button
                 color="grayPrimary"
                 size="md"
-                onClick={wordNav.goToNextWord}
+                onClick={() => goToWord(nextWord)}
                 data-test="btn-next-word"
               >
                 {'Next Word'}
