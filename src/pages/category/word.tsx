@@ -79,7 +79,7 @@ export const Word = ({
         'Has' +
         (word[i.key]?.length ? ' ' + word[i.key]?.length : ' no') +
         ' ' +
-        namesByKeys[i.key][0].toLowerCase(),
+        namesByKeys[i.key][0]?.toLowerCase(),
       class:
         i.class +
         ' ' +
