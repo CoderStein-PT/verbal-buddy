@@ -97,6 +97,8 @@ export type StoreType = {
   practiceStats: PracticeStatsType[]
   guessStats: GuessStats[]
   settings: SettingsType
+  deleteWord: (id: number) => void
+  deleteCategory: (id: number) => void
 }
 
 export const useStore = create(
@@ -120,6 +122,24 @@ export const useStore = create(
         guessMaxWords: 10,
         guessPronounceDefinitions: false,
         voice: null
+      },
+      deleteWord: (id: number) => {
+        set((s) => ({
+          words: s.words
+            .filter((w) => w.id !== id)
+            .map((w) => ({
+              ...w,
+              definitions: w.definitions?.filter((d) => d.wordId !== id),
+              opposites: w.opposites?.filter((d) => d.wordId !== id),
+              props: w.props?.filter((d) => d.wordId !== id)
+            }))
+        }))
+      },
+      deleteCategory: (id: number) => {
+        set((s) => ({
+          categories: s.categories.filter((c) => c.id !== id),
+          words: s.words.filter((w) => w.categoryId !== id)
+        }))
       }
     }),
     {

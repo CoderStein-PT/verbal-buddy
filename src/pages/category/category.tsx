@@ -50,6 +50,9 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
     onEnter: (itemIdx) => {
       navigate(`/word/${filteredWords[itemIdx].id}`)
     },
+    onDelete: (itemIdx) => {
+      useStore.getState().deleteWord(filteredWords[itemIdx].id)
+    },
     scrollableContainer
   })
 

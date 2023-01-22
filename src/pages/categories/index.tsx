@@ -145,9 +145,7 @@ export const CategoriesPage = () => {
     )
     if (!confirmation) return
 
-    useStore.setState((state) => ({
-      categories: state.categories.filter((c) => c.id !== category.id)
-    }))
+    useStore.getState().deleteCategory(category.id)
   }
 
   const controllableList = useControllableList({
