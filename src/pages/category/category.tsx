@@ -45,10 +45,17 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
     length: filteredWords.length,
     onPronounce: (itemIdx) => {
       const word = filteredWords[itemIdx]
-      pronounce(word.text)
+      pronounce(word?.text)
     },
     onEnter: (itemIdx) => {
-      navigate(`/word/${filteredWords[itemIdx].id}`)
+      const word = filteredWords[itemIdx]
+      if (!word) return
+      navigate(`/word/${word.id}`)
+    },
+    onDelete: (itemIdx) => {
+      const word = filteredWords[itemIdx]
+      if (!word) return
+      useStore.getState().deleteWord(word.id)
     },
     scrollableContainer
   })
@@ -128,7 +135,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
           controllableList={controllableList}
           selectedItemText={
             controllableList.selectedIdx !== null
-              ? filteredWords[controllableList.selectedIdx].text
+              ? filteredWords[controllableList.selectedIdx]?.text
               : undefined
           }
         />

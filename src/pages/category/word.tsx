@@ -55,12 +55,11 @@ export const Word = ({
     pronounce(word.text)
   }
 
+  const onDelete = () => {
+    useStore.getState().deleteWord(word.id)
+  }
+
   const actions: ActionType[] = useMemo(() => {
-    const onDelete = () => {
-      useStore.setState((s) => ({
-        words: s.words.filter((w) => w.id !== word.id)
-      }))
-    }
     return [
       {
         title: 'Pronounce',
@@ -80,7 +79,7 @@ export const Word = ({
         'Has' +
         (word[i.key]?.length ? ' ' + word[i.key]?.length : ' no') +
         ' ' +
-        namesByKeys[i.key][0].toLowerCase(),
+        namesByKeys[i.key][0]?.toLowerCase(),
       class:
         i.class +
         ' ' +

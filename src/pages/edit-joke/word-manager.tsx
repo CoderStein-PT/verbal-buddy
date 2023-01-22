@@ -65,14 +65,15 @@ const AddNewWord = ({
     </div>
   )
 }
-export const WordManager = ({ joke }: { joke: JokeType }) => {
-  const words = useStore((state) => state.words)
-  const wordEditor = useWordEditor({ length: 3 })
 
-  const wordsToLoop =
-    (joke.wordIds
-      ?.map((id) => words.find((w) => w.id === id))
-      .filter((e) => e) as WordType[]) || []
+const WordEditorWrapped = ({
+  word,
+  joke
+}: {
+  word: WordType
+  joke: JokeType
+}) => {
+  const wordEditor = useWordEditor({ length: 3 })
 
   const onDeleteClick = (word: WordType) => {
     useStore.setState((s) =>
@@ -87,16 +88,29 @@ export const WordManager = ({ joke }: { joke: JokeType }) => {
   }
 
   return (
+    <WordEditor
+      height={200}
+      word={word}
+      onDeleteClick={() => onDeleteClick(word)}
+      wordEditor={wordEditor}
+    />
+  )
+}
+
+export const WordManager = ({ joke }: { joke: JokeType }) => {
+  const words = useStore((state) => state.words)
+
+  const wordsToLoop =
+    (joke.wordIds
+      ?.map((id) => words.find((w) => w.id === id))
+      .filter((e) => e) as WordType[]) || []
+
+  return (
     <div className="pb-1 overflow-x-auto">
       <div className="flex space-x-2 md:space-x-4">
         {wordsToLoop.map((word) => (
           <Column key={word?.id}>
-            <WordEditor
-              height={200}
-              word={word}
-              onDeleteClick={() => onDeleteClick(word)}
-              wordEditor={wordEditor}
-            />
+            <WordEditorWrapped word={word} joke={joke} />
           </Column>
         ))}
         <Column>

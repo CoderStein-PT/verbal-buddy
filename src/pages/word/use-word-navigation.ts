@@ -1,37 +1,16 @@
-import { useStore, WordType } from 'store'
-import { useNavigate } from 'react-router-dom'
 import isHotKey from 'is-hotkey'
 import { useCallback, useMemo } from 'react'
 import { RecursiveWordType, UseWordEditorType } from 'components'
 
 export type UseWordNavigationType = ReturnType<typeof useWordNavigation>
 
-export const useWordNavigation = ({ word }: { word: WordType }) => {
-  const navigate = useNavigate()
-  const words = useStore((state) => state.words)
-
-  const prevWord = useMemo(
-    () => words.find((c) => c.id === word.id - 1),
-    [word, words]
-  )
-
-  const nextWord = useMemo(
-    () => words.find((c) => c.id === word.id + 1),
-    [word, words]
-  )
-
-  const goToPreviousWord = useCallback(() => {
-    if (!prevWord) return
-
-    navigate(`/word/${prevWord.id}`, { replace: true })
-  }, [prevWord, navigate])
-
-  const goToNextWord = useCallback(() => {
-    if (!nextWord) return
-
-    navigate(`/word/${nextWord.id}`, { replace: true })
-  }, [nextWord, navigate])
-
+export const useWordNavigation = ({
+  onLeft,
+  onRight
+}: {
+  onLeft?: () => void
+  onRight?: () => void
+}) => {
   const onKeyDown = useCallback(
     (
       e: React.KeyboardEvent,
@@ -40,15 +19,23 @@ export const useWordNavigation = ({ word }: { word: WordType }) => {
     ) => {
       if (!wordEditor || wordEditor.text) return false
 
-      if (isHotKey('left', e) && recursiveWord?.activeBreadcrumbIndex === 0) {
+      if (
+        !!onLeft &&
+        isHotKey('left', e) &&
+        recursiveWord?.activeBreadcrumbIndex === 0
+      ) {
         e.preventDefault()
-        goToPreviousWord()
+        onLeft()
         return true
       }
 
-      if (isHotKey('right', e) && recursiveWord?.activeBreadcrumbIndex === 0) {
+      if (
+        !!onRight &&
+        isHotKey('right', e) &&
+        recursiveWord?.activeBreadcrumbIndex === 0
+      ) {
         e.preventDefault()
-        goToNextWord()
+        onRight()
         return true
       }
 
@@ -66,17 +53,8 @@ export const useWordNavigation = ({ word }: { word: WordType }) => {
 
       return false
     },
-    [goToPreviousWord, goToNextWord]
+    [onLeft, onRight]
   )
 
-  return useMemo(
-    () => ({
-      goToPreviousWord,
-      goToNextWord,
-      prevWord,
-      nextWord,
-      onKeyDown
-    }),
-    [goToPreviousWord, goToNextWord, prevWord, nextWord, onKeyDown]
-  )
+  return useMemo(() => ({ onKeyDown }), [onKeyDown])
 }
