@@ -1,5 +1,6 @@
 import { useVoiceStore } from 'voice-store'
 import { useEffect } from 'react'
+import { useStore } from 'store'
 
 export const recognitionLangs = [
   { name: 'Chinese (China)', code: 'zh-CN' },
@@ -21,21 +22,25 @@ export const recognitionLangs = [
   { name: 'Ukrainian (Ukraine)', code: 'uk-UA' }
 ]
 
-const getNewRecognition = () => {
+const getNewRecognition = ({ lang }: { lang: string }) => {
   const speechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition
   const recognition = new speechRecognition()
 
   recognition.continuous = true
-  recognition.lang = 'en-US'
+  recognition.lang = lang
   recognition.interimResults = false
   recognition.maxAlternatives = 1
   return recognition
 }
 
 export const useSpeechRecognition = () => {
+  const speechRecognitionLang = useStore(
+    (state) => state.settings.speechRecognitionLang
+  )
+
   useEffect(() => {
-    const recognition = getNewRecognition()
+    const recognition = getNewRecognition({ lang: speechRecognitionLang })
 
     recognition.onresult = (event) => {
       const last = event.results.length - 1
