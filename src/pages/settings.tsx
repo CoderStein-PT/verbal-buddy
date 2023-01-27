@@ -23,7 +23,9 @@ export const explanations = {
   },
   voice: {
     pronunciation: 'Voice to use for pronunciation.',
-    recognition: 'Language to use for speech recognition.'
+    recognition: 'Language to use for speech recognition.',
+    useSpeechRecognition:
+      'Whether to use speech recognition. If you have a microphone, you can use it to practice/guess words faster.'
   },
   guess: {
     maxWords:
@@ -41,6 +43,10 @@ export const explanations = {
   },
   presets: {
     main: 'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
+  },
+  global: {
+    fastMode:
+      'If ON - you can say multiple words (or write them separated by a space) and it will send them separately.'
   }
 }
 
@@ -152,6 +158,23 @@ export const SettingsPage = () => {
     }))
   }
 
+  const onChangeUseSpeechRecognition = (checked: boolean) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, useSpeechRecognition: checked }
+    }))
+    if (checked) {
+      recognition?.start()
+    } else {
+      recognition?.stop()
+    }
+  }
+
+  const onChangeFastMode = (checked: boolean) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, fastMode: checked }
+    }))
+  }
+
   return (
     <PageContainer>
       <div className="px-2 space-y-4">
@@ -201,6 +224,14 @@ export const SettingsPage = () => {
             <Text color="gray-light">{'Loading voices...'}</Text>
           )}
           <Explanation title={explanations.voice.pronunciation} />
+        </div>
+        <div className="relative flex flex-col">
+          <Label>{'Use Speech Recognition'}</Label>
+          <Switch
+            checked={settings.useSpeechRecognition}
+            onChange={onChangeUseSpeechRecognition}
+          />
+          <Explanation title={explanations.voice.useSpeechRecognition} />
         </div>
         <div className="relative flex flex-col">
           <Label>{'Recognition Voice'}</Label>
@@ -271,6 +302,13 @@ export const SettingsPage = () => {
             onChange={onChangeRandomWords}
           />
           <Explanation title={explanations.jokes.randomWords} />
+        </div>
+        <SeparatorFull />
+        <Text variant="button">{'Global'}</Text>
+        <div className="relative flex flex-col">
+          <Label>{'Use Fast Mode'}</Label>
+          <Switch checked={settings.fastMode} onChange={onChangeFastMode} />
+          <Explanation title={explanations.global.fastMode} />
         </div>
       </div>
     </PageContainer>

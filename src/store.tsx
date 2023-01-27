@@ -89,6 +89,14 @@ export type SettingsType = {
    * Language code for speech recognition based on BCP 47 (e.g. en-US)
    */
   speechRecognitionLang: string
+  /**
+   * Whether to use speech recognition
+   */
+  useSpeechRecognition: boolean
+  /**
+   * Whether to use fast mode. If ON - you can say multiple words (or write them separated by a space) and it will send them separately.
+   */
+  fastMode: boolean
 }
 
 export type StoreType = {
@@ -126,7 +134,9 @@ export const useStore = create(
         guessMaxWords: 10,
         guessPronounceDefinitions: false,
         voice: null,
-        speechRecognitionLang: 'en-US'
+        speechRecognitionLang: 'en-US',
+        useSpeechRecognition: false,
+        fastMode: false
       },
       deleteWord: (id: number) => {
         set((s) => ({

@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Words } from './words'
 import { Header } from './header'
+import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 
 const WrappedWords = ({
   scrollableContainer,
@@ -108,6 +109,12 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
     setNewWord(event.target.value)
   }
 
+  const voiceInput = useVoiceInput({
+    onResult: (result) => {
+      setNewWord(result)
+    }
+  })
+
   return (
     <PageContainer>
       <ControllableListContext.Provider value={controllableList}>
@@ -128,6 +135,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
           onChange={onChange}
           ref={inputRef}
           autoFocus
+          voiceInput={voiceInput}
           big
           icon={
             <InputIcons onClick={onCreateWord} title={'Send (Enter key)'} />

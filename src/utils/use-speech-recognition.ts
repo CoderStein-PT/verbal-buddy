@@ -35,21 +35,17 @@ const getNewRecognition = ({ lang }: { lang: string }) => {
 }
 
 export const useSpeechRecognition = () => {
-  const speechRecognitionLang = useStore(
-    (state) => state.settings.speechRecognitionLang
-  )
+  const settings = useStore((state) => state.settings)
 
   useEffect(() => {
-    const recognition = getNewRecognition({ lang: speechRecognitionLang })
+    const recognition = getNewRecognition({
+      lang: settings.speechRecognitionLang
+    })
+    useVoiceStore.setState({ recognition })
 
-    recognition.onresult = (event) => {
-      const last = event.results.length - 1
-      const text = event.results[last][0].transcript
-      console.log('Confidence: ' + event.results[last][0].confidence, text)
-    }
+    if (!settings.useSpeechRecognition) return
 
     recognition.start()
-
-    useVoiceStore.setState({ recognition })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }

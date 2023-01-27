@@ -1,9 +1,11 @@
 import { Input, InputProps, Text } from 'ui'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ControllableListType } from './use-controllable-list'
 import { HelpIcon } from './commander-help'
+import { VoiceInputType } from './use-voice-input'
 
 export type ControllableListInputType = InputProps & {
+  voiceInput?: VoiceInputType
   icon?: React.ReactNode
 } & {
   controllableList: ControllableListType
@@ -17,6 +19,8 @@ export const ControllableListInputCore = (
     onBlur,
     onKeyDown,
     onKeyUp,
+    onFocus,
+    voiceInput,
     ...props
   }: ControllableListInputType,
   ref: React.Ref<HTMLInputElement>
@@ -24,6 +28,12 @@ export const ControllableListInputCore = (
   const onRealBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     controllableList.setSelectedIdx(null)
     onBlur?.(e)
+    voiceInput?.onBlur?.()
+  }
+
+  const onRealFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    onFocus?.(e)
+    voiceInput?.onFocus?.()
   }
 
   const onRealKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -36,6 +46,11 @@ export const ControllableListInputCore = (
     onKeyUp?.(e)
   }
 
+  useEffect(() => {
+    if (!props.autoFocus) return
+    onFocus?.(null as any)
+  }, [props])
+
   return (
     <div className="relative w-full">
       <div
@@ -46,6 +61,7 @@ export const ControllableListInputCore = (
           ref={ref}
           onKeyDown={onRealKeyDown}
           onBlur={onRealBlur}
+          onFocus={onRealFocus}
           onKeyUp={onRealKeyUp}
           {...props}
         />
@@ -77,6 +93,7 @@ export const ControllableListInput = React.forwardRef<
   any,
   InputProps & {
     icon?: React.ReactNode
+    voiceInput?: VoiceInputType
   } & {
     controllableList: ControllableListType
     selectedItemText?: string
