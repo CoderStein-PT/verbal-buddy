@@ -20,6 +20,7 @@ export const CategoriesPage = () => {
   const scrollableContainer = useScrollableContainer({})
   const [newCategoryText, setNewCategoryText] = useState('')
   const categories = useStore((state) => state.categories)
+  const settings = useStore((state) => state.settings)
   const navigate = useNavigate()
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -61,7 +62,23 @@ export const CategoriesPage = () => {
     onCreateCategory()
   }
 
-  const onCreateCategory = () => {
+  const getNewCategory = (id: number, text: string): CategoryType => {
+    return { id, name: capitalizeWords(text) }
+  }
+
+  const createInFastMode = (result?: string) => {
+    const words = (result || newCategoryText).split(' ')
+    const lastId = findLastId(categories)
+
+    const newCategories = words
+      .map((word, idx) => getNewCategory(lastId + idx + 1, word))
+      .filter((c) => c.name)
+      .filter((c) => !categories.find((cat) => cat.name === c.name))
+
+    useStore.setState({ categories: [...categories, ...newCategories] })
+  }
+
+  const createInNormalMode = () => {
     if (!newCategoryText) {
       toast.error('Category cannot be empty')
       return
@@ -73,12 +90,19 @@ export const CategoriesPage = () => {
       return
     }
 
-    const newId = findLastId(categories) + 1
-    const newName = capitalizeWords(newCategoryText)
+    const newCategory = getNewCategory(
+      findLastId(categories) + 1,
+      newCategoryText
+    )
 
     useStore.setState({
-      categories: [...categories, { id: newId, name: newName }]
+      categories: [...categories, newCategory]
     })
+  }
+
+  const onCreateCategory = (result?: string) => {
+    settings.fastMode ? createInFastMode(result) : createInNormalMode()
+
     setNewCategoryText('')
     scrollableContainer.scrollDown()
   }
@@ -90,6 +114,9 @@ export const CategoriesPage = () => {
   const voiceInput = useVoiceInput({
     onResult: (result) => {
       setNewCategoryText(result)
+
+      if (!settings.fastMode) return
+      onCreateCategory(result)
     }
   })
 
@@ -123,7 +150,10 @@ export const CategoriesPage = () => {
           voiceInput={voiceInput}
           big
           icon={
-            <InputIcons onClick={onCreateCategory} title={'Send (Enter key)'} />
+            <InputIcons
+              onClick={() => onCreateCategory()}
+              title={'Send (Enter key)'}
+            />
           }
           controllableList={controllableList}
           selectedItemText={

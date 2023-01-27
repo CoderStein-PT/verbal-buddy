@@ -1,3 +1,4 @@
+import { getNewRecognition } from 'utils/use-speech-recognition'
 import create from 'zustand'
 
 export type VoiceStoreType = {
@@ -7,5 +8,5 @@ export type VoiceStoreType = {
 
 export const useVoiceStore = create<VoiceStoreType>((set) => ({
   voices: null,
-  recognition: null
+  recognition: getNewRecognition()
 }))

@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from 'react'
 import { useVoiceStore } from 'voice-store'
 
 export type VoiceInputType = ReturnType<typeof useVoiceInput>
@@ -9,17 +10,33 @@ export const useVoiceInput = ({
 }) => {
   const recognition = useVoiceStore((s) => s.recognition)
 
-  const onFocus = () => {
-    if (!recognition) return
-
-    recognition.onresult = (event) => {
+  const action = useCallback(
+    (event: any) => {
       const last = event.results.length - 1
       const lastResult = event.results[last]
       if (!lastResult) return
       const text = lastResult[0]?.transcript
       if (!text) return
+
       onResult(text)
-    }
+    },
+    [onResult]
+  )
+
+  useEffect(() => {
+    if (!recognition) return
+
+    recognition.onresult = action
+  }, [onResult, recognition, action])
+
+  const refresh = () => {
+    if (!recognition) return
+
+    recognition.onresult = action
+  }
+
+  const onFocus = () => {
+    refresh()
   }
 
   const onBlur = () => {
@@ -28,5 +45,5 @@ export const useVoiceInput = ({
     recognition.onresult = null
   }
 
-  return { onFocus, onBlur }
+  return { onFocus, onBlur, refresh }
 }

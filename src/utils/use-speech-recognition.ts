@@ -22,13 +22,12 @@ export const recognitionLangs = [
   { name: 'Ukrainian (Ukraine)', code: 'uk-UA' }
 ]
 
-const getNewRecognition = ({ lang }: { lang: string }) => {
+export const getNewRecognition = () => {
   const speechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition
   const recognition = new speechRecognition()
 
   recognition.continuous = true
-  recognition.lang = lang
   recognition.interimResults = false
   recognition.maxAlternatives = 1
   return recognition
@@ -36,14 +35,13 @@ const getNewRecognition = ({ lang }: { lang: string }) => {
 
 export const useSpeechRecognition = () => {
   const settings = useStore((state) => state.settings)
+  const recognition = useVoiceStore((state) => state.recognition)
 
   useEffect(() => {
-    const recognition = getNewRecognition({
-      lang: settings.speechRecognitionLang
-    })
-    useVoiceStore.setState({ recognition })
+    if (!recognition) return
+    recognition.lang = settings.speechRecognitionLang
 
-    if (!settings.useSpeechRecognition) return
+    if (!recognition || !settings.useSpeechRecognition) return
 
     recognition.start()
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -49,7 +49,7 @@ export const ControllableListInputCore = (
   useEffect(() => {
     if (!props.autoFocus) return
     onFocus?.(null as any)
-  }, [props])
+  }, [props.autoFocus, onFocus])
 
   return (
     <div className="relative w-full">
