@@ -2,7 +2,7 @@ import { ListContainer, Row, ScrollableContainer } from 'components'
 import { useStore, PremiseType, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import produce from 'immer'
-import { SeparatorFull, Input, Text, InputSendIcon } from 'ui'
+import { SeparatorFull, Input, Text, InputIcons } from 'ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { findLastId } from 'utils'
@@ -118,9 +118,7 @@ export const PremisesBase = ({ joke }: { joke: JokeType }) => {
         big
         onChange={onPremiseChange}
         value={text}
-        icon={
-          <InputSendIcon onClick={() => onKeyDown({ key: 'Enter' } as any)} />
-        }
+        icon={<InputIcons onClick={() => onKeyDown({ key: 'Enter' } as any)} />}
       />
     </ListContainer>
   )

@@ -9,7 +9,7 @@ import {
 } from 'ui'
 import { PageContainer } from 'components'
 import { useStore } from 'store'
-import { getCurrentVoice, pronounce } from 'utils'
+import { getCurrentVoice, pronounce, recognitionLangs } from 'utils'
 import { FaQuestionCircle } from '@react-icons/all-files/fa/FaQuestionCircle'
 import { TooltipWrapper } from 'react-tooltip'
 import { useVoiceStore } from 'voice-store'
@@ -21,8 +21,9 @@ export const explanations = {
     randomWords:
       'Number of random words to select from the list to create random jokes.'
   },
-  pronunciation: {
-    voice: 'Voice to use for pronunciation.'
+  voice: {
+    pronunciation: 'Voice to use for pronunciation.',
+    recognition: 'Language to use for speech recognition.'
   },
   guess: {
     maxWords:
@@ -137,6 +138,12 @@ export const SettingsPage = () => {
     pronounce(voiceGreetingsByLanguage[voiceCode || 'en'])
   }
 
+  const onChangeSpeechRecognitionLang = (option: OptionType) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, speechRecognitionLang: option.value }
+    }))
+  }
+
   return (
     <PageContainer>
       <div className="px-2 space-y-4">
@@ -165,9 +172,9 @@ export const SettingsPage = () => {
           <Explanation title={explanations.guess.pronounceDefinitions} />
         </div>
         <SeparatorFull />
-        <Text variant="button">{'Pronunciation'}</Text>
+        <Text variant="button">{'Voice'}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Voice'}</Label>
+          <Label>{'Pronunciation Voice'}</Label>
           {voices ? (
             <Select
               options={voices.map((voice) => ({
@@ -185,7 +192,19 @@ export const SettingsPage = () => {
           ) : (
             <Text color="gray-light">{'Loading voices...'}</Text>
           )}
-          <Explanation title={explanations.pronunciation.voice} />
+          <Explanation title={explanations.voice.pronunciation} />
+        </div>
+        <div className="relative flex flex-col">
+          <Label>{'Recognition Voice'}</Label>
+          <Select
+            options={recognitionLangs.map((lang) => ({
+              ...lang,
+              value: lang.code
+            }))}
+            value={settings.speechRecognitionLang}
+            onChange={onChangeSpeechRecognitionLang}
+          />
+          <Explanation title={explanations.voice.recognition} />
         </div>
         <SeparatorFull />
         <Text variant="button">{'Practice'}</Text>

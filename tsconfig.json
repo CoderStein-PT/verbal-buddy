@@ -16,7 +16,7 @@
     "isolatedModules": false,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["cypress", "node", "mdx"]
+    "types": ["cypress", "node", "mdx", "dom-speech-recognition"]
   },
   "include": ["src", "cypress"],
   "exclude": ["node_modules"]

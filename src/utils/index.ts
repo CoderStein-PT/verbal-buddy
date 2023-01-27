@@ -140,3 +140,4 @@ export const getVoices = () => {
 }
 
 export * from './math'
+export * from './use-speech-recognition'

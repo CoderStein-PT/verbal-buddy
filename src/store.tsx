@@ -85,6 +85,10 @@ export type SettingsType = {
    * voiceURI of the selected voice
    */
   voice: string | null
+  /**
+   * Language code for speech recognition based on BCP 47 (e.g. en-US)
+   */
+  speechRecognitionLang: string
 }
 
 export type StoreType = {
@@ -121,7 +125,8 @@ export const useStore = create(
         practiceStartRightAway: false,
         guessMaxWords: 10,
         guessPronounceDefinitions: false,
-        voice: null
+        voice: null,
+        speechRecognitionLang: 'en-US'
       },
       deleteWord: (id: number) => {
         set((s) => ({

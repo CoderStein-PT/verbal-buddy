@@ -4,6 +4,7 @@ import { Layout } from 'components'
 import { useEffect } from 'react'
 import { environment } from 'utils/helpers'
 import { useSetupVoice } from './utils/use-setup-voice'
+import { useSpeechRecognition } from 'utils'
 
 const Page = ({ route }: { route: IRoute }) => {
   return <route.component />
@@ -11,6 +12,7 @@ const Page = ({ route }: { route: IRoute }) => {
 
 export function App() {
   useSetupVoice()
+  useSpeechRecognition()
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.glowCookies) return

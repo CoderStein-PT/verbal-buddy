@@ -5,7 +5,7 @@ import {
   ControllableListInput,
   ControllableListContext
 } from 'components'
-import { Button, SeparatorFull, Text, InputSendIcon } from 'ui'
+import { Button, SeparatorFull, Text, InputIcons } from 'ui'
 import { useStore, CategoryType } from 'store'
 import { capitalizeWords, findLastId, pronounce } from 'utils'
 import { toast } from 'react-toastify'
@@ -115,10 +115,7 @@ export const CategoriesPage = () => {
           ref={inputRef}
           big
           icon={
-            <InputSendIcon
-              onClick={onCreateCategory}
-              title={'Send (Enter key)'}
-            />
+            <InputIcons onClick={onCreateCategory} title={'Send (Enter key)'} />
           }
           controllableList={controllableList}
           selectedItemText={

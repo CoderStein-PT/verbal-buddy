@@ -6,7 +6,7 @@ import {
   ControllableListContext,
   ScrollableContainerType
 } from 'components'
-import { SeparatorFull, Text, InputSendIcon } from 'ui'
+import { SeparatorFull, Text, InputIcons } from 'ui'
 import isHotkey from 'is-hotkey'
 import { CategoryType, useStore, WordType } from 'store'
 import { capitalizeWords, compareStrings, findLastId, pronounce } from 'utils'
@@ -130,7 +130,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
           autoFocus
           big
           icon={
-            <InputSendIcon onClick={onCreateWord} title={'Send (Enter key)'} />
+            <InputIcons onClick={onCreateWord} title={'Send (Enter key)'} />
           }
           controllableList={controllableList}
           selectedItemText={

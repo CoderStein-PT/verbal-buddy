@@ -13,7 +13,7 @@ import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
 import produce from 'immer'
 import { findLastId, pronounce } from 'utils'
-import { InputSendIcon } from 'ui'
+import { InputIcons } from 'ui'
 import { useEffect, useState } from 'react'
 import { Props } from './props1'
 import isHotkey from 'is-hotkey'
@@ -222,7 +222,7 @@ export const Properties = ({
             onChange={onChange}
             autoFocus
             big
-            icon={<InputSendIcon onClick={addProp} title={'Add (Enter key)'} />}
+            icon={<InputIcons onClick={addProp} title={'Add (Enter key)'} />}
             controllableList={controllableList}
             selectedItemText={
               controllableList.selectedIdx !== null
