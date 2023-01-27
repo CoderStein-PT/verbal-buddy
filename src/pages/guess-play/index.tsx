@@ -19,6 +19,7 @@ import { GuessResults } from './guess-results'
 import { Navigate, Link, useParams } from 'react-router-dom'
 import { Definitions } from './definitions'
 import { toast } from 'react-toastify'
+import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 
 export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [word, setWord] = useState<WordType>(() => getRandomWord({ words }))
@@ -118,19 +119,35 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     }))
   }
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    game.onKeyDown()
-
-    const newWord = event.currentTarget.value
-
-    if (!compareStrings(newWord, word.text)) return
+  const checkInWord = (
+    newWord: string,
+    throwIfIncorrect?: boolean,
+    newLastTimestamp?: number
+  ) => {
+    if (!compareStrings(newWord, word.text)) {
+      if (throwIfIncorrect) {
+        toast.error('Incorrect word')
+      }
+      return
+    }
 
     const newGuessedWords = [...guessedWords, word]
 
     setGuessedWords(newGuessedWords)
 
-    checkIfFinished(newGuessedWords, skippedWords, game.lastTypingTimestamp)
-    event.currentTarget.value = ''
+    checkIfFinished(
+      newGuessedWords,
+      skippedWords,
+      newLastTimestamp || game.lastTypingTimestamp
+    )
+    game.setCurrentWord('')
+  }
+
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    game.onKeyDown()
+    game.setCurrentWord(event.currentTarget.value)
+
+    checkInWord(event.currentTarget.value)
   }
 
   const skipWord = () => {
@@ -160,6 +177,13 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const resetDescriptionCount = () => {
     setDescriptionCount(3)
   }
+
+  const voiceInput = useVoiceInput({
+    onResult: (result) => {
+      game.setLastTypingTimestamp(Date.now())
+      checkInWord(result, true, Date.now())
+    }
+  })
 
   const showHintsButton =
     game.started && descriptionCount < (word?.definitions?.length || 0)
@@ -234,6 +258,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             startCountdown={startCountdown}
             skipWord={skipWord}
             placeholder="Guess word"
+            voiceInput={voiceInput}
           />
           <div className="flex flex-col mt-2 md:hidden">
             <Link className="flex flex-col" to={`/guess`}>

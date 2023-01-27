@@ -1,5 +1,5 @@
-import { Input, InputProps, Text } from 'ui'
-import React, { useEffect } from 'react'
+import { InputProps, InputWithVoice, Text } from 'ui'
+import React from 'react'
 import { ControllableListType } from './use-controllable-list'
 import { HelpIcon } from './commander-help'
 import { VoiceInputType } from './use-voice-input'
@@ -28,12 +28,10 @@ export const ControllableListInputCore = (
   const onRealBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     controllableList.setSelectedIdx(null)
     onBlur?.(e)
-    voiceInput?.onBlur?.()
   }
 
   const onRealFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     onFocus?.(e)
-    voiceInput?.onFocus?.()
   }
 
   const onRealKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -46,23 +44,19 @@ export const ControllableListInputCore = (
     onKeyUp?.(e)
   }
 
-  useEffect(() => {
-    if (!props.autoFocus) return
-    onFocus?.(null as any)
-  }, [props.autoFocus, onFocus])
-
   return (
     <div className="relative w-full">
       <div
         className={controllableList.selectedIdx !== null ? ' opacity-0' : ''}
       >
         <HelpIcon title="Commander Help" />
-        <Input
+        <InputWithVoice
           ref={ref}
           onKeyDown={onRealKeyDown}
           onBlur={onRealBlur}
           onFocus={onRealFocus}
           onKeyUp={onRealKeyUp}
+          voiceInput={voiceInput}
           {...props}
         />
       </div>
