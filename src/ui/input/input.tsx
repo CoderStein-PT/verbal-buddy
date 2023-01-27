@@ -1,4 +1,5 @@
-import React from 'react'
+import { VoiceInputType } from 'components/scrollable-container/use-voice-input'
+import React, { useEffect } from 'react'
 import tw from 'tailwind-styled-components'
 
 export const InputCore = tw.input<InputCoreProps>`
@@ -26,3 +27,43 @@ export const Input = React.forwardRef<
     </div>
   )
 })
+
+export const InputWithVoiceCore = (
+  {
+    voiceInput,
+    onBlur,
+    onFocus,
+    ...props
+  }: {
+    voiceInput?: VoiceInputType
+    icon?: React.ReactNode
+  } & InputProps,
+  ref: React.Ref<HTMLInputElement>
+) => {
+  const onRealBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    onBlur?.(e)
+    voiceInput?.onBlur?.()
+  }
+
+  const onRealFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    onFocus?.(e)
+    voiceInput?.onFocus?.()
+  }
+
+  useEffect(() => {
+    if (!props.autoFocus) return
+    onFocus?.(null as any)
+  }, [props.autoFocus, onFocus])
+
+  return (
+    <Input {...props} ref={ref} onFocus={onRealFocus} onBlur={onRealBlur} />
+  )
+}
+
+export const InputWithVoice = React.forwardRef<
+  any,
+  InputProps & {
+    voiceInput?: VoiceInputType
+    icon?: React.ReactNode
+  }
+>(InputWithVoiceCore)

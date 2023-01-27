@@ -1,7 +1,8 @@
-import { Button, Input } from 'ui'
+import { Button, InputIcons, InputWithVoice } from 'ui'
 import { ChangeEventHandler } from 'react'
 import { ProgressBar } from './progress-bar'
 import { GameType } from './use-game'
+import { VoiceInputType } from 'components/scrollable-container/use-voice-input'
 
 export const Footer = ({
   game,
@@ -13,7 +14,8 @@ export const Footer = ({
   wordsLeft,
   skipWord,
   placeholder,
-  onEndClick
+  onEndClick,
+  voiceInput
 }: {
   game: GameType
   goal: number
@@ -25,21 +27,25 @@ export const Footer = ({
   skipWord?: () => void
   placeholder?: string
   onEndClick?: () => void
+  voiceInput?: VoiceInputType
 }) => (
   <>
     {!game.pressedStart || game.finished ? null : (
-      <>
-        <Input
-          onChange={game.started ? onChange : undefined}
-          onKeyDown={game.started ? onKeyDown : undefined}
+      <div className="mt-2">
+        <InputWithVoice
+          value={game.currentWord}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
           type="text"
           placeholder={placeholder || 'New word...'}
           autoFocus
           data-test="input-game"
           big
-          className="w-full mt-2 text-center"
+          className="w-full text-center"
+          voiceInput={voiceInput}
+          icon={<InputIcons onClick={() => {}} title={'Send (Enter key)'} />}
         />
-      </>
+      </div>
     )}
     {game.started && (
       <div className="mt-4">

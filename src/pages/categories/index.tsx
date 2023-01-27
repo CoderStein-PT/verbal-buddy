@@ -5,7 +5,7 @@ import {
   ControllableListInput,
   ControllableListContext
 } from 'components'
-import { Button, SeparatorFull, Text, InputSendIcon } from 'ui'
+import { Button, SeparatorFull, Text, InputIcons } from 'ui'
 import { useStore, CategoryType } from 'store'
 import { capitalizeWords, findLastId, pronounce } from 'utils'
 import { toast } from 'react-toastify'
@@ -14,11 +14,13 @@ import { useState } from 'react'
 import React from 'react'
 import isHotkey from 'is-hotkey'
 import { Categories } from './categories'
+import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 
 export const CategoriesPage = () => {
   const scrollableContainer = useScrollableContainer({})
   const [newCategoryText, setNewCategoryText] = useState('')
   const categories = useStore((state) => state.categories)
+  const settings = useStore((state) => state.settings)
   const navigate = useNavigate()
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -60,7 +62,23 @@ export const CategoriesPage = () => {
     onCreateCategory()
   }
 
-  const onCreateCategory = () => {
+  const getNewCategory = (id: number, text: string): CategoryType => {
+    return { id, name: capitalizeWords(text) }
+  }
+
+  const createInFastMode = (result?: string) => {
+    const words = (result || newCategoryText).split(' ')
+    const lastId = findLastId(categories)
+
+    const newCategories = words
+      .map((word, idx) => getNewCategory(lastId + idx + 1, word))
+      .filter((c) => c.name)
+      .filter((c) => !categories.find((cat) => cat.name === c.name))
+
+    useStore.setState({ categories: [...categories, ...newCategories] })
+  }
+
+  const createInNormalMode = () => {
     if (!newCategoryText) {
       toast.error('Category cannot be empty')
       return
@@ -72,12 +90,19 @@ export const CategoriesPage = () => {
       return
     }
 
-    const newId = findLastId(categories) + 1
-    const newName = capitalizeWords(newCategoryText)
+    const newCategory = getNewCategory(
+      findLastId(categories) + 1,
+      newCategoryText
+    )
 
     useStore.setState({
-      categories: [...categories, { id: newId, name: newName }]
+      categories: [...categories, newCategory]
     })
+  }
+
+  const onCreateCategory = (result?: string) => {
+    settings.fastMode ? createInFastMode(result) : createInNormalMode()
+
     setNewCategoryText('')
     scrollableContainer.scrollDown()
   }
@@ -85,6 +110,15 @@ export const CategoriesPage = () => {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewCategoryText(event.target.value)
   }
+
+  const voiceInput = useVoiceInput({
+    onResult: (result) => {
+      setNewCategoryText(result)
+
+      if (!settings.fastMode) return
+      onCreateCategory(result)
+    }
+  })
 
   return (
     <PageContainer>
@@ -113,10 +147,11 @@ export const CategoriesPage = () => {
           onChange={onChange}
           autoFocus
           ref={inputRef}
+          voiceInput={voiceInput}
           big
           icon={
-            <InputSendIcon
-              onClick={onCreateCategory}
+            <InputIcons
+              onClick={() => onCreateCategory()}
               title={'Send (Enter key)'}
             />
           }

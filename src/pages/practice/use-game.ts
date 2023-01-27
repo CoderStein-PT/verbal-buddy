@@ -14,6 +14,7 @@ export const useGame = ({ onStart }: { onStart?: () => void } = {}) => {
   const [lastTypingTimestamp, setLastTypingTimestamp] = useState(Date.now())
   const initialTimestamp = useRef(Date.now())
   const settings = useStore((state) => state.settings)
+  const [currentWord, setCurrentWord] = useState('')
 
   const displayCountdown = moment.utc(countdown * 1000).format('ss')
 
@@ -91,7 +92,9 @@ export const useGame = ({ onStart }: { onStart?: () => void } = {}) => {
     finish,
     initialTimestamp,
     reset,
-    startCountdown
+    startCountdown,
+    currentWord,
+    setCurrentWord
   }
 }
 

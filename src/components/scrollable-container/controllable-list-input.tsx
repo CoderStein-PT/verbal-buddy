@@ -1,9 +1,11 @@
-import { Input, InputProps, Text } from 'ui'
+import { InputProps, InputWithVoice, Text } from 'ui'
 import React from 'react'
 import { ControllableListType } from './use-controllable-list'
 import { HelpIcon } from './commander-help'
+import { VoiceInputType } from './use-voice-input'
 
 export type ControllableListInputType = InputProps & {
+  voiceInput?: VoiceInputType
   icon?: React.ReactNode
 } & {
   controllableList: ControllableListType
@@ -17,6 +19,8 @@ export const ControllableListInputCore = (
     onBlur,
     onKeyDown,
     onKeyUp,
+    onFocus,
+    voiceInput,
     ...props
   }: ControllableListInputType,
   ref: React.Ref<HTMLInputElement>
@@ -24,6 +28,10 @@ export const ControllableListInputCore = (
   const onRealBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     controllableList.setSelectedIdx(null)
     onBlur?.(e)
+  }
+
+  const onRealFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    onFocus?.(e)
   }
 
   const onRealKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -42,11 +50,13 @@ export const ControllableListInputCore = (
         className={controllableList.selectedIdx !== null ? ' opacity-0' : ''}
       >
         <HelpIcon title="Commander Help" />
-        <Input
+        <InputWithVoice
           ref={ref}
           onKeyDown={onRealKeyDown}
           onBlur={onRealBlur}
+          onFocus={onRealFocus}
           onKeyUp={onRealKeyUp}
+          voiceInput={voiceInput}
           {...props}
         />
       </div>
@@ -77,6 +87,7 @@ export const ControllableListInput = React.forwardRef<
   any,
   InputProps & {
     icon?: React.ReactNode
+    voiceInput?: VoiceInputType
   } & {
     controllableList: ControllableListType
     selectedItemText?: string

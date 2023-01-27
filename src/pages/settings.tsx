@@ -9,7 +9,7 @@ import {
 } from 'ui'
 import { PageContainer } from 'components'
 import { useStore } from 'store'
-import { getCurrentVoice, pronounce } from 'utils'
+import { getCurrentVoice, pronounce, recognitionLangs } from 'utils'
 import { FaQuestionCircle } from '@react-icons/all-files/fa/FaQuestionCircle'
 import { TooltipWrapper } from 'react-tooltip'
 import { useVoiceStore } from 'voice-store'
@@ -21,8 +21,11 @@ export const explanations = {
     randomWords:
       'Number of random words to select from the list to create random jokes.'
   },
-  pronunciation: {
-    voice: 'Voice to use for pronunciation.'
+  voice: {
+    pronunciation: 'Voice to use for pronunciation.',
+    recognition: 'Language to use for speech recognition.',
+    useSpeechRecognition:
+      'Whether to use speech recognition. If you have a microphone, you can use it to practice/guess words faster.'
   },
   guess: {
     maxWords:
@@ -40,6 +43,10 @@ export const explanations = {
   },
   presets: {
     main: 'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
+  },
+  global: {
+    fastMode:
+      'If ON - you can say multiple words (or write them separated by a space) and it will send them separately.'
   }
 }
 
@@ -78,6 +85,7 @@ const voiceGreetingsByLanguage = {
 export const SettingsPage = () => {
   const settings = useStore((state) => state.settings)
   const voices = useVoiceStore((state) => state.voices)
+  const recognition = useVoiceStore((state) => state.recognition)
 
   const currentVoice = getCurrentVoice()
 
@@ -137,6 +145,36 @@ export const SettingsPage = () => {
     pronounce(voiceGreetingsByLanguage[voiceCode || 'en'])
   }
 
+  const onChangeSpeechRecognitionLang = (option: OptionType) => {
+    if (recognition) {
+      recognition.lang = option.value
+      recognition.stop()
+      setTimeout(() => {
+        recognition.start()
+      }, 1000)
+    }
+    useStore.setState((state) => ({
+      settings: { ...state.settings, speechRecognitionLang: option.value }
+    }))
+  }
+
+  const onChangeUseSpeechRecognition = (checked: boolean) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, useSpeechRecognition: checked }
+    }))
+    if (checked) {
+      recognition?.start()
+    } else {
+      recognition?.stop()
+    }
+  }
+
+  const onChangeFastMode = (checked: boolean) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, fastMode: checked }
+    }))
+  }
+
   return (
     <PageContainer>
       <div className="px-2 space-y-4">
@@ -165,9 +203,9 @@ export const SettingsPage = () => {
           <Explanation title={explanations.guess.pronounceDefinitions} />
         </div>
         <SeparatorFull />
-        <Text variant="button">{'Pronunciation'}</Text>
+        <Text variant="button">{'Voice'}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Voice'}</Label>
+          <Label>{'Pronunciation Voice'}</Label>
           {voices ? (
             <Select
               options={voices.map((voice) => ({
@@ -185,7 +223,27 @@ export const SettingsPage = () => {
           ) : (
             <Text color="gray-light">{'Loading voices...'}</Text>
           )}
-          <Explanation title={explanations.pronunciation.voice} />
+          <Explanation title={explanations.voice.pronunciation} />
+        </div>
+        <div className="relative flex flex-col">
+          <Label>{'Use Speech Recognition'}</Label>
+          <Switch
+            checked={settings.useSpeechRecognition}
+            onChange={onChangeUseSpeechRecognition}
+          />
+          <Explanation title={explanations.voice.useSpeechRecognition} />
+        </div>
+        <div className="relative flex flex-col">
+          <Label>{'Recognition Voice'}</Label>
+          <Select
+            options={recognitionLangs.map((lang) => ({
+              ...lang,
+              value: lang.code
+            }))}
+            value={settings.speechRecognitionLang}
+            onChange={onChangeSpeechRecognitionLang}
+          />
+          <Explanation title={explanations.voice.recognition} />
         </div>
         <SeparatorFull />
         <Text variant="button">{'Practice'}</Text>
@@ -244,6 +302,13 @@ export const SettingsPage = () => {
             onChange={onChangeRandomWords}
           />
           <Explanation title={explanations.jokes.randomWords} />
+        </div>
+        <SeparatorFull />
+        <Text variant="button">{'Global'}</Text>
+        <div className="relative flex flex-col">
+          <Label>{'Use Fast Mode'}</Label>
+          <Switch checked={settings.fastMode} onChange={onChangeFastMode} />
+          <Explanation title={explanations.global.fastMode} />
         </div>
       </div>
     </PageContainer>

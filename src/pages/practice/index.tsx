@@ -5,8 +5,9 @@ import {
   Timer
 } from 'components'
 import { Text, SeparatorFull, Button, ProseDiv } from 'ui'
-import { CategoryType, useStore } from 'store'
+import { CategoryType, useStore, WordType } from 'store'
 import {
+  capitalizeWords,
   compareStrings,
   convertDelays,
   findLastId,
@@ -21,6 +22,7 @@ import Explanation from './explanation.mdx'
 import { useGame } from './use-game'
 import { Footer } from './footer'
 import { Placeholder } from './placeholder'
+import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 
 export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const words = useStore((state) => state.words)
@@ -76,36 +78,61 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     endGame()
   }
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    game.onKeyDown()
+  const getNewPractice = (id: number, text: string): WordType => {
+    return { id, text: capitalizeWords(text) }
+  }
 
-    if (event.key !== 'Enter') return
-
-    const newWord = event.currentTarget.value
-
+  const createInNormalMode = (select?: () => void) => {
+    const newWord = game.currentWord.trim()
     if (!newWord) return toast.error('Word cannot be empty')
     const practice = useStore.getState().practice
 
     if (practice.find((w) => w.text === newWord)) {
-      event.currentTarget.select()
+      select?.()
 
       return toast.error('Word already exists')
     }
 
-    useStore.setState(() => {
-      const newPractice = { id: findLastId(practice) + 1, text: newWord }
-      return { practice: [...(practice || []), newPractice] }
+    useStore.setState({
+      practice: [
+        ...(practice || []),
+        getNewPractice(findLastId(practice) + 1, newWord)
+      ]
     })
 
     if (categoryWords.find((w) => compareStrings(w.text, newWord))) {
       const newDelay = game.lastTypingTimestamp - game.initialTimestamp.current
       setDelays((delays) => [...delays, newDelay])
     }
+  }
 
-    event.currentTarget.value = ''
+  const createInFastMode = (result?: string) => {
+    const words = (result || game.currentWord).split(' ')
+    const lastId = findLastId(practice)
+
+    const newPractice = words
+      .map((word, idx) => getNewPractice(lastId + idx + 1, word))
+      .filter((c) => c.text)
+      .filter((c) => !practice.find((cat) => cat.text === c.text))
+
+    useStore.setState({ practice: [...practice, ...newPractice] })
+  }
+
+  const onCreate = (result?: string) => {
+    settings.fastMode ? createInFastMode(result) : createInNormalMode()
+
+    game.setCurrentWord('')
     scrollableContainer.scrollDown()
 
     checkIfFinished()
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    game.onKeyDown()
+
+    if (event.key !== 'Enter') return
+
+    onCreate()
   }
 
   const resetPractice = () => {
@@ -117,6 +144,19 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const startCountdown = () => {
     resetPractice()
     game.startCountdown()
+  }
+
+  const voiceInput = useVoiceInput({
+    onResult: (result) => {
+      game.setCurrentWord(result)
+      if (!settings.fastMode) return
+
+      onCreate(result)
+    }
+  })
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    game.setCurrentWord(event.target.value)
   }
 
   return (
@@ -155,6 +195,8 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
             onKeyDown={onKeyDown}
             resetPractice={resetPractice}
             onEndClick={endGame}
+            voiceInput={voiceInput}
+            onChange={onChange}
           />
           <div className="flex flex-col mt-2 md:hidden">
             <Link

@@ -1,2 +1,2 @@
 export * from './input'
-export * from './input-send-icon'
+export * from './input-icons'

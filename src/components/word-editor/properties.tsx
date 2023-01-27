@@ -13,10 +13,11 @@ import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
 import produce from 'immer'
 import { findLastId, pronounce } from 'utils'
-import { InputSendIcon } from 'ui'
+import { InputIcons } from 'ui'
 import { useEffect, useState } from 'react'
 import { Props } from './props1'
 import isHotkey from 'is-hotkey'
+import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 
 export type PropKeyType = keyof Pick<
   WordType,
@@ -184,6 +185,12 @@ export const Properties = ({
     }
   })
 
+  const voiceInput = useVoiceInput({
+    onResult: (result) => {
+      setText(result)
+    }
+  })
+
   return (
     <ControllableListContext.Provider value={controllableList}>
       <div>
@@ -218,11 +225,12 @@ export const Properties = ({
             placeholder={`Add ${nameByKey[0]}`}
             className={'w-full'}
             value={text}
+            voiceInput={voiceInput}
             data-test={'input-add-' + keys}
             onChange={onChange}
             autoFocus
             big
-            icon={<InputSendIcon onClick={addProp} title={'Add (Enter key)'} />}
+            icon={<InputIcons onClick={addProp} title={'Add (Enter key)'} />}
             controllableList={controllableList}
             selectedItemText={
               controllableList.selectedIdx !== null
