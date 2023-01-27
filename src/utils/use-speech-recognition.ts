@@ -23,8 +23,12 @@ export const recognitionLangs = [
 ]
 
 export const getNewRecognition = () => {
+  if (typeof window === 'undefined') return
+
   const speechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition
+
+  if (!speechRecognition) return
   const recognition = new speechRecognition()
 
   recognition.continuous = true

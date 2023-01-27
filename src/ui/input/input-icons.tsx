@@ -49,7 +49,7 @@ export const InputIcons = ({
     <div className="absolute right-0 top-0 bottom-0 items-center flex">
       <TooltipWrapper
         content={
-          'Whether to use fast mode. If ON - you can say multiple words (or write them separated by a space) and it will send them separately.'
+          'Whether to use speech recognition. If ON - you can say it instead of typing which is much faster.'
         }
         place="top"
       >

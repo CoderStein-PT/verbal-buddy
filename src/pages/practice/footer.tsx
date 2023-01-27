@@ -31,7 +31,7 @@ export const Footer = ({
 }) => (
   <>
     {!game.pressedStart || game.finished ? null : (
-      <>
+      <div className="mt-2">
         <InputWithVoice
           value={game.currentWord}
           onChange={onChange}
@@ -41,11 +41,11 @@ export const Footer = ({
           autoFocus
           data-test="input-game"
           big
-          className="w-full mt-2 text-center"
+          className="w-full text-center"
           voiceInput={voiceInput}
           icon={<InputIcons onClick={() => {}} title={'Send (Enter key)'} />}
         />
-      </>
+      </div>
     )}
     {game.started && (
       <div className="mt-4">
