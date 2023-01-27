@@ -36,6 +36,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   const [newWord, setNewWord] = useState<string>('')
   const words = useStore((state) => state.words)
   const inputRef = useRef<HTMLInputElement>(null)
+  const settings = useStore((state) => state.settings)
 
   const filteredWords = useMemo(
     () => words.filter((w) => w.categoryId === category.id),
@@ -61,33 +62,53 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
     scrollableContainer
   })
 
-  const onCreateWord = useCallback(() => {
+  const getNewWord = (
+    id: number,
+    text: string,
+    categoryId?: number
+  ): WordType => {
+    return { id, text: capitalizeWords(text), categoryId }
+  }
+
+  const createInFastMode = (result?: string) => {
+    const texts = (result || newWord).split(' ')
+    const lastId = findLastId(words)
+
+    const newWords = texts
+      .map((text, idx) => getNewWord(lastId + idx + 1, text, category.id))
+      .filter((c) => c.text)
+      .filter((c) => !filteredWords.find((cat) => cat.text === c.text))
+
+    useStore.setState({ words: [...words, ...newWords] })
+  }
+
+  const createInNormalMode = useCallback(() => {
     if (!newWord) {
       toast.error('Word cannot be empty')
       return
     }
 
-    if (
-      filteredWords.find(
-        (w) => compareStrings(w.text, newWord) && w.categoryId === category.id
-      )
-    ) {
+    if (filteredWords.find((w) => compareStrings(w.text, newWord))) {
       toast.error('Word in this category already exists')
       inputRef.current?.select()
       return
     }
 
-    const id = findLastId(words) + 1
-    const newWordObject = {
-      id,
-      text: capitalizeWords(newWord),
-      categoryId: category.id
-    }
+    const newWordObject = getNewWord(
+      findLastId(words) + 1,
+      newWord,
+      category.id
+    )
 
     useStore.setState({ words: [...words, newWordObject] })
+  }, [newWord, category, words, filteredWords])
+
+  const onCreateWord = (result?: string) => {
+    settings.fastMode ? createInFastMode(result) : createInNormalMode()
+
     setNewWord('')
     scrollableContainer.scrollDown()
-  }, [newWord, words, category, scrollableContainer, filteredWords])
+  }
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!newWord && isHotkey(['mod+left', 'ctrl+left'], e)) {
@@ -112,6 +133,9 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   const voiceInput = useVoiceInput({
     onResult: (result) => {
       setNewWord(result)
+
+      if (!settings.fastMode) return
+      onCreateWord(result)
     }
   })
 
@@ -138,7 +162,10 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
           voiceInput={voiceInput}
           big
           icon={
-            <InputIcons onClick={onCreateWord} title={'Send (Enter key)'} />
+            <InputIcons
+              onClick={() => onCreateWord()}
+              title={'Send (Enter key)'}
+            />
           }
           controllableList={controllableList}
           selectedItemText={
