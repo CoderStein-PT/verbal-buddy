@@ -7,7 +7,7 @@ import {
 } from 'components'
 import { Button, SeparatorFull, Text, InputIcons } from 'ui'
 import { useStore, CategoryType } from 'store'
-import { capitalizeWords, findLastId, pronounce } from 'utils'
+import { capitalizeWords, findLastId, getTextInMode, pronounce } from 'utils'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -67,7 +67,7 @@ export const CategoriesPage = () => {
   }
 
   const createInFastMode = (result?: string) => {
-    const words = (result || newCategoryText).split(' ')
+    const words = (result || newCategoryText).split(',')
     const lastId = findLastId(categories)
 
     const newCategories = words
@@ -113,10 +113,11 @@ export const CategoriesPage = () => {
 
   const voiceInput = useVoiceInput({
     onResult: (result) => {
+      if (settings.fastMode) {
+        onCreateCategory(getTextInMode(result, settings.fastMode))
+        return
+      }
       setNewCategoryText(result)
-
-      if (!settings.fastMode) return
-      onCreateCategory(result)
     }
   })
 

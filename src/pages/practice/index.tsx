@@ -149,6 +149,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   const voiceInput = useVoiceInput({
     onResult: (result) => {
       game.setCurrentWord(result)
+      game.setLastTypingTimestamp(Date.now())
       if (!settings.fastMode) return
 
       onCreate(result)

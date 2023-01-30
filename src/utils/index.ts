@@ -139,5 +139,10 @@ export const getVoices = () => {
   })
 }
 
+// if fast mode is enabled, we replace spaces with commas
+export const getTextInMode = (text: string, fastMode: boolean) => {
+  return fastMode ? text.replace(/ /g, ',') : text
+}
+
 export * from './math'
 export * from './use-speech-recognition'

@@ -62,7 +62,7 @@ export const InputIcons = ({
       </TooltipWrapper>
       <TooltipWrapper
         content={
-          'Whether to use fast mode. If ON - you can say multiple words (or write them separated by a space) and it will send them separately.'
+          'Whether to use fast mode. If ON - you can say multiple words (or write them separated by a comma) and it will send them separately.'
         }
         place="top"
       >
