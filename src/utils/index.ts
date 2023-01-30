@@ -144,5 +144,9 @@ export const getTextInMode = (text: string, fastMode: boolean) => {
   return fastMode ? text.replace(/ /g, ',') : text
 }
 
+export const removeDuplicates = (arr: any[]) => {
+  return arr.filter((item, index) => arr.indexOf(item) === index)
+}
+
 export * from './math'
 export * from './use-speech-recognition'
