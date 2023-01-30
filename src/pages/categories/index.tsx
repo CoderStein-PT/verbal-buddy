@@ -73,15 +73,13 @@ export const CategoriesPage = () => {
   }
 
   const createInFastMode = (result?: string) => {
-    const words = (result || newCategoryText).split(',')
+    const words = removeDuplicates((result || newCategoryText).split(','))
     const lastId = findLastId(categories)
 
-    const newCategories = removeDuplicates(
-      words
-        .map((word, idx) => getNewCategory(lastId + idx + 1, word))
-        .filter((c) => c.name)
-        .filter((c) => !categories.find((cat) => cat.name === c.name))
-    )
+    const newCategories = words
+      .map((word, idx) => getNewCategory(lastId + idx + 1, word))
+      .filter((c) => c.name)
+      .filter((c) => !categories.find((cat) => cat.name === c.name))
 
     useStore.setState({ categories: [...categories, ...newCategories] })
   }
