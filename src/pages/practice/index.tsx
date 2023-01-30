@@ -11,7 +11,8 @@ import {
   compareStrings,
   convertDelays,
   findLastId,
-  getAverageDelay
+  getAverageDelay,
+  removeDuplicates
 } from 'utils'
 import { toast } from 'react-toastify'
 import { useMemo, useState } from 'react'
@@ -110,10 +111,12 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     const words = (result || game.currentWord).split(' ')
     const lastId = findLastId(practice)
 
-    const newPractice = words
-      .map((word, idx) => getNewPractice(lastId + idx + 1, word))
-      .filter((c) => c.text)
-      .filter((c) => !practice.find((cat) => cat.text === c.text))
+    const newPractice = removeDuplicates(
+      words
+        .map((word, idx) => getNewPractice(lastId + idx + 1, word))
+        .filter((c) => c.text)
+        .filter((c) => !practice.find((cat) => cat.text === c.text))
+    )
 
     useStore.setState({ practice: [...practice, ...newPractice] })
   }

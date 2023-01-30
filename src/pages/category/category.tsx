@@ -14,7 +14,8 @@ import {
   compareStrings,
   findLastId,
   getTextInMode,
-  pronounce
+  pronounce,
+  removeDuplicates
 } from 'utils'
 import { toast } from 'react-toastify'
 import { Navigate, useParams } from 'react-router-dom'
@@ -85,7 +86,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
       .filter((c) => c.text)
       .filter((c) => !filteredWords.find((cat) => cat.text === c.text))
 
-    useStore.setState({ words: [...words, ...newWords] })
+    useStore.setState({ words: [...words, ...removeDuplicates(newWords)] })
   }
 
   const createInNormalMode = useCallback(() => {

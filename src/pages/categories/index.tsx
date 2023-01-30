@@ -7,7 +7,13 @@ import {
 } from 'components'
 import { Button, SeparatorFull, Text, InputIcons } from 'ui'
 import { useStore, CategoryType } from 'store'
-import { capitalizeWords, findLastId, getTextInMode, pronounce } from 'utils'
+import {
+  capitalizeWords,
+  findLastId,
+  getTextInMode,
+  pronounce,
+  removeDuplicates
+} from 'utils'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -70,10 +76,12 @@ export const CategoriesPage = () => {
     const words = (result || newCategoryText).split(',')
     const lastId = findLastId(categories)
 
-    const newCategories = words
-      .map((word, idx) => getNewCategory(lastId + idx + 1, word))
-      .filter((c) => c.name)
-      .filter((c) => !categories.find((cat) => cat.name === c.name))
+    const newCategories = removeDuplicates(
+      words
+        .map((word, idx) => getNewCategory(lastId + idx + 1, word))
+        .filter((c) => c.name)
+        .filter((c) => !categories.find((cat) => cat.name === c.name))
+    )
 
     useStore.setState({ categories: [...categories, ...newCategories] })
   }
