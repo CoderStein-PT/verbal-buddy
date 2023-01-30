@@ -12,7 +12,7 @@ import {
 import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
 import produce from 'immer'
-import { findLastId, pronounce } from 'utils'
+import { findLastId, getTextInMode, pronounce } from 'utils'
 import { InputIcons } from 'ui'
 import { useEffect, useState } from 'react'
 import { Props } from './props1'

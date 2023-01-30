@@ -9,7 +9,13 @@ import {
 import { SeparatorFull, Text, InputIcons } from 'ui'
 import isHotkey from 'is-hotkey'
 import { CategoryType, useStore, WordType } from 'store'
-import { capitalizeWords, compareStrings, findLastId, pronounce } from 'utils'
+import {
+  capitalizeWords,
+  compareStrings,
+  findLastId,
+  getTextInMode,
+  pronounce
+} from 'utils'
 import { toast } from 'react-toastify'
 import { Navigate, useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
@@ -71,7 +77,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   }
 
   const createInFastMode = (result?: string) => {
-    const texts = (result || newWord).split(' ')
+    const texts = (result || newWord).split(',')
     const lastId = findLastId(words)
 
     const newWords = texts
@@ -132,10 +138,11 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
 
   const voiceInput = useVoiceInput({
     onResult: (result) => {
+      if (settings.fastMode) {
+        onCreateWord(getTextInMode(result, settings.fastMode))
+        return
+      }
       setNewWord(result)
-
-      if (!settings.fastMode) return
-      onCreateWord(result)
     }
   })
 
