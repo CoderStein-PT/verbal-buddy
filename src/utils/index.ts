@@ -144,7 +144,7 @@ export const getTextInMode = (text: string, fastMode: boolean) => {
   return fastMode ? text.replace(/ /g, ',') : text
 }
 
-export const removeDuplicates = (arr: any[]) => {
+export const removeDuplicates = <T>(arr: T[]) => {
   return arr.filter((item, index) => arr.indexOf(item) === index)
 }
 

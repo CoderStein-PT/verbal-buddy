@@ -78,7 +78,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
   }
 
   const createInFastMode = (result?: string) => {
-    const texts = (result || newWord).split(',')
+    const texts = removeDuplicates((result || newWord).split(','))
     const lastId = findLastId(words)
 
     const newWords = texts
@@ -86,7 +86,7 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
       .filter((c) => c.text)
       .filter((c) => !filteredWords.find((cat) => cat.text === c.text))
 
-    useStore.setState({ words: [...words, ...removeDuplicates(newWords)] })
+    useStore.setState({ words: [...words, ...newWords] })
   }
 
   const createInNormalMode = useCallback(() => {
