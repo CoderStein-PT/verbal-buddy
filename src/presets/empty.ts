@@ -3,6 +3,6 @@ import { PresetType } from './types'
 export const empty: PresetType = {
   id: 2,
   name: 'Empty',
-  description: 'Has no categories and words.',
+  description: 'Start from scratch ✨',
   data: { words: [], categories: [] }
 }

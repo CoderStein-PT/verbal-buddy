@@ -3,17 +3,17 @@ import { PresetType } from './types'
 export const standard: PresetType = {
   id: 1,
   name: 'Standard',
-  description: 'Has everything you need to start playing.',
+  description: 'Has a basic set of conversational words and categories 🚀',
   data: {
     categories: [
       { id: 1, name: 'Animals' },
       { id: 2, name: 'Food' },
       { id: 3, name: 'Colors' },
       { id: 4, name: 'Shapes' },
-      { id: 5, name: 'Human states (Emotional)' },
+      { id: 5, name: 'Human States (Emotional)' },
       { id: 45, name: 'Human States (Physical)' },
       { id: 6, name: 'Clothes' },
-      { id: 7, name: 'Body parts' },
+      { id: 7, name: 'Body Parts' },
       { id: 8, name: 'Furniture' },
       { id: 9, name: 'Kitchen' },
       { id: 10, name: 'Sports' },
