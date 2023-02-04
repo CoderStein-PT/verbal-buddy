@@ -20,7 +20,7 @@ const inputTypeIcons = {
   multiple: <BsLightningFill className="w-4 h-7" />
 }
 
-const inputModeHtml = (mode: SettingsType['inputMode']) => `
+export const inputModeHtml = (mode: SettingsType['inputMode']) => `
   <div><span class="font-bold">Current input mode: </span><span class="text-primary-500" >${
     mode[0]?.toUpperCase() + mode.slice(1)
   }</span></div>
