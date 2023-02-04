@@ -22,7 +22,7 @@ const inputTypeIcons = {
 
 export const inputModeHtml = (mode: SettingsType['inputMode']) => `
   <div><span class="font-bold">Current input mode: </span><span class="text-primary-500" >${
-    mode[0]?.toUpperCase() + mode.slice(1)
+    mode ? mode[0]?.toUpperCase() + mode.slice(1) : ''
   }</span></div>
   <div class="space-y-2 mt-2 pt-2 border-t border-gray-600" >
     <div>
