@@ -5,7 +5,8 @@ import {
   Label,
   SeparatorFull,
   Switch,
-  OptionType
+  OptionType,
+  inputModeHtml
 } from 'ui'
 import { PageContainer } from 'components'
 import { useStore } from 'store'
@@ -45,16 +46,12 @@ export const explanations = {
   },
   presets: {
     main: 'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
-  },
-  global: {
-    inputMode:
-      'Determines how to act when user speaks/types into a Commander.\nNormal - Send only on Enter key.\nSingle - say multiple words (or write them separated by a comma) and they will be sent separately.\nMultiple - say a phrase and it will send the whole phrase'
   }
 }
 
 export const Explanation = ({ title }: { title: string }) => (
   <div className="absolute top-0 right-0 cursor-pointer">
-    <TooltipWrapper content={title} place="right">
+    <TooltipWrapper html={title} place="right">
       <FaQuestionCircle className="text-gray-400" />
     </TooltipWrapper>
   </div>
@@ -88,6 +85,8 @@ export const SettingsPage = () => {
   const settings = useStore((state) => state.settings)
   const voices = useVoiceStore((state) => state.voices)
   const recognition = useVoiceStore((state) => state.recognition)
+  const startRecognition = useVoiceStore((state) => state.startRecognition)
+  const stopRecognition = useVoiceStore((state) => state.stopRecognition)
 
   const currentVoice = getCurrentVoice()
 
@@ -150,9 +149,9 @@ export const SettingsPage = () => {
   const onChangeSpeechRecognitionLang = (option: OptionType) => {
     if (recognition) {
       recognition.lang = option.value
-      recognition.stop()
+      stopRecognition()
       setTimeout(() => {
-        recognition.start()
+        startRecognition()
       }, 1000)
     }
     useStore.setState((state) => ({
@@ -332,7 +331,7 @@ export const SettingsPage = () => {
             value={settings.inputMode}
             onChange={onChangeInputMode}
           />
-          <Explanation title={explanations.global.inputMode} />
+          <Explanation title={inputModeHtml(settings.inputMode)} />
         </div>
       </div>
     </PageContainer>
