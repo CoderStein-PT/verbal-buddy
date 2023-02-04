@@ -75,7 +75,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
       useStore.getState().practice.find((p) => compareStrings(p.text, w.text))
     ).length
 
-    if (newWordsLeft !== goal || game.finished) return
+    if (newWordsLeft < goal || game.finished) return
 
     if (settings.practiceVoiceFeedback)
       pronounce('Great, you guessed all the words')
