@@ -94,9 +94,12 @@ export type SettingsType = {
    */
   useSpeechRecognition: boolean
   /**
-   * Whether to use fast mode. If ON - you can say multiple words (or write them separated by a space) and it will send them separately.
+   * Whether to use fast mode.
+   * normal - only send the word when the user presses enter
+   * single - say multiple words (or write them separated by a comma) and they'll be sent separately.
+   * multiple - say a phrase and it will send the whole phrase
    */
-  fastMode: boolean
+  inputMode: 'normal' | 'single' | 'multiple'
 }
 
 export type StoreType = {
@@ -136,7 +139,7 @@ export const useStore = create(
         voice: null,
         speechRecognitionLang: 'en-US',
         useSpeechRecognition: false,
-        fastMode: false
+        inputMode: 'normal'
       },
       deleteWord: (id: number) => {
         set((s) => ({
@@ -159,7 +162,7 @@ export const useStore = create(
     }),
     {
       name: 'verbal-content',
-      version: 1
+      version: 2
     }
   )
 )

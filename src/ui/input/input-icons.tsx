@@ -1,6 +1,7 @@
 import { MdSend } from '@react-icons/all-files/md/MdSend'
-import { GoZap } from '@react-icons/all-files/go/GoZap'
 import { MdMic } from '@react-icons/all-files/md/MdMic'
+import { BsLightning } from '@react-icons/all-files/bs/BsLightning'
+import { BsLightningFill } from '@react-icons/all-files/bs/BsLightningFill'
 import { TooltipWrapper } from 'react-tooltip'
 import tw from 'tailwind-styled-components'
 import { useStore } from 'store'
@@ -13,6 +14,12 @@ ${({ $active }) =>
     ? 'text-primary-600 hover:text-primary-500'
     : 'text-slate-500 hover:text-primary-600'} active:text-primary-500`
 
+const inputTypeIcons = {
+  normal: <BsLightning className="w-4 h-7" />,
+  single: <BsLightning className="w-4 h-7" />,
+  multiple: <BsLightningFill className="w-4 h-7" />
+}
+
 export const InputIcons = ({
   title,
   onClick
@@ -23,9 +30,17 @@ export const InputIcons = ({
   const settings = useStore((s) => s.settings)
   const recognition = useVoiceStore((s) => s.recognition)
 
-  const onFastModeClick = () => {
+  const onChangeInputMode = () => {
     useStore.setState({
-      settings: { ...settings, fastMode: !settings.fastMode }
+      settings: {
+        ...settings,
+        inputMode:
+          settings.inputMode === 'normal'
+            ? 'single'
+            : settings.inputMode === 'single'
+            ? 'multiple'
+            : 'normal'
+      }
     })
   }
 
@@ -60,14 +75,12 @@ export const InputIcons = ({
           <MdMic className="w-5 h-7" />
         </IconButton>
       </TooltipWrapper>
-      <TooltipWrapper
-        content={
-          'Whether to use fast mode. If ON - you can say multiple words (or write them separated by a comma) and it will send them separately.'
-        }
-        place="top"
-      >
-        <IconButton $active={settings.fastMode} onClick={onFastModeClick}>
-          <GoZap className="w-3 h-7" />
+      <TooltipWrapper content={''} place="top">
+        <IconButton
+          $active={settings.inputMode !== 'normal'}
+          onClick={onChangeInputMode}
+        >
+          {inputTypeIcons[settings.inputMode]}
         </IconButton>
       </TooltipWrapper>
       <TooltipWrapper content={title} place="right">

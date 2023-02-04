@@ -45,8 +45,8 @@ export const explanations = {
     main: 'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
   },
   global: {
-    fastMode:
-      'If ON - you can say multiple words (or write them separated by a space) and it will send them separately.'
+    inputMode:
+      'Determines how to act when user speaks/types into a Commander.\nNormal - Send only on Enter key.\nSingle - say multiple words (or write them separated by a comma) and they will be sent separately.\nMultiple - say a phrase and it will send the whole phrase'
   }
 }
 
@@ -169,9 +169,9 @@ export const SettingsPage = () => {
     }
   }
 
-  const onChangeFastMode = (checked: boolean) => {
+  const onChangeInputMode = (option: OptionType) => {
     useStore.setState((state) => ({
-      settings: { ...state.settings, fastMode: checked }
+      settings: { ...state.settings, inputMode: option.value }
     }))
   }
 
@@ -306,9 +306,17 @@ export const SettingsPage = () => {
         <SeparatorFull />
         <Text variant="button">{'Global'}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Use Fast Mode'}</Label>
-          <Switch checked={settings.fastMode} onChange={onChangeFastMode} />
-          <Explanation title={explanations.global.fastMode} />
+          <Label>{'Input Mode'}</Label>
+          <Select
+            options={[
+              { name: 'Normal', value: 'normal' },
+              { name: 'Single', value: 'single' },
+              { name: 'Multiple', value: 'multiple' }
+            ]}
+            value={settings.inputMode}
+            onChange={onChangeInputMode}
+          />
+          <Explanation title={explanations.global.inputMode} />
         </div>
       </div>
     </PageContainer>

@@ -84,22 +84,19 @@ export const CategoriesPage = () => {
     useStore.setState({ categories: [...categories, ...newCategories] })
   }
 
-  const createInNormalMode = () => {
-    if (!newCategoryText) {
+  const createInNormalMode = (result = newCategoryText) => {
+    if (!result) {
       toast.error('Category cannot be empty')
       return
     }
 
-    if (categories.find((c) => c.name === newCategoryText)) {
+    if (categories.find((c) => c.name === result)) {
       toast.error('Category already exists')
       inputRef.current?.select()
       return
     }
 
-    const newCategory = getNewCategory(
-      findLastId(categories) + 1,
-      newCategoryText
-    )
+    const newCategory = getNewCategory(findLastId(categories) + 1, result)
 
     useStore.setState({
       categories: [...categories, newCategory]
@@ -107,7 +104,9 @@ export const CategoriesPage = () => {
   }
 
   const onCreateCategory = (result?: string) => {
-    settings.fastMode ? createInFastMode(result) : createInNormalMode()
+    settings.inputMode === 'single'
+      ? createInFastMode(result)
+      : createInNormalMode(result)
 
     setNewCategoryText('')
     scrollableContainer.scrollDown()
@@ -119,11 +118,11 @@ export const CategoriesPage = () => {
 
   const voiceInput = useVoiceInput({
     onResult: (result) => {
-      if (settings.fastMode) {
-        onCreateCategory(getTextInMode(result, settings.fastMode))
+      if (settings.inputMode === 'normal') {
+        setNewCategoryText(result)
         return
       }
-      setNewCategoryText(result)
+      onCreateCategory(getTextInMode(result, settings.inputMode))
     }
   })
 
