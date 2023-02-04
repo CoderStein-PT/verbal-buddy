@@ -103,6 +103,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
 
     game.finish()
     toast.success('Game finished!')
+    if (settings.practiceVoiceFeedback) {
+      pronounce('Game finished!')
+    }
     setLastWord(word)
     useStore.setState((state) => ({
       guessStats: [
@@ -127,6 +130,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     if (!compareStrings(newWord, word.text)) {
       if (throwIfIncorrect) {
         toast.error('Incorrect word')
+        if (settings.practiceVoiceFeedback) {
+          pronounce('Incorrect')
+        }
       }
       return
     }
