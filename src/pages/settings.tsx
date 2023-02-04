@@ -39,7 +39,9 @@ export const explanations = {
       'Stops the timer when you type for this amount of seconds so stats are not affected by typing pauses',
     startRightAway:
       'Starts the timer right away when you start a practice session if ON',
-    countdown: 'Gives you a bit of time to prepare (in seconds)'
+    countdown: 'Gives you a bit of time to prepare (in seconds)',
+    voiceFeedback:
+      'Whenever the word is entered correctly, the voice will say "correct" or "incorrect". When you guess all the words, the voice will say "finished"'
   },
   presets: {
     main: 'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
@@ -175,6 +177,12 @@ export const SettingsPage = () => {
     }))
   }
 
+  const onChangePracticeVoiceFeedback = (checked: boolean) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, practiceVoiceFeedback: checked }
+    }))
+  }
+
   return (
     <PageContainer>
       <div className="px-2 space-y-4">
@@ -259,7 +267,7 @@ export const SettingsPage = () => {
           <Explanation title={explanations.practice.maxWords} />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Practice delay tolerance'}</Label>
+          <Label>{'Practice typing delay tolerance'}</Label>
           <Input
             min={0}
             max={10}
@@ -269,6 +277,14 @@ export const SettingsPage = () => {
             onChange={onChangePracticeDelayTolerance}
           />
           <Explanation title={explanations.practice.delayTolerance} />
+        </div>
+        <div className="relative flex flex-col">
+          <Label>{'Voice feedback'}</Label>
+          <Switch
+            checked={settings.practiceVoiceFeedback}
+            onChange={onChangePracticeVoiceFeedback}
+          />
+          <Explanation title={explanations.practice.voiceFeedback} />
         </div>
         <div className="relative flex flex-col">
           <Label>{'Start the timer right away'}</Label>

@@ -77,6 +77,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
     if (newWordsLeft !== goal || game.finished) return
 
+    if (settings.practiceVoiceFeedback)
+      pronounce('Great, you guessed all the words')
+
     endGame()
   }
 
@@ -89,6 +92,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     const practice = useStore.getState().practice
 
     if (practice.find((w) => w.text === result)) {
+      if (settings.practiceVoiceFeedback) pronounce('Word already exists')
       return toast.error('Word already exists')
     }
 
@@ -101,6 +105,8 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
 
     const found = categoryWords.find((w) => compareStrings(w.text, result))
 
+    if (settings.practiceVoiceFeedback) pronounce(found ? 'Yes' : 'No')
+
     if (found) {
       const newDelay = game.lastTypingTimestamp - game.initialTimestamp.current
       setDelays((delays) => [...delays, newDelay])
@@ -108,7 +114,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   }
 
   const createInFastMode = (result?: string) => {
-    const words = (result || game.currentWord).split(' ')
+    const words = (result || game.currentWord).split(' ').filter((w) => w)
     const lastId = findLastId(practice)
 
     const newPractice = removeDuplicates(
@@ -117,6 +123,33 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
         .filter((c) => c.text)
         .filter((c) => !practice.find((cat) => cat.text === c.text))
     )
+
+    const correctWords = newPractice.filter((w) =>
+      categoryWords.find((c) => compareStrings(c.text, w.text))
+    ).length
+
+    const incorrectWords = newPractice.filter(
+      (w) => !categoryWords.find((c) => compareStrings(c.text, w.text))
+    )
+
+    if (settings.practiceVoiceFeedback) {
+      if (words.length === 1) {
+        const found = categoryWords.find((w) =>
+          compareStrings(w.text, words[0])
+        )
+        pronounce(found ? 'Yes' : 'No')
+      } else {
+        pronounce(
+          correctWords === words.length
+            ? 'All correct'
+            : correctWords === 0
+            ? 'None correct'
+            : incorrectWords.length > 8
+            ? 'Many incorrect'
+            : incorrectWords.map((w) => w.text).join(', ') + ' incorrect'
+        )
+      }
+    }
 
     useStore.setState({ practice: [...practice, ...newPractice] })
   }

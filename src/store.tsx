@@ -100,6 +100,10 @@ export type SettingsType = {
    * multiple - say a phrase and it will send the whole phrase
    */
   inputMode: 'normal' | 'single' | 'multiple'
+  /**
+   * Whether to assist the user with voice feedback while practicing.
+   */
+  practiceVoiceFeedback: boolean
 }
 
 export type StoreType = {
@@ -139,7 +143,8 @@ export const useStore = create(
         voice: null,
         speechRecognitionLang: 'en-US',
         useSpeechRecognition: false,
-        inputMode: 'normal'
+        inputMode: 'normal',
+        practiceVoiceFeedback: false
       },
       deleteWord: (id: number) => {
         set((s) => ({
