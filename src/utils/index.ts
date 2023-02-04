@@ -1,6 +1,6 @@
 import { useVoiceStore } from './../voice-store'
 import { useRef } from 'react'
-import { useStore, WordType } from 'store'
+import { SettingsType, useStore, WordType } from 'store'
 
 export const findLastId = (array: any[]) => {
   if (array.length === 0) return 0
@@ -139,9 +139,12 @@ export const getVoices = () => {
   })
 }
 
-// if fast mode is enabled, we replace spaces with commas
-export const getTextInMode = (text: string, fastMode: boolean) => {
-  return fastMode ? text.replace(/ /g, ',') : text
+// if inputMode is single, we replace spaces with commas
+export const getTextInMode = (
+  text: string,
+  inputMode: SettingsType['inputMode']
+) => {
+  return inputMode === 'single' ? text.replace(/ /g, ',') : text
 }
 
 export const removeDuplicates = <T>(arr: T[]) => {

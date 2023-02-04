@@ -89,29 +89,34 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
     useStore.setState({ words: [...words, ...newWords] })
   }
 
-  const createInNormalMode = useCallback(() => {
-    if (!newWord) {
-      toast.error('Word cannot be empty')
-      return
-    }
+  const createInNormalMode = useCallback(
+    (result = newWord) => {
+      if (!result) {
+        toast.error('Word cannot be empty')
+        return
+      }
 
-    if (filteredWords.find((w) => compareStrings(w.text, newWord))) {
-      toast.error('Word in this category already exists')
-      inputRef.current?.select()
-      return
-    }
+      if (filteredWords.find((w) => compareStrings(w.text, result))) {
+        toast.error('Word in this category already exists')
+        inputRef.current?.select()
+        return
+      }
 
-    const newWordObject = getNewWord(
-      findLastId(words) + 1,
-      newWord,
-      category.id
-    )
+      const newWordObject = getNewWord(
+        findLastId(words) + 1,
+        result,
+        category.id
+      )
 
-    useStore.setState({ words: [...words, newWordObject] })
-  }, [newWord, category, words, filteredWords])
+      useStore.setState({ words: [...words, newWordObject] })
+    },
+    [newWord, category, words, filteredWords]
+  )
 
   const onCreateWord = (result?: string) => {
-    settings.fastMode ? createInFastMode(result) : createInNormalMode()
+    settings.inputMode === 'single'
+      ? createInFastMode(result)
+      : createInNormalMode(result)
 
     setNewWord('')
     scrollableContainer.scrollDown()
@@ -139,11 +144,11 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
 
   const voiceInput = useVoiceInput({
     onResult: (result) => {
-      if (settings.fastMode) {
-        onCreateWord(getTextInMode(result, settings.fastMode))
+      if (settings.inputMode === 'normal') {
+        setNewWord(result)
         return
       }
-      setNewWord(result)
+      onCreateWord(getTextInMode(result, settings.inputMode))
     }
   })
 

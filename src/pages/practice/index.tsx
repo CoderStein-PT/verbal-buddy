@@ -12,6 +12,7 @@ import {
   convertDelays,
   findLastId,
   getAverageDelay,
+  pronounce,
   removeDuplicates
 } from 'utils'
 import { toast } from 'react-toastify'
@@ -83,25 +84,24 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     return { id, text: capitalizeWords(text) }
   }
 
-  const createInNormalMode = (select?: () => void) => {
-    const newWord = game.currentWord.trim()
-    if (!newWord) return toast.error('Word cannot be empty')
+  const createInNormalMode = (result = game.currentWord.trim()) => {
+    if (!result) return toast.error('Word cannot be empty')
     const practice = useStore.getState().practice
 
-    if (practice.find((w) => w.text === newWord)) {
-      select?.()
-
+    if (practice.find((w) => w.text === result)) {
       return toast.error('Word already exists')
     }
 
     useStore.setState({
       practice: [
         ...(practice || []),
-        getNewPractice(findLastId(practice) + 1, newWord)
+        getNewPractice(findLastId(practice) + 1, result)
       ]
     })
 
-    if (categoryWords.find((w) => compareStrings(w.text, newWord))) {
+    const found = categoryWords.find((w) => compareStrings(w.text, result))
+
+    if (found) {
       const newDelay = game.lastTypingTimestamp - game.initialTimestamp.current
       setDelays((delays) => [...delays, newDelay])
     }
@@ -122,7 +122,9 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   }
 
   const onCreate = (result?: string) => {
-    settings.fastMode ? createInFastMode(result) : createInNormalMode()
+    settings.inputMode === 'single'
+      ? createInFastMode(result)
+      : createInNormalMode(result)
 
     game.setCurrentWord('')
     scrollableContainer.scrollDown()
@@ -153,7 +155,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     onResult: (result) => {
       game.setCurrentWord(result)
       game.setLastTypingTimestamp(Date.now())
-      if (!settings.fastMode) return
+      if (settings.inputMode === 'normal') return
 
       onCreate(result)
     }
