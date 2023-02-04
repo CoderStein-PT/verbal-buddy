@@ -4,7 +4,7 @@ import { BsLightning } from '@react-icons/all-files/bs/BsLightning'
 import { BsLightningFill } from '@react-icons/all-files/bs/BsLightningFill'
 import { TooltipWrapper } from 'react-tooltip'
 import tw from 'tailwind-styled-components'
-import { useStore } from 'store'
+import { SettingsType, useStore } from 'store'
 import { useVoiceStore } from 'voice-store'
 
 export const IconButton = tw.button<{ $active?: boolean }>`
@@ -20,6 +20,26 @@ const inputTypeIcons = {
   multiple: <BsLightningFill className="w-4 h-7" />
 }
 
+const inputModeHtml = (mode: SettingsType['inputMode']) => `
+  <div><span class="font-bold">Current input mode: </span><span class="text-primary-500" >${
+    mode[0]?.toUpperCase() + mode.slice(1)
+  }</span></div>
+  <div class="space-y-2 mt-2 pt-2 border-t border-gray-600" >
+    <div>
+      <span class="font-bold">Normal:</span>
+      <span>Type/say anything and press enter</span>
+    </div>
+    <div>
+      <span class="font-bold">Single:</span>
+      <span>Type/say all the words separated by comma and press enter</span>
+    </div>
+    <div>
+      <span class="font-bold">Multiple:</span>
+      <span>Say phrases and it submits them automatically</span>
+    </div>
+  </div>
+`
+
 export const InputIcons = ({
   title,
   onClick
@@ -28,7 +48,8 @@ export const InputIcons = ({
   onClick?: () => void
 }) => {
   const settings = useStore((s) => s.settings)
-  const recognition = useVoiceStore((s) => s.recognition)
+  const startRecognition = useVoiceStore((s) => s.startRecognition)
+  const stopRecognition = useVoiceStore((s) => s.stopRecognition)
 
   const onChangeInputMode = () => {
     useStore.setState({
@@ -51,20 +72,20 @@ export const InputIcons = ({
         useSpeechRecognition: !settings.useSpeechRecognition
       }
     })
-    if (recognition) {
-      if (settings.useSpeechRecognition) {
-        recognition.stop()
-      } else {
-        recognition.start()
-      }
+    if (settings.useSpeechRecognition) {
+      stopRecognition()
+    } else {
+      startRecognition()
     }
   }
 
   return (
     <div className="absolute right-0 top-0 bottom-0 items-center flex">
       <TooltipWrapper
-        content={
-          'Whether to use speech recognition. If ON - you can say it instead of typing which is much faster.'
+        html={
+          settings.useSpeechRecognition
+            ? 'Disable speech recognition'
+            : 'Enable speech recognition (make sure you focus on the input and your mic is working)'
         }
         place="top"
       >
@@ -75,7 +96,7 @@ export const InputIcons = ({
           <MdMic className="w-5 h-7" />
         </IconButton>
       </TooltipWrapper>
-      <TooltipWrapper content={''} place="top">
+      <TooltipWrapper html={inputModeHtml(settings.inputMode)} place="top">
         <IconButton
           $active={settings.inputMode !== 'normal'}
           onClick={onChangeInputMode}

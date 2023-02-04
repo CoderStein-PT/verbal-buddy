@@ -88,6 +88,8 @@ export const SettingsPage = () => {
   const settings = useStore((state) => state.settings)
   const voices = useVoiceStore((state) => state.voices)
   const recognition = useVoiceStore((state) => state.recognition)
+  const startRecognition = useVoiceStore((state) => state.startRecognition)
+  const stopRecognition = useVoiceStore((state) => state.stopRecognition)
 
   const currentVoice = getCurrentVoice()
 
@@ -150,9 +152,9 @@ export const SettingsPage = () => {
   const onChangeSpeechRecognitionLang = (option: OptionType) => {
     if (recognition) {
       recognition.lang = option.value
-      recognition.stop()
+      stopRecognition()
       setTimeout(() => {
-        recognition.start()
+        startRecognition()
       }, 1000)
     }
     useStore.setState((state) => ({

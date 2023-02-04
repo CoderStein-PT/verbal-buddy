@@ -23,12 +23,12 @@ export const recognitionLangs = [
 ]
 
 export const getNewRecognition = () => {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined') return null
 
   const speechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition
 
-  if (!speechRecognition) return
+  if (!speechRecognition) return null
   const recognition = new speechRecognition()
 
   recognition.continuous = true
@@ -40,6 +40,7 @@ export const getNewRecognition = () => {
 export const useSpeechRecognition = () => {
   const settings = useStore((state) => state.settings)
   const recognition = useVoiceStore((state) => state.recognition)
+  const startRecognition = useVoiceStore((state) => state.startRecognition)
 
   useEffect(() => {
     if (!recognition) return
@@ -47,7 +48,7 @@ export const useSpeechRecognition = () => {
 
     if (!recognition || !settings.useSpeechRecognition) return
 
-    recognition.start()
+    startRecognition()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
