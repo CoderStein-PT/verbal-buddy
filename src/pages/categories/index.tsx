@@ -148,7 +148,6 @@ export const CategoriesPage = () => {
           data-test="input-new-category"
           type="text"
           placeholder="New category..."
-          className="w-full"
           value={newCategoryText}
           onChange={onChange}
           autoFocus
