@@ -223,7 +223,6 @@ export const Properties = ({
             onKeyDown={onRealKeyDown}
             type="text"
             placeholder={`Add ${nameByKey[0]}`}
-            className={'w-full'}
             value={text}
             voiceInput={voiceInput}
             data-test={'input-add-' + keys}

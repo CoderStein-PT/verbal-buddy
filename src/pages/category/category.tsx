@@ -167,7 +167,6 @@ export const CategoryPageCore = ({ category }: { category: CategoryType }) => {
           data-test="input-new-word"
           type="text"
           placeholder="New word..."
-          className="w-full"
           value={newWord}
           onChange={onChange}
           ref={inputRef}
