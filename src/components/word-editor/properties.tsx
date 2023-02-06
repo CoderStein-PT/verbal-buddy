@@ -13,7 +13,7 @@ import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
 import produce from 'immer'
 import { findLastId, pronounce } from 'utils'
-import { InputIcons } from 'ui'
+import { InputIcons, Text } from 'ui'
 import { useEffect, useState } from 'react'
 import { Props } from './props1'
 import isHotkey from 'is-hotkey'
@@ -56,6 +56,7 @@ export const Properties = ({
 
   const nameByKey = namesByKeys[keys]
   const words = useStore((state) => state.words)
+  const categories = useStore((state) => state.categories)
 
   const addProp = () => {
     if (!text) {
@@ -191,6 +192,16 @@ export const Properties = ({
     }
   })
 
+  // if foundWords has duplicates (by text) it will also show the category name below
+  const realFoundWords: WordType[] = foundWords.map((w) => {
+    const category = categories.find((c) => c.id === w.categoryId)
+
+    const hasDuplicate =
+      foundWords.filter((fw) => fw.text === w.text).length > 1
+
+    return { ...w, categoryName: hasDuplicate ? category?.name : undefined }
+  })
+
   return (
     <ControllableListContext.Provider value={controllableList}>
       <div>
@@ -203,9 +214,27 @@ export const Properties = ({
             className="z-[1] relative px-2"
             data-test={'word-editor-' + keys}
           >
-            {!!foundWords.length ? (
-              foundWords.map((w) => (
-                <Row key={w.id} onClick={() => addWord(w.id)} text={w.text} />
+            {!!realFoundWords.length ? (
+              realFoundWords.map((w) => (
+                <Row
+                  key={w.id}
+                  onClick={() => addWord(w.id)}
+                  text={
+                    <>
+                      {w.text}
+                      {w.categoryName && (
+                        <Text
+                          $as="span"
+                          className="ml-2"
+                          variant="subtitle"
+                          color="gray-light"
+                        >
+                          ({w.categoryName})
+                        </Text>
+                      )}
+                    </>
+                  }
+                />
               ))
             ) : (
               <Props

@@ -19,9 +19,14 @@ export const Prop = ({
   words: WordType[]
   onClick?: (id: number) => void
 }) => {
-  const text = prop.wordId
-    ? words.find((w) => w.id === prop.wordId)?.text
-    : prop.text
+  const categories = useStore((state) => state.categories)
+
+  const word = words.find((w) => w.id === prop.wordId)
+
+  const text = prop.wordId ? word?.text : prop.text
+
+  const duplicateWords = words.filter((w) => w.text === text)
+  const category = categories.find((c) => c.id === word?.categoryId)
 
   const onRealClick = () => {
     if (!prop.wordId) return
@@ -31,7 +36,21 @@ export const Prop = ({
 
   return (
     <Row
-      text={text}
+      text={
+        <>
+          {text}
+          {duplicateWords.length > 1 && (
+            <Text
+              $as="span"
+              className="ml-2"
+              variant="subtitle"
+              color="gray-light"
+            >
+              {category?.name}
+            </Text>
+          )}
+        </>
+      }
       index={index}
       onClick={onRealClick}
       ellipsis={false}
