@@ -91,7 +91,7 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
     if (!result) return toast.error('Word cannot be empty')
     const practice = useStore.getState().practice
 
-    if (practice.find((w) => w.text === result)) {
+    if (practice.find((w) => compareStrings(w.text, result))) {
       if (settings.practiceVoiceFeedback) pronounce('Word already exists')
       return toast.error('Word already exists')
     }
@@ -114,15 +114,21 @@ export const PracticePageCore = ({ category }: { category: CategoryType }) => {
   }
 
   const createInFastMode = (result?: string) => {
-    const words = (result || game.currentWord).split(' ').filter((w) => w)
+    const words = removeDuplicates(
+      (result || game.currentWord).split(' ').filter((w) => w)
+    )
+
     const lastId = findLastId(practice)
 
-    const newPractice = removeDuplicates(
-      words
-        .map((word, idx) => getNewPractice(lastId + idx + 1, word))
-        .filter((c) => c.text)
-        .filter((c) => !practice.find((cat) => cat.text === c.text))
-    )
+    const newPractice = words
+      .map((word, idx) => getNewPractice(lastId + idx + 1, word))
+      .filter((c) => c.text)
+      .filter((c) => !practice.find((p) => compareStrings(p.text, c.text)))
+
+    if (newPractice.length === 0) {
+      if (settings.practiceVoiceFeedback) pronounce('Already in the list')
+      return toast.error('Already in the list')
+    }
 
     const correctWords = newPractice.filter((w) =>
       categoryWords.find((c) => compareStrings(c.text, w.text))

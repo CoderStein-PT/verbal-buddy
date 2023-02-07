@@ -77,9 +77,12 @@ export const getRandomWord = ({ words }: { words: WordType[] }) => {
   return words[randomIndex]
 }
 
+export const normalizeString = (string: string) =>
+  string.toLowerCase().replace(/[- ]/g, '')
+
 export const compareStrings = (a: string, b: string) => {
-  const aNormalized = a.toLowerCase().replace(/[- ]/g, '')
-  const bNormalized = b.toLowerCase().replace(/[- ]/g, '')
+  const aNormalized = normalizeString(a)
+  const bNormalized = normalizeString(b)
 
   return aNormalized === bNormalized
 }
@@ -147,8 +150,10 @@ export const getTextInMode = (
   return inputMode === 'single' ? text.replace(/ /g, ',') : text
 }
 
-export const removeDuplicates = <T>(arr: T[]) => {
-  return arr.filter((item, index) => arr.indexOf(item) === index)
+export const removeDuplicates = (arr: string[]) => {
+  return arr
+    .map((e) => normalizeString(e))
+    .filter((item, index) => arr.indexOf(normalizeString(item)) === index)
 }
 
 export * from './math'
