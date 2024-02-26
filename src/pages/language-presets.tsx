@@ -38,16 +38,13 @@ export const LanguagePresets = () => {
 
     const newPreset = { ...presets[1] }
     newPreset.data.categories = newPreset.data.categories.map((c, idx) => {
-      return {
-        ...c,
-        name: desiredPreset.data.categories[idx]
-      }
+      return desiredPreset.data.categories[idx]
     })
     newPreset.data.words = newPreset.data.words.map((w, idx) => {
       return {
         ...w,
-        text: desiredPreset.data.words[idx],
-        definitions: [{ id: 1, text: nativePreset.data.words[idx] }]
+        text: desiredPreset.data.words[idx].text,
+        definitions: [{ id: 1, text: nativePreset.data.words[idx].text }]
       }
     })
 

@@ -1,6 +1,6 @@
 import { PresetType } from './types'
 
-export const standard: PresetType = {
+export const standard = {
   id: 1,
   name: 'Standard',
   description: 'Has a basic set of conversational words and categories 🚀',
