@@ -78,8 +78,9 @@ export const getRandomWord = ({ words }: { words: WordType[] }) => {
 }
 
 export const compareStrings = (a: string, b: string) => {
-  const aNormalized = a.toLowerCase().replace(/[- ]/g, '')
-  const bNormalized = b.toLowerCase().replace(/[- ]/g, '')
+  // The e is replaced for cases of Russian words (sometimes written with е and sometimes with ё)
+  const aNormalized = a.toLowerCase().replace(/ё/g, 'е').replace(/[- ]/g, '')
+  const bNormalized = b.toLowerCase().replace(/ё/g, 'е').replace(/[- ]/g, '')
 
   return aNormalized === bNormalized
 }
