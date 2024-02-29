@@ -98,7 +98,8 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
 
     const newConvertedDelays = convertedDelays.map((delay, index) => ({
       delay,
-      wordId: newWords[index].wordId
+      wordId: newWords[index].wordId,
+      guessed: newWords[index].guessed
     }))
 
     game.finish()
