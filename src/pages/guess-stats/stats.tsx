@@ -174,6 +174,9 @@ const WordRow = ({
         </Text>
       </td>
       <td className="text-right">
+        <Text>{word.guessRatio}</Text>
+      </td>
+      <td className="text-right">
         <Text>{moment(word.avgDelay).format('mm:ss')}</Text>
       </td>
     </tr>
@@ -213,6 +216,9 @@ const MostDifficultWords = ({ stats }: { stats: GuessStats[] }) => {
               </th>
               <th className="text-left">
                 <Text variant="subtitle">{'Word'}</Text>
+              </th>
+              <th className="text-right">
+                <Text variant="subtitle">{'Guess Ratio'}</Text>
               </th>
               <th className="text-right">
                 <Text variant="subtitle">{'Avg delay'}</Text>
