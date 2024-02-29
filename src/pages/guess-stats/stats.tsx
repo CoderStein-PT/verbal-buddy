@@ -193,7 +193,9 @@ export const getMostDifficultWords = (
       text: words.find((word) => word.id === w.wordId)?.text || ''
     }))
     .sort((a, b) => {
-      return (b.avgDelay - a.avgDelay) / 30 - (b.guessRatio - a.guessRatio)
+      return (
+        (b.avgDelay - a.avgDelay) / (30 * 1000) - (b.guessRatio - a.guessRatio)
+      )
     })
     .slice(0, 50)
 }
