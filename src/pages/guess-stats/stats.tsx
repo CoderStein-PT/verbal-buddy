@@ -1,6 +1,6 @@
 import { Text, SeparatorFull, TextProps, Button } from 'ui'
 import { ScrollableContainer } from 'components'
-import { GuessWordType, GuessStats, useStore } from 'store'
+import { GuessWordType, GuessStats, useStore, WordType } from 'store'
 import {
   BetterOrWorse,
   calculateMultipleDelays,
@@ -180,16 +180,25 @@ const WordRow = ({
   )
 }
 
-const MostDifficultWords = ({ stats }: { stats: GuessStats[] }) => {
-  const words = useStore((s) => s.words)
-
-  const sortedWords = calculateMultipleDelays(stats)
-    .slice(0, 50)
+export const getMostDifficultWords = (
+  stats: GuessStats[],
+  words: WordType[]
+) => {
+  return calculateMultipleDelays(stats)
     .map((w) => ({
       ...w,
       text: words.find((word) => word.id === w.wordId)?.text || ''
     }))
-    .sort((a, b) => b.avgDelay - a.avgDelay)
+    .sort((a, b) => {
+      return (b.avgDelay - a.avgDelay) / 30 - (b.guessRatio - a.guessRatio)
+    })
+    .slice(0, 50)
+}
+
+const MostDifficultWords = ({ stats }: { stats: GuessStats[] }) => {
+  const words = useStore((s) => s.words)
+
+  const sortedWords = getMostDifficultWords(stats, words)
 
   return (
     <div>

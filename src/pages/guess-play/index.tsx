@@ -3,7 +3,6 @@ import { ScrollableContainer, PageContainer, Timer } from 'components'
 import { useStore, WordType, GuessWordType } from 'store'
 import { useEffect, useState } from 'react'
 import {
-  calculateMultipleDelays,
   compareStrings,
   convertDelays,
   findLastId,
@@ -20,6 +19,7 @@ import { Navigate, Link, useParams } from 'react-router-dom'
 import { Definitions } from './definitions'
 import { toast } from 'react-toastify'
 import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
+import { getMostDifficultWords } from 'pages/guess-stats/stats'
 
 export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [word, setWord] = useState<WordType>(() => getRandomWord({ words }))
@@ -289,7 +289,7 @@ export const GuessPlayPage = () => {
 
   const isDifficultWords = categoryIds === 'difficult-words'
 
-  const difficultWords = calculateMultipleDelays(stats).slice(0, 50)
+  const difficultWords = getMostDifficultWords(stats, words)
 
   const wordsFiltered = words.filter(
     (w) =>
