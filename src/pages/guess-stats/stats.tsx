@@ -174,7 +174,7 @@ const WordRow = ({
         </Text>
       </td>
       <td className="text-right">
-        <Text>{word.guessRatio}</Text>
+        <Text>{word.guessRatio.toFixed(1)}</Text>
       </td>
       <td className="text-right">
         <Text>{moment(word.avgDelay).format('mm:ss')}</Text>
