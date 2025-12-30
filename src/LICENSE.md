@@ -1,0 +1,1 @@
+Copyright (c) 2025-2026 CODERSTEIN LDA. All rights reserved. Permission is hereby granted to view, copy, and modify this source code for personal, non-commercial use only. Redistribution, in whole or in part, in any form, is strictly prohibited. Commercial use is strictly prohibited.

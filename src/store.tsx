@@ -108,6 +108,14 @@ export type SettingsType = {
    * Google AI API Token
    */
   googleAiToken?: string
+  /**
+   * Whether to use AI for validation
+   */
+  useAi: boolean
+  /**
+   * Google AI Model
+   */
+  googleAiModel?: string
 }
 
 export type StoreType = {
@@ -149,7 +157,9 @@ export const useStore = create(
         useSpeechRecognition: false,
         inputMode: 'normal',
         practiceVoiceFeedback: false,
-        googleAiToken: ''
+        googleAiToken: '',
+        useAi: false,
+        googleAiModel: 'gemini-3-flash-preview'
       },
       deleteWord: (id: number) => {
         set((s) => ({

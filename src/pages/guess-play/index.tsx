@@ -20,6 +20,7 @@ import { Definitions } from './definitions'
 import { toast } from 'react-toastify'
 import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 import { getMostDifficultWords } from 'pages/guess-stats/stats'
+import { checkWordWithAI } from 'utils/ai'
 
 export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [word, setWord] = useState<WordType>(() => getRandomWord({ words }))
@@ -34,6 +35,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [showLastWord, setShowLastWord] = useState(false)
   const [hintsLeft, setHintsLeft] = useState(10)
   const [descriptionCount, setDescriptionCount] = useState(3)
+  const [isChecking, setIsChecking] = useState(false)
 
   useEffect(() => {
     if (!lastWord) return
@@ -123,12 +125,38 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     }))
   }
 
-  const checkInWord = (
+  const checkInWord = async (
     newWord: string,
     throwIfIncorrect?: boolean,
     newLastTimestamp?: number
   ) => {
-    if (!compareStrings(newWord, word.text)) {
+    if (settings.useAi && settings.googleAiToken && throwIfIncorrect) {
+      setIsChecking(true)
+      try {
+        const definition = word.definitions?.[0]?.text || ''
+        const result = await checkWordWithAI(
+          settings.googleAiToken,
+          settings.googleAiModel || 'gemini-2.0-flash-exp',
+          newWord,
+          word.text,
+          definition
+        )
+
+        if (!result.correct) {
+          toast.error(result.explanation || 'Incorrect word')
+          if (settings.practiceVoiceFeedback) {
+            pronounce(result.explanation || 'Incorrect')
+          }
+          setIsChecking(false)
+          return
+        }
+      } catch (e) {
+        console.error(e)
+        toast.error('AI check failed, falling back to exact match')
+      } finally {
+        setIsChecking(false)
+      }
+    } else if (!compareStrings(newWord, word.text)) {
       if (throwIfIncorrect) {
         toast.error('Incorrect word')
         if (settings.practiceVoiceFeedback) {
@@ -154,7 +182,19 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     game.onKeyDown()
     game.setCurrentWord(event.currentTarget.value)
 
-    checkInWord(event.currentTarget.value)
+    // Only check exact match on typing, AI check is too slow for every keystroke
+    // AI check will only happen on "Enter" or voice input which usually triggers throwIfIncorrect=true logic if we wire it up
+    // But wait, onChange is called on every keystroke. We shouldn't await AI here.
+    // We should only check if it matches exactly here.
+    if (!settings.useAi && compareStrings(event.currentTarget.value, word.text)) {
+      checkInWord(event.currentTarget.value)
+    }
+  }
+
+  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.key === 'Enter') {
+      checkInWord(game.currentWord, true, Date.now())
+    }
   }
 
   const skipWord = () => {
@@ -260,6 +300,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             game={game}
             goal={goal}
             onChange={onChange}
+            onKeyDown={onKeyDown}
             resetPractice={resetPractice}
             wordsLeft={guessedWords.length + skippedWords.length}
             startCountdown={startCountdown}

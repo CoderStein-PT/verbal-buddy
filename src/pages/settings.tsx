@@ -48,9 +48,15 @@ export const explanations = {
     main: 'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
   },
   ai: {
-    token: 'Google AI API Token (Gemini). Required for AI features.'
+    token: 'Google AI API Token (Gemini). Required for AI features.',
+    model: 'Google AI Model to use.'
   }
 }
+
+const googleAiModels = [
+  { name: 'Gemini 3.0 Flash', value: 'gemini-3-flash-preview' },
+  { name: 'Gemini 2.5 Flash', value: 'gemini-2.5-flash' },
+]
 
 export const Explanation = ({ title }: { title: string }) => (
   <div className="absolute top-0 right-0 cursor-pointer">
@@ -188,6 +194,12 @@ export const SettingsPage = () => {
   const onChangeGoogleAiToken = (e: React.ChangeEvent<HTMLInputElement>) => {
     useStore.setState((state) => ({
       settings: { ...state.settings, googleAiToken: e.target.value }
+    }))
+  }
+
+  const onChangeGoogleAiModel = (option: OptionType) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, googleAiModel: option.value }
     }))
   }
 
@@ -338,6 +350,15 @@ export const SettingsPage = () => {
             placeholder="Enter your Google AI API Token"
           />
           <Explanation title={explanations.ai.token} />
+        </div>
+        <div className="relative flex flex-col">
+          <Label>{'Google AI Model'}</Label>
+          <Select
+            options={googleAiModels}
+            value={settings.googleAiModel || 'gemini-2.0-flash-exp'}
+            onChange={onChangeGoogleAiModel}
+          />
+          <Explanation title={explanations.ai.model} />
         </div>
         <SeparatorFull />
         <Text variant="button">{'Global'}</Text>

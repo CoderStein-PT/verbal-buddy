@@ -2,10 +2,12 @@ import { MdSend } from '@react-icons/all-files/md/MdSend'
 import { MdMic } from '@react-icons/all-files/md/MdMic'
 import { BsLightning } from '@react-icons/all-files/bs/BsLightning'
 import { BsLightningFill } from '@react-icons/all-files/bs/BsLightningFill'
+import { RiRobotLine } from '@react-icons/all-files/ri/RiRobotLine'
 import { TooltipWrapper } from 'react-tooltip'
 import tw from 'tailwind-styled-components'
 import { SettingsType, useStore } from 'store'
 import { useVoiceStore } from 'voice-store'
+import { toast } from 'react-toastify'
 
 export const IconButton = tw.button<{ $active?: boolean }>`
 flex items-center justify-center px-2 transition cursor-pointer
@@ -79,8 +81,33 @@ export const InputIcons = ({
     }
   }
 
+  const onAiClick = () => {
+    if (!settings.googleAiToken) {
+      toast.error('Please set your Google AI Token in settings first')
+      return
+    }
+    useStore.setState({
+      settings: {
+        ...settings,
+        useAi: !settings.useAi
+      }
+    })
+  }
+
   return (
     <div className="absolute right-0 top-0 bottom-0 items-center flex">
+      <TooltipWrapper
+        html={
+          settings.useAi
+            ? 'Disable AI validation'
+            : 'Enable AI validation (requires Google AI Token)'
+        }
+        place="top"
+      >
+        <IconButton $active={settings.useAi} onClick={onAiClick}>
+          <RiRobotLine className="w-5 h-7" />
+        </IconButton>
+      </TooltipWrapper>
       <TooltipWrapper
         html={
           settings.useSpeechRecognition
