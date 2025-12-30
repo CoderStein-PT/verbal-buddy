@@ -6,7 +6,6 @@ declare global {
      * Cookies library.
      */
     glowCookies: any
-    Cypress: any
     store: any
   }
 }

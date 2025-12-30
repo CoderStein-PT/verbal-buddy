@@ -186,7 +186,3 @@ export const useStore = create(
     }
   )
 )
-
-if (window.Cypress) {
-  window.store = useStore
-}
