@@ -21,6 +21,7 @@ import { toast } from 'react-toastify'
 import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 import { getMostDifficultWords } from 'pages/guess-stats/stats'
 import { checkWordWithAI } from 'utils/ai'
+import { googleAiModels } from 'pages/settings'
 
 export const GuessPageCore = ({ words }: { words: WordType[] }) => {
   const [word, setWord] = useState<WordType>(() => getRandomWord({ words }))
@@ -136,7 +137,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
         const definition = word.definitions?.[0]?.text || ''
         const result = await checkWordWithAI(
           settings.googleAiToken,
-          settings.googleAiModel || 'gemini-2.0-flash-exp',
+          settings.googleAiModel || googleAiModels[0].value,
           newWord,
           word.text,
           definition

@@ -24,6 +24,7 @@ export const explanations = {
   },
   voice: {
     pronunciation: 'Voice to use for pronunciation.',
+    speechRate: 'Speed of the voice pronunciation (0.5 to 2).',
     recognition: 'Language to use for speech recognition.',
     useSpeechRecognition:
       'Whether to use speech recognition. If you have a microphone, you can use it to practice/guess words faster.'
@@ -53,7 +54,7 @@ export const explanations = {
   }
 }
 
-const googleAiModels = [
+export const googleAiModels = [
   { name: 'Gemini 3.0 Flash', value: 'gemini-3-flash-preview' },
   { name: 'Gemini 2.5 Flash', value: 'gemini-2.5-flash' },
 ]
@@ -155,6 +156,12 @@ export const SettingsPage = () => {
     pronounce(voiceGreetingsByLanguage[voiceCode || 'en'])
   }
 
+  const onChangeSpeechRate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, speechRate: +e.target.value }
+    }))
+  }
+
   const onChangeSpeechRecognitionLang = (option: OptionType) => {
     if (recognition) {
       recognition.lang = option.value
@@ -252,6 +259,18 @@ export const SettingsPage = () => {
             <Text color="gray-light">{'Loading voices...'}</Text>
           )}
           <Explanation title={explanations.voice.pronunciation} />
+        </div>
+        <div className="relative flex flex-col">
+          <Label>{'Speech Rate'}</Label>
+          <Input
+            min={0.5}
+            max={2}
+            step={0.1}
+            type="number"
+            value={settings.speechRate || 1}
+            onChange={onChangeSpeechRate}
+          />
+          <Explanation title={explanations.voice.speechRate} />
         </div>
         <div className="relative flex flex-col">
           <Label>{'Use Speech Recognition'}</Label>
@@ -355,7 +374,7 @@ export const SettingsPage = () => {
           <Label>{'Google AI Model'}</Label>
           <Select
             options={googleAiModels}
-            value={settings.googleAiModel || 'gemini-2.0-flash-exp'}
+            value={settings.googleAiModel || googleAiModels[0].value}
             onChange={onChangeGoogleAiModel}
           />
           <Explanation title={explanations.ai.model} />

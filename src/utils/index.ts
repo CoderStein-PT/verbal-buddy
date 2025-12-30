@@ -124,6 +124,7 @@ export const pronounce = (text: string | undefined) => {
   if (!voice) return
 
   utterance.voice = voice
+  utterance.rate = useStore.getState().settings.speechRate || 1
 
   speechSynthesis.speak(utterance)
 }

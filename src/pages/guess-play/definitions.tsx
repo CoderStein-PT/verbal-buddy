@@ -10,7 +10,7 @@ const Definition = ({
   definition: WordPropType
   index: number
 }) => {
-  return <Row text={definition.text} index={index} />
+  return <Row ellipsis={false} text={definition.text} index={index} />
 }
 
 export const Definitions = ({

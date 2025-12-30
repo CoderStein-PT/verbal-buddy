@@ -86,6 +86,10 @@ export type SettingsType = {
    */
   voice: string | null
   /**
+   * Speech rate (0.5 to 2)
+   */
+  speechRate: number
+  /**
    * Language code for speech recognition based on BCP 47 (e.g. en-US)
    */
   speechRecognitionLang: string
@@ -153,6 +157,7 @@ export const useStore = create(
         guessMaxWords: 10,
         guessPronounceDefinitions: false,
         voice: null,
+        speechRate: 1,
         speechRecognitionLang: 'en-US',
         useSpeechRecognition: false,
         inputMode: 'normal',
