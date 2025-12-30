@@ -10,7 +10,6 @@ import { useStore, CategoryType } from 'store'
 import {
   capitalizeWords,
   findLastId,
-  getTextInMode,
   pronounce,
   removeDuplicates
 } from 'utils'
@@ -20,7 +19,6 @@ import { useState } from 'react'
 import React from 'react'
 import isHotkey from 'is-hotkey'
 import { Categories } from './categories'
-import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 
 export const CategoriesPage = () => {
   const scrollableContainer = useScrollableContainer({})
@@ -116,16 +114,6 @@ export const CategoriesPage = () => {
     setNewCategoryText(event.target.value)
   }
 
-  const voiceInput = useVoiceInput({
-    onResult: (result) => {
-      if (settings.inputMode === 'normal') {
-        setNewCategoryText(result)
-        return
-      }
-      onCreateCategory(getTextInMode(result, settings.inputMode))
-    }
-  })
-
   return (
     <PageContainer>
       <ControllableListContext.Provider value={controllableList}>
@@ -152,12 +140,14 @@ export const CategoriesPage = () => {
           onChange={onChange}
           autoFocus
           ref={inputRef}
-          voiceInput={voiceInput}
           big
           icon={
             <InputIcons
               onClick={() => onCreateCategory()}
               title={'Send (Enter key)'}
+              showAi={false}
+              showMic={false}
+              showMode={false}
             />
           }
           controllableList={controllableList}

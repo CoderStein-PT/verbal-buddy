@@ -227,6 +227,7 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
 
   const voiceInput = useVoiceInput({
     onResult: (result) => {
+      console.log("result", result)
       game.setLastTypingTimestamp(Date.now())
       checkInWord(result, true, Date.now())
     }

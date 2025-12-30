@@ -44,10 +44,16 @@ export const inputModeHtml = (mode: SettingsType['inputMode']) => `
 
 export const InputIcons = ({
   title,
-  onClick
+  onClick,
+  showAi = true,
+  showMic = true,
+  showMode = true
 }: {
   title?: string
   onClick?: () => void
+  showAi?: boolean
+  showMic?: boolean
+  showMode?: boolean
 }) => {
   const settings = useStore((s) => s.settings)
   const startRecognition = useVoiceStore((s) => s.startRecognition)
@@ -96,41 +102,47 @@ export const InputIcons = ({
 
   return (
     <div className="absolute right-0 top-0 bottom-0 items-center flex">
-      <TooltipWrapper
-        html={
-          settings.useAi
-            ? 'Disable AI validation'
-            : 'Enable AI validation (requires Google AI Token)'
-        }
-        place="top"
-      >
-        <IconButton $active={settings.useAi} onClick={onAiClick}>
-          <RiRobotLine className="w-5 h-7" />
-        </IconButton>
-      </TooltipWrapper>
-      <TooltipWrapper
-        html={
-          settings.useSpeechRecognition
-            ? 'Disable speech recognition'
-            : 'Enable speech recognition (make sure you focus on the input and your mic is working)'
-        }
-        place="top"
-      >
-        <IconButton
-          $active={settings.useSpeechRecognition}
-          onClick={onMicClick}
+      {showAi && (
+        <TooltipWrapper
+          html={
+            settings.useAi
+              ? 'Disable AI validation'
+              : 'Enable AI validation (requires Google AI Token)'
+          }
+          place="top"
         >
-          <MdMic className="w-5 h-7" />
-        </IconButton>
-      </TooltipWrapper>
-      <TooltipWrapper html={inputModeHtml(settings.inputMode)} place="top">
-        <IconButton
-          $active={settings.inputMode !== 'normal'}
-          onClick={onChangeInputMode}
+          <IconButton $active={settings.useAi} onClick={onAiClick}>
+            <RiRobotLine className="w-5 h-7" />
+          </IconButton>
+        </TooltipWrapper>
+      )}
+      {showMic && (
+        <TooltipWrapper
+          html={
+            settings.useSpeechRecognition
+              ? 'Disable speech recognition'
+              : 'Enable speech recognition (make sure you focus on the input and your mic is working)'
+          }
+          place="top"
         >
-          {inputTypeIcons[settings.inputMode]}
-        </IconButton>
-      </TooltipWrapper>
+          <IconButton
+            $active={settings.useSpeechRecognition}
+            onClick={onMicClick}
+          >
+            <MdMic className="w-5 h-7" />
+          </IconButton>
+        </TooltipWrapper>
+      )}
+      {showMode && (
+        <TooltipWrapper html={inputModeHtml(settings.inputMode)} place="top">
+          <IconButton
+            $active={settings.inputMode !== 'normal'}
+            onClick={onChangeInputMode}
+          >
+            {inputTypeIcons[settings.inputMode]}
+          </IconButton>
+        </TooltipWrapper>
+      )}
       <TooltipWrapper content={title} place="right">
         <IconButton onClick={onClick}>
           <MdSend className="w-5 h-7" />
