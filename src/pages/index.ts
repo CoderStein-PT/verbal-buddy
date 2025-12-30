@@ -7,6 +7,7 @@ import { SettingsPage } from './settings'
 import { PracticePage } from './practice'
 import { WordPage } from './word'
 import { GuessPlayPage } from './guess-play'
+import { ReverseGuessPlayPage } from './guess-play/reverse-guess'
 import { GuessNewGamePage } from './guess-new-game'
 import { AboutPage } from './about'
 import { PracticeStats } from './practice-stats'
@@ -53,6 +54,11 @@ export const routes: {
     name: 'Guess',
     path: '/guess/new-game',
     component: GuessNewGamePage
+  },
+  guessReverse: {
+    name: 'Reverse Guess',
+    path: '/guess/reverse',
+    component: ReverseGuessPlayPage
   },
   guessPlay: {
     name: 'Play Guess',

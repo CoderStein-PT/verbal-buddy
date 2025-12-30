@@ -6,6 +6,8 @@ import Explanation from './explanation.mdx'
 
 export const GuessStats = () => {
   const stats = useStore((state) => state.guessStats)
+  const settings = useStore((state) => state.settings)
+  const aiEnabled = settings.useAi && settings.googleAiToken
 
   const resetStats = () => {
     const confirm = window.confirm('Are you sure you want to reset stats?')
@@ -45,6 +47,13 @@ export const GuessStats = () => {
               {'Guess Difficult Words'}
             </Button>
           </Link>
+          <div title={!aiEnabled ? "Enable AI in settings to use this mode" : ""}>
+            <Link to={aiEnabled ? "/guess/reverse" : "#"} onClick={(e) => !aiEnabled && e.preventDefault()}>
+              <Button color="grayPrimary" size="md" disabled={!aiEnabled}>
+                {'Reverse Guess'}
+              </Button>
+            </Link>
+          </div>
         </div>
         <Link to="/guess/new-game" data-test="btn-new-game">
           <Button size="md">{'New Game'}</Button>
