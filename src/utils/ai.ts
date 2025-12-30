@@ -22,6 +22,7 @@ export const checkWordWithAI = async (
     User's Guess: "${userWord}"
     
     Is the user's guess correct? It doesn't have to be the exact target word, but it must be a valid synonym or fit the definition perfectly.
+    If the user says a definition and not a word, treat it as incorrect.
     
     If it is correct, respond with exactly: CORRECT
     If it is incorrect, respond with: INCORRECT: <short explanation of why it is wrong, max 20 words>
@@ -29,7 +30,7 @@ export const checkWordWithAI = async (
 
   try {
     const response = await ai.models.generateContent({
-      model: model || "gemini-2.0-flash-exp",
+      model: model || "gemini-2.5-flash",
       contents: prompt,
     });
     
