@@ -115,12 +115,14 @@ export const capitalizeWords = (string: string) =>
 
 export const pronounce = (text: string | undefined) => {
   if (!text) return
+  
   const utterance = new SpeechSynthesisUtterance(text)
   const voice = getCurrentVoice()
 
   if (!voice) return
 
   utterance.voice = voice
+
   speechSynthesis.speak(utterance)
 }
 

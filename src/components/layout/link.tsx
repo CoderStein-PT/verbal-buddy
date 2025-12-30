@@ -22,7 +22,7 @@ export const Link = React.forwardRef<any, any>(
     return (
       <RouterLink to={link.link}>
         <div
-          className="px-2"
+          className="p-2"
           ref={ref}
           onMouseEnter={() => onMouseEnter?.(link.name)}
           onMouseLeave={onMouseLeave}

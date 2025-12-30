@@ -48,7 +48,10 @@ export const useSpeechRecognition = () => {
 
     if (!recognition || !settings.useSpeechRecognition) return
 
-    startRecognition()
+    setTimeout(() =>
+
+     startRecognition()
+    , 300);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
