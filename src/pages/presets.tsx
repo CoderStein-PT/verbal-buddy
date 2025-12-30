@@ -1,12 +1,13 @@
 import { Text, Button } from 'ui'
 import { presets } from 'presets'
 import { PresetType } from 'presets/types'
-import { useStore } from 'store'
+import { useStore, WordType } from 'store'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { findLastId } from 'utils'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { Explanation, explanations } from './settings'
+import Papa from 'papaparse'
 
 const Preset = ({
   preset,
@@ -72,6 +73,7 @@ const Preset = ({
 
 export const Presets = () => {
   const myPresets = useStore((state) => state.settings.myPresets) || []
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const saveCurrentStateAsPreset = () => {
     //get current state from store, but only the parts that are relevant for presets
@@ -98,6 +100,65 @@ export const Presets = () => {
     }))
   }
 
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    Papa.parse(file, {
+      complete: (results) => {
+        const state = useStore.getState()
+        const newWords = [...state.words]
+        const newCategories = [...state.categories]
+
+        let nextWordId = findLastId(newWords) + 1
+        let nextCategoryId = findLastId(newCategories) + 1
+        let addedCount = 0
+
+        results.data.forEach((row: any) => {
+          // Expecting array: [word, category, definition]
+          if (!Array.isArray(row) || row.length === 0) return
+
+          const text = row[0]?.trim()
+          const categoryName = row[1]?.trim()
+          const definition = row[2]?.trim()
+
+          if (!text) return
+
+          if (newWords.find((w) => w.text.toLowerCase() === text.toLowerCase()))
+            return
+
+          let categoryId = undefined
+          if (categoryName) {
+            const existingCategory = newCategories.find(
+              (c) => c.name.toLowerCase() === categoryName.toLowerCase()
+            )
+            if (existingCategory) {
+              categoryId = existingCategory.id
+            } else {
+              categoryId = nextCategoryId++
+              newCategories.push({ id: categoryId, name: categoryName })
+            }
+          }
+
+          const newWord: WordType = {
+            id: nextWordId++,
+            text,
+            categoryId,
+            definitions: definition ? [{ id: 1, text: definition }] : []
+          }
+          newWords.push(newWord)
+          addedCount++
+        })
+
+        useStore.setState({ words: newWords, categories: newCategories })
+        toast.success(`Imported ${addedCount} words`)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+      },
+      header: false,
+      skipEmptyLines: true
+    })
+  }
+
   return (
     <div className="relative flex flex-col">
       <Text id="presets" variant="button">
@@ -116,6 +177,19 @@ export const Presets = () => {
         <Button onClick={saveCurrentStateAsPreset}>
           {'Save Current State'}
         </Button>
+        <input
+          type="file"
+          accept=".csv"
+          ref={fileInputRef}
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+        <Button onClick={() => fileInputRef.current?.click()}>
+          Import CSV
+        </Button>
+        <Text className="text-xs text-gray-500 mt-1 text-center">
+          Format: word, category, definition
+        </Text>
       </div>
     </div>
   )

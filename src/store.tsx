@@ -104,6 +104,10 @@ export type SettingsType = {
    * Whether to assist the user with voice feedback while practicing.
    */
   practiceVoiceFeedback: boolean
+  /**
+   * Google AI API Token
+   */
+  googleAiToken?: string
 }
 
 export type StoreType = {
@@ -144,7 +148,8 @@ export const useStore = create(
         speechRecognitionLang: 'en-US',
         useSpeechRecognition: false,
         inputMode: 'normal',
-        practiceVoiceFeedback: false
+        practiceVoiceFeedback: false,
+        googleAiToken: ''
       },
       deleteWord: (id: number) => {
         set((s) => ({

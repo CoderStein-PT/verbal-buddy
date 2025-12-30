@@ -46,6 +46,9 @@ export const explanations = {
   },
   presets: {
     main: 'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
+  },
+  ai: {
+    token: 'Google AI API Token (Gemini). Required for AI features.'
   }
 }
 
@@ -179,6 +182,12 @@ export const SettingsPage = () => {
   const onChangePracticeVoiceFeedback = (checked: boolean) => {
     useStore.setState((state) => ({
       settings: { ...state.settings, practiceVoiceFeedback: checked }
+    }))
+  }
+
+  const onChangeGoogleAiToken = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useStore.setState((state) => ({
+      settings: { ...state.settings, googleAiToken: e.target.value }
     }))
   }
 
@@ -317,6 +326,18 @@ export const SettingsPage = () => {
             onChange={onChangeRandomWords}
           />
           <Explanation title={explanations.jokes.randomWords} />
+        </div>
+        <SeparatorFull />
+        <Text variant="button">{'AI'}</Text>
+        <div className="relative flex flex-col">
+          <Label>{'Google AI Token'}</Label>
+          <Input
+            type="password"
+            value={settings.googleAiToken || ''}
+            onChange={onChangeGoogleAiToken}
+            placeholder="Enter your Google AI API Token"
+          />
+          <Explanation title={explanations.ai.token} />
         </div>
         <SeparatorFull />
         <Text variant="button">{'Global'}</Text>
