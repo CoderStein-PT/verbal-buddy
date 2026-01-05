@@ -13,7 +13,6 @@ import {
 import { Placeholder } from './placeholder'
 import { Footer } from 'pages/practice/footer'
 import { useGame } from 'pages/practice/use-game'
-import Explanation from './explanation.mdx'
 import { GuessResults } from './guess-results'
 import { Navigate, Link, useParams } from 'react-router-dom'
 import { Definitions } from './definitions'
@@ -22,8 +21,28 @@ import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 import { getMostDifficultWords } from 'pages/guess-stats/stats'
 import { checkWordWithAI } from 'utils/ai'
 import { googleAiModels } from 'pages/settings'
+import { useI18n } from 'i18n'
+
+const Explanation = () => {
+  const { t } = useI18n()
+  
+  return (
+    <>
+      <h2>{t('guess')}</h2>
+      <p>{t('guessIntro')}</p>
+      <hr />
+      <ul>
+        <li>{t('guessInstructionAutoSubmit')}</li>
+        <li>{t('guessInstructionNoFormatting')}</li>
+        <li>{t('guessInstructionStats')}</li>
+        <li>{t('guessInstructionTimer')}</li>
+      </ul>
+    </>
+  )
+}
 
 export const GuessPageCore = ({ words }: { words: WordType[] }) => {
+  const { t } = useI18n()
   const [word, setWord] = useState<WordType>(() => getRandomWord({ words }))
   const categories = useStore((s) => s.categories)
   const settings = useStore((s) => s.settings)
@@ -106,9 +125,9 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
     }))
 
     game.finish()
-    toast.success('Game finished!')
+    toast.success(t('gameFinished'))
     if (settings.practiceVoiceFeedback) {
-      pronounce('Game finished!')
+      pronounce(t('gameFinished'))
     }
     setLastWord(word)
     useStore.setState((state) => ({
@@ -144,24 +163,24 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
         )
 
         if (!result.correct) {
-          toast.error(result.explanation || 'Incorrect word')
+          toast.error(result.explanation || t('incorrectWord'))
           if (settings.practiceVoiceFeedback) {
-            pronounce(result.explanation || 'Incorrect')
+            pronounce(result.explanation || t('incorrect'))
           }
           setIsChecking(false)
           return
         }
       } catch (e) {
         console.error(e)
-        toast.error('AI check failed, falling back to exact match')
+        toast.error(t('aiCheckFailed'))
       } finally {
         setIsChecking(false)
       }
     } else if (!compareStrings(newWord, word.text)) {
       if (throwIfIncorrect) {
-        toast.error('Incorrect word')
+        toast.error(t('incorrectWord'))
         if (settings.practiceVoiceFeedback) {
-          pronounce('Incorrect')
+          pronounce(t('incorrect'))
         }
       }
       return
@@ -283,8 +302,8 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
                 onClick={moreDefinitions}
               >
                 {hintsLeft > 0
-                  ? 'Show more (' + hintsLeft + 'x)'
-                  : 'No Hints Left'}
+                  ? t('showMore') + ' (' + hintsLeft + 'x)'
+                  : t('noHintsLeft')}
               </Button>
             )}
             <div
@@ -307,12 +326,12 @@ export const GuessPageCore = ({ words }: { words: WordType[] }) => {
             wordsLeft={guessedWords.length + skippedWords.length}
             startCountdown={startCountdown}
             skipWord={skipWord}
-            placeholder="Guess word"
+            placeholder={t('guessWord')}
             voiceInput={voiceInput}
           />
           <div className="flex flex-col mt-2 md:hidden">
             <Link className="flex flex-col" to={`/guess`}>
-              <Button color="grayPrimary">{'See Stats'}</Button>
+              <Button color="grayPrimary">{t('seeStats')}</Button>
             </Link>
           </div>
         </PageContainer>

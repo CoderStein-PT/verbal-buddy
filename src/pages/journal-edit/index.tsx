@@ -6,8 +6,10 @@ import produce from 'immer'
 import { JournalEntryType, useStore } from 'store'
 import { toast } from 'react-toastify'
 import moment from 'moment'
+import { useI18n } from 'i18n'
 
 export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
+  const { t } = useI18n()
   const [isPreview, setIsPreview] = useState(entry.text !== '')
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [title, setTitle] = useState(entry.title)
@@ -33,7 +35,7 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
 
   const changeTitle = () => {
     if (title.trim() === '') {
-      toast.error('Title cannot be empty')
+      toast.error(t('titleCannotBeEmpty'))
       setTitle(entry.title)
       return
     }
@@ -97,7 +99,7 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
           <div className="flex-1 w-full">
             <Input
               className="w-full"
-              placeholder="Write your journal entry here..."
+              placeholder={t('writeJournalEntry')}
               value={title}
               ref={titleInputRef}
               onKeyDown={onTitleKeyDown}
@@ -124,7 +126,7 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
             color="grayPrimary"
             onClick={() => setIsPreview(!isPreview)}
           >
-            {isPreview ? 'Edit' : 'Preview'}
+            {isPreview ? t('edit') : t('preview')}
           </Button>
         </div>
       </div>
@@ -137,7 +139,7 @@ export const JournalEditPageCore = ({ entry }: { entry: JournalEntryType }) => {
           <Input
             className="w-full text-lg resize-none"
             style={{ padding: '1rem', height: '400px' }}
-            placeholder="Write your journal entry here..."
+            placeholder={t('writeJournalEntry')}
             value={entry.text}
             $as={'textarea' as any}
             onKeyDown={onKeyDown}

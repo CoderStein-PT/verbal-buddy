@@ -5,6 +5,8 @@ import { useEffect } from 'react'
 import { environment } from 'utils/helpers'
 import { useSetupVoice } from './utils/use-setup-voice'
 import { useSpeechRecognition } from 'utils'
+import { useUiStore } from './ui-store'
+import { OnboardingFlow } from './components/onboarding'
 
 const Page = ({ route }: { route: IRoute }) => {
   return <route.component />
@@ -13,6 +15,7 @@ const Page = ({ route }: { route: IRoute }) => {
 export function App() {
   useSetupVoice()
   useSpeechRecognition()
+  const hasCompletedOnboarding = useUiStore((state) => state.hasCompletedOnboarding)
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.glowCookies) return
@@ -37,6 +40,11 @@ export function App() {
       manageBackground: '#345'
     })
   }, [])
+
+  // Show onboarding if not completed
+  if (!hasCompletedOnboarding) {
+    return <OnboardingFlow />
+  }
 
   return (
     <BrowserRouter>

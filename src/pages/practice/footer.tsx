@@ -3,6 +3,7 @@ import { ChangeEventHandler } from 'react'
 import { ProgressBar } from './progress-bar'
 import { GameType } from './use-game'
 import { VoiceInputType } from 'components/scrollable-container/use-voice-input'
+import { useI18n } from 'i18n'
 
 export const Footer = ({
   game,
@@ -28,7 +29,10 @@ export const Footer = ({
   placeholder?: string
   onEndClick?: () => void
   voiceInput?: VoiceInputType
-}) => (
+}) => {
+  const { t } = useI18n()
+  
+  return (
   <>
     {!game.pressedStart || game.finished ? null : (
       <div className="mt-2">
@@ -37,7 +41,7 @@ export const Footer = ({
           onChange={onChange}
           onKeyDown={onKeyDown}
           type="text"
-          placeholder={placeholder || 'New word...'}
+          placeholder={placeholder || t('newWord')}
           autoFocus
           data-test="input-game"
           big
@@ -59,18 +63,18 @@ export const Footer = ({
             onClick={resetPractice}
             color="grayPrimary"
           >
-            {'Reset'}
+            {t('reset')}
           </Button>
           {!game.finished && !!onEndClick && (
             <Button className="w-full" onClick={onEndClick} color="red">
-              {'End'}
+              {t('end')}
             </Button>
           )}
         </>
       )}
       {skipWord && game.started && !game.finished && (
         <Button className="w-full" color="grayPrimary" onClick={skipWord}>
-          {'Skip Word'}
+          {t('skipWord')}
         </Button>
       )}
       {game.pressedStart && !game.finished ? null : (
@@ -79,9 +83,10 @@ export const Footer = ({
           onClick={startCountdown}
           data-test="btn-game-start"
         >
-          {'Start'}
+          {t('start')}
         </Button>
       )}
     </div>
   </>
-)
+  )
+}

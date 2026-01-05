@@ -7,6 +7,7 @@ import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2'
 import { AiFillFire } from '@react-icons/all-files/ai/AiFillFire'
 import { AiFillSound } from '@react-icons/all-files/ai/AiFillSound'
 import { useNavigate } from 'react-router-dom'
+import { useI18n } from 'i18n'
 
 export const Category = ({
   category,
@@ -17,6 +18,7 @@ export const Category = ({
   isSelected?: boolean
   onDelete: (category: CategoryType) => void
 }) => {
+  const { t } = useI18n()
   const navigate = useNavigate()
   const categoryWords = useStore
     .getState()
@@ -24,14 +26,14 @@ export const Category = ({
 
   const onChange = (text: string | undefined) => {
     if (!text) {
-      toast.error('Category cannot be empty')
+      toast.error(t('categoryCannotBeEmpty'))
       return
     }
 
     const categories = useStore.getState().categories
 
     if (categories.find((c) => c.name === text && c.id !== category.id)) {
-      toast.error('Category already exists')
+      toast.error(t('categoryAlreadyExists'))
       return
     }
 

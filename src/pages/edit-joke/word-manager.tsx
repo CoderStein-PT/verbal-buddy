@@ -10,6 +10,7 @@ import { HiPlus } from '@react-icons/all-files/hi/HiPlus'
 import { useState } from 'react'
 import produce from 'immer'
 import tw from 'tailwind-styled-components'
+import { useI18n } from 'i18n'
 
 const Column = tw.div`md:w-1/3 w-full flex-shrink-0 flex-grow-0 relative`
 
@@ -58,7 +59,7 @@ const AddNewWord = ({
             variant="button"
             className="group-hover:text-primary-500"
           >
-            {'Add new word'}
+            {t('addNewWord')}
           </Text>
         </div>
       )}

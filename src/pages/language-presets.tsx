@@ -3,8 +3,10 @@ import { presets, languagePresets } from 'presets'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useStore } from 'store'
+import { useI18n } from 'i18n'
 
 export const LanguagePresets = () => {
+  const { t } = useI18n()
   const [native, setNative] = useState(null)
   const [desired, setDesired] = useState(null)
   const [applied, setApplied] = useState(false)
@@ -56,36 +58,34 @@ export const LanguagePresets = () => {
       selectedWords: [],
       jokes: []
     }))
-    toast.success('Preset applied!')
+    toast.success(t('presetApplied'))
     setApplied(true)
     setTimeout(() => setApplied(false), 3000)
   }
 
   return (
     <div className="relative flex flex-col">
-      <Text variant="button">{'Language Presets'}</Text>
+      <Text variant="button">{t('languagePresets')}</Text>
       <Text className="mt-2" variant="subtitle" color="gray-light">
-        {
-          'Here you can quickly create a custom preset based on a language you want to learn.'
-        }
+        {t('languagePresetsDescription')}
       </Text>
       <div className="flex items-end justify-between mt-4 space-x-2">
         <div className="flex items-center space-x-4">
           <div>
-            <Label>{'Native'}</Label>
+            <Label>{t('nativeLanguage')}</Label>
             <Select
               options={languagePresetsOptions}
               value={native}
-              placeholder="Language"
+              placeholder={t('language')}
               onChange={onChangeNative}
             />
           </div>
           <div>
-            <Label>{'Desired'}</Label>
+            <Label>{t('desiredLanguage')}</Label>
             <Select
               options={languagePresetsOptions}
               value={desired}
-              placeholder="Language"
+              placeholder={t('language')}
               onChange={onChangeDesired}
             />
           </div>

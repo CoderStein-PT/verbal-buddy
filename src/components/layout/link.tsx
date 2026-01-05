@@ -2,6 +2,7 @@ import { Text } from 'ui'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { LinkType } from './links-list'
+import { useI18n } from '../../i18n'
 
 // eslint-disable-next-line react/display-name
 export const Link = React.forwardRef<any, any>(
@@ -19,6 +20,8 @@ export const Link = React.forwardRef<any, any>(
     },
     ref
   ) => {
+    const { t } = useI18n()
+    
     return (
       <RouterLink to={link.link}>
         <div
@@ -35,7 +38,7 @@ export const Link = React.forwardRef<any, any>(
             />
           ) : (
             <Text variant="button" color={active ? 'primary' : undefined}>
-              {link.name}
+              {t(link.nameKey as any)}
             </Text>
           )}
         </div>

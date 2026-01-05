@@ -4,6 +4,7 @@ import { ScrollableContainer, ListContainer, Row } from 'components'
 import { Button, Text, SeparatorFull } from 'ui'
 import { useStore, CategoryType, WordType } from 'store'
 import { WordSelectorType } from './use-words-selector'
+import { useI18n } from 'i18n'
 
 export const Category = ({
   category,
@@ -16,6 +17,8 @@ export const Category = ({
   active?: boolean
   index?: number
 }) => {
+  const { t } = useI18n()
+  
   const onClick = () => {
     onCategoryClick(category)
   }
@@ -29,7 +32,7 @@ export const Category = ({
       selectedColor="primary"
       info={
         active
-          ? [{ title: 'Selected', icon: FiCheck, class: 'text-green-500' }]
+          ? [{ title: t('selected'), icon: FiCheck, class: 'text-green-500' }]
           : undefined
       }
     />
@@ -77,6 +80,7 @@ export const Word = ({
   selectedWords: WordType[]
   index?: number
 }) => {
+  const { t } = useI18n()
   const isSelected = !!selectedWords.find((w) => w.id === word.id)
 
   const onClick = () => {
@@ -94,7 +98,7 @@ export const Word = ({
       selectedColor="primary"
       info={
         isSelected
-          ? [{ title: 'Selected', icon: FiCheck, class: 'text-green-500' }]
+          ? [{ title: t('selected'), icon: FiCheck, class: 'text-green-500' }]
           : undefined
       }
     />
@@ -144,6 +148,7 @@ export const WordSelector = ({
   height?: number
   maxHeight?: number
 }) => {
+  const { t } = useI18n()
   const {
     selectedCategoryId,
     setSelectedCategoryId,
@@ -172,7 +177,7 @@ export const WordSelector = ({
           </Button>
         )}
         <Text variant="button">
-          {category ? category.name : 'Choose a category'}
+          {category ? category.name : t('chooseACategory')}
         </Text>
       </div>
       <SeparatorFull />

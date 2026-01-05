@@ -13,6 +13,7 @@ import moment from 'moment'
 import { BarChart, Bar, ResponsiveContainer } from 'recharts'
 import { Tab } from '@headlessui/react'
 import React, { useState } from 'react'
+import { useI18n } from 'i18n'
 
 const DelayGraph = ({ delays }: { delays: GuessWordType[] }) => {
   const data = capGraphPointsFrequency(
@@ -92,28 +93,30 @@ const StatRow = ({
 }
 
 const StatsTable = ({ stats }: { stats: GuessStats[] }) => {
+  const { t } = useI18n()
+  
   return (
     <div>
-      <Text variant="button">{'Stats'}</Text>
+      <Text variant="button">{t('stats')}</Text>
       <SeparatorFull className="my-2" />
       <ScrollableContainer>
         <table className="w-full h-px">
           <thead>
             <tr>
               <th className="text-left">
-                <Text variant="subtitle">{'ID'}</Text>
+                <Text variant="subtitle">{t('id')}</Text>
               </th>
               <th className="text-left">
-                <Text variant="subtitle">{'Date'}</Text>
+                <Text variant="subtitle">{t('date')}</Text>
               </th>
               <th className="text-right">
-                <Text variant="subtitle">{'Avg'}</Text>
+                <Text variant="subtitle">{t('avg')}</Text>
               </th>
               <th className="text-right">
-                <Text variant="subtitle">{'Words'}</Text>
+                <Text variant="subtitle">{t('words')}</Text>
               </th>
               <th className="text-right">
-                <Text variant="subtitle">{'Time'}</Text>
+                <Text variant="subtitle">{t('time')}</Text>
               </th>
             </tr>
           </thead>
@@ -142,6 +145,7 @@ const WordRow = ({
   word: WordWithAvgDelay & { text: string }
   index: number
 }) => {
+  const { t } = useI18n()
   const [showText, setShowText] = useState(false)
 
   const onToggleShow = () => {
@@ -170,7 +174,7 @@ const WordRow = ({
         <Text color={showText ? undefined : 'gray-light'}>
           {showText
             ? word.text
-            : '[' + (isMobile() ? 'Click' : 'Hover') + ' to reveal]'}
+            : '[' + (isMobile() ? t('clickToReveal') : t('hoverToReveal')) + ']'}
         </Text>
       </td>
       <td className="text-right">
@@ -201,13 +205,14 @@ export const getMostDifficultWords = (
 }
 
 const MostDifficultWords = ({ stats }: { stats: GuessStats[] }) => {
+  const { t } = useI18n()
   const words = useStore((s) => s.words)
 
   const sortedWords = getMostDifficultWords(stats, words)
 
   return (
     <div>
-      <Text variant="button">{'Most difficult words'}</Text>
+      <Text variant="button">{t('mostDifficultWords')}</Text>
       <SeparatorFull className="my-2" />
       <ScrollableContainer>
         <table className="w-full h-px">
@@ -217,13 +222,13 @@ const MostDifficultWords = ({ stats }: { stats: GuessStats[] }) => {
                 <Text variant="subtitle">{'#'}</Text>
               </th>
               <th className="text-left">
-                <Text variant="subtitle">{'Word'}</Text>
+                <Text variant="subtitle">{t('word')}</Text>
               </th>
               <th className="text-right">
-                <Text variant="subtitle">{'Guess Ratio'}</Text>
+                <Text variant="subtitle">{t('guessRatio')}</Text>
               </th>
               <th className="text-right">
-                <Text variant="subtitle">{'Avg delay'}</Text>
+                <Text variant="subtitle">{t('avgDelay')}</Text>
               </th>
             </tr>
           </thead>
@@ -254,20 +259,22 @@ export const StatsDesktop = ({ stats }: { stats: GuessStats[] }) => {
 }
 
 export const StatsMobile = ({ stats }: { stats: GuessStats[] }) => {
+  const { t } = useI18n()
+  
   return (
     <Tab.Group>
       <Tab.List className="flex px-2 mt-2 space-x-1 overflow-x-auto">
         <Tab as={React.Fragment}>
           {({ selected }) => (
             <Button size="sm" color={selected ? 'gray' : undefined}>
-              {'Stats'}
+              {t('stats')}
             </Button>
           )}
         </Tab>
         <Tab as={React.Fragment}>
           {({ selected }) => (
             <Button size="sm" color={selected ? 'gray' : undefined}>
-              {'Most Difficult Words'}
+              {t('mostDifficultWords')}
             </Button>
           )}
         </Tab>

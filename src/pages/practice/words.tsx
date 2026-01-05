@@ -1,6 +1,7 @@
 import { Text } from 'ui'
 import { CategoryType, useStore, WordType } from 'store'
 import { Word } from './word'
+import { useI18n } from 'i18n'
 
 export const Words = ({
   categoryWords,
@@ -11,6 +12,7 @@ export const Words = ({
   category: CategoryType
   checkIfFinished: () => void
 }) => {
+  const { t } = useI18n()
   const words = useStore((state) => state.practice)
 
   const onWordAdded = () => {
@@ -32,7 +34,7 @@ export const Words = ({
         ))
       ) : (
         <Text color="gray-light" className="text-center" variant="button">
-          {'Start typing words you know 🔥'}
+          {t('startTypingWords')}
         </Text>
       )}
     </div>

@@ -4,6 +4,7 @@ import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
 import { findLastId, isMobile, shuffleArray } from 'utils'
 import { WordSelector, useWordSelector } from 'components'
+import { useI18n } from 'i18n'
 
 export const Word = ({ word }: { word: WordType }) => {
   const isSelected = useStore((state) =>
@@ -55,6 +56,7 @@ export const SelectedWord = ({ word }: { word: WordType }) => {
 
 export const SelectedWords = () => {
   const selectedWords = useStore((state) => state.selectedWords)
+  const { t } = useI18n()
 
   return (
     <div>
@@ -64,10 +66,10 @@ export const SelectedWords = () => {
       {selectedWords.length === 0 && (
         <div className="text-center">
           <Text color="gray-light" className="md:hidden">
-            {'Please, select the words below.'}
+            {t('pleaseSelectWordsBelow')}
           </Text>
           <Text color="gray-light" className="hidden md:block">
-            {'Please, select the words from the list on the left.'}
+            {t('pleaseSelectWordsLeft')}
           </Text>
         </div>
       )}
@@ -77,6 +79,7 @@ export const SelectedWords = () => {
 
 export const CreateJokePage = () => {
   const selectedWords = useStore((state) => state.selectedWords)
+  const { t } = useI18n()
 
   const wordSelector = useWordSelector({
     selectedWords,
@@ -135,11 +138,11 @@ export const CreateJokePage = () => {
           color={isMobile() ? 'gray' : undefined}
           size={isMobile() ? 'sm' : 'md'}
         >
-          {'Select random words'}
+          {t('selectRandomWords')}
         </Button>
       </div>
       <div className="md:w-[320px] w-full mx-auto">
-        <Text variant="h5">{'Selected words'}</Text>
+        <Text variant="h5">{t('selectedWords')}</Text>
         <div className="mt-4">
           <SelectedWords />
           <div className="mt-4">

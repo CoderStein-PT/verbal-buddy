@@ -2,15 +2,27 @@ import { Button, ProseDiv, SeparatorFull } from 'ui'
 import { Stats } from 'pages/guess-stats/stats'
 import { Link } from 'react-router-dom'
 import { useStore } from 'store'
-import Explanation from './explanation.mdx'
+import { useI18n } from 'i18n'
+
+const Explanation = () => {
+  const { t } = useI18n()
+  
+  return (
+    <>
+      <h2>{t('guess')}</h2>
+      <p>{t('guessIntro')}<br />{t('guessIntroDesc')}</p>
+    </>
+  )
+}
 
 export const GuessStats = () => {
+  const { t } = useI18n()
   const stats = useStore((state) => state.guessStats)
   const settings = useStore((state) => state.settings)
   const aiEnabled = settings.useAi && settings.googleAiToken
 
   const resetStats = () => {
-    const confirm = window.confirm('Are you sure you want to reset stats?')
+    const confirm = window.confirm(t('areYouSureResetStats'))
 
     if (!confirm) return
 
@@ -38,25 +50,25 @@ export const GuessStats = () => {
           {!!stats.length && (
             <div>
               <Button color="grayPrimary" size="md" onClick={resetStats}>
-                {'Reset Stats'}
+                {t('resetStats')}
               </Button>
             </div>
           )}
           <Link to="/guess/difficult-words">
             <Button color="grayPrimary" size="md">
-              {'Guess Difficult Words'}
+              {t('guessDifficultWords')}
             </Button>
           </Link>
-          <div title={!aiEnabled ? "Enable AI in settings to use this mode" : ""}>
+          <div title={!aiEnabled ? t('enableAiInSettings') : ""}>
             <Link to={aiEnabled ? "/guess/reverse" : "#"} onClick={(e) => !aiEnabled && e.preventDefault()}>
               <Button color="grayPrimary" size="md" disabled={!aiEnabled}>
-                {'Reverse Guess'}
+                {t('reverseGuess')}
               </Button>
             </Link>
           </div>
         </div>
         <Link to="/guess/new-game" data-test="btn-new-game">
-          <Button size="md">{'New Game'}</Button>
+          <Button size="md">{t('newGame')}</Button>
         </Link>
       </div>
     </div>

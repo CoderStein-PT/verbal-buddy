@@ -18,8 +18,10 @@ import { toast } from 'react-toastify'
 import { useVoiceInput } from 'components/scrollable-container/use-voice-input'
 import { checkDefinitionWithAI } from 'utils/ai'
 import { googleAiModels } from 'pages/settings'
+import { useI18n } from 'i18n'
 
 export const ReverseGuessPageCore = ({ words }: { words: WordType[] }) => {
+  const { t } = useI18n()
   const [word, setWord] = useState<WordType>(() => getRandomWord({ words }))
   const categories = useStore((s) => s.categories)
   const settings = useStore((s) => s.settings)
@@ -91,9 +93,9 @@ export const ReverseGuessPageCore = ({ words }: { words: WordType[] }) => {
     }))
 
     game.finish()
-    toast.success('Game finished!')
+    toast.success(t('gameFinished'))
     if (settings.practiceVoiceFeedback) {
-      pronounce('Game finished!')
+      pronounce(t('gameFinished'))
     }
     setLastWord(word)
     useStore.setState((state) => ({
@@ -128,16 +130,16 @@ export const ReverseGuessPageCore = ({ words }: { words: WordType[] }) => {
         )
 
         if (!result.correct) {
-          toast.error(result.explanation || 'Incorrect definition')
+          toast.error(result.explanation || t('incorrectWord'))
           if (settings.practiceVoiceFeedback) {
-            pronounce(result.explanation || 'Incorrect')
+            pronounce(result.explanation || t('incorrect'))
           }
           setIsChecking(false)
           return
         }
       } catch (e) {
         console.error(e)
-        toast.error('AI check failed')
+        toast.error(t('aiCheckFailed'))
         setIsChecking(false)
         return
       } finally {
@@ -145,7 +147,7 @@ export const ReverseGuessPageCore = ({ words }: { words: WordType[] }) => {
       }
     } else {
         // Should not happen as we disable the button if AI is not setup
-        toast.error("AI not configured")
+        toast.error(t('enableAiInSettings'))
         return
     }
 
@@ -221,9 +223,9 @@ export const ReverseGuessPageCore = ({ words }: { words: WordType[] }) => {
                     {word.text}
                 </Text>
                 <Text className="text-center text-gray-500">
-                    Say the definition...
+                    {t('sayTheDefinition')}
                 </Text>
-                {isChecking && <Text className="text-center text-blue-500 mt-2">Checking...</Text>}
+                {isChecking && <Text className="text-center text-blue-500 mt-2">{t('checking')}</Text>}
             </div>
           ) : !!game.countdown ? (
             <div className="h-[200px] flex justify-center items-center">
@@ -233,10 +235,10 @@ export const ReverseGuessPageCore = ({ words }: { words: WordType[] }) => {
             </div>
           ) : (
             <ProseDiv>
-              <h3>Reverse Guess Mode</h3>
-              <p>In this mode, you will see a word and you need to explain its meaning.</p>
-              <p>Speak clearly and try to define the word as best as you can.</p>
-              <p>AI will verify your definition.</p>
+              <h3>{t('reverseGuessMode')}</h3>
+              <p>{t('reverseGuessModeDesc')}</p>
+              <p>{t('speakClearly')}</p>
+              <p>{t('aiWillVerify')}</p>
             </ProseDiv>
           )}
           <div
@@ -262,12 +264,12 @@ export const ReverseGuessPageCore = ({ words }: { words: WordType[] }) => {
             wordsLeft={guessedWords.length + skippedWords.length}
             startCountdown={startCountdown}
             skipWord={skipWord}
-            placeholder="Type definition..."
+            placeholder={t('typeDefinition')}
             voiceInput={voiceInput}
           />
           <div className="flex flex-col mt-2 md:hidden">
             <Link className="flex flex-col" to={`/guess`}>
-              <Button color="grayPrimary">{'See Stats'}</Button>
+              <Button color="grayPrimary">{t('seeStats')}</Button>
             </Link>
           </div>
         </PageContainer>

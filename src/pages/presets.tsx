@@ -6,8 +6,9 @@ import { toast } from 'react-toastify'
 import { useState, useRef } from 'react'
 import { findLastId } from 'utils'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
-import { Explanation, explanations } from './settings'
+import { Explanation } from './settings'
 import Papa from 'papaparse'
+import { useI18n } from 'i18n'
 
 const Preset = ({
   preset,
@@ -16,6 +17,7 @@ const Preset = ({
   preset: PresetType
   custom?: boolean
 }) => {
+  const { t } = useI18n()
   const [applied, setApplied] = useState(false)
 
   const applyPreset = () => {
@@ -27,7 +29,7 @@ const Preset = ({
       selectedWords: [],
       jokes: []
     }))
-    toast.success('Preset applied!')
+    toast.success(t('presetApplied'))
     setApplied(true)
     setTimeout(() => setApplied(false), 3000)
   }
@@ -56,7 +58,7 @@ const Preset = ({
             disabled={applied}
             onClick={applyPreset}
           >
-            {applied ? 'Applied' : 'Apply'}
+            {applied ? t('applied') : t('apply')}
           </Button>
           <div>
             {custom && (
@@ -72,6 +74,7 @@ const Preset = ({
 }
 
 export const Presets = () => {
+  const { t } = useI18n()
   const myPresets = useStore((state) => state.settings.myPresets) || []
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -86,8 +89,8 @@ export const Presets = () => {
 
     const id = findLastId([...presets, ...myPresets]) + 1
 
-    const name = prompt('Enter preset name') || 'Preset ' + id
-    const description = prompt('Enter preset description') || 'My Custom Preset'
+    const name = prompt(t('enterPresetName')) || t('presetDefault') + ' ' + id
+    const description = prompt(t('enterPresetDescription')) || t('myCustomPreset')
 
     useStore.setState((state) => ({
       settings: {
@@ -151,7 +154,7 @@ export const Presets = () => {
         })
 
         useStore.setState({ words: newWords, categories: newCategories })
-        toast.success(`Imported ${addedCount} words`)
+        toast.success(`${t('importedWords').replace('{{count}}', addedCount.toString())}`)
         if (fileInputRef.current) fileInputRef.current.value = ''
       },
       header: false,
@@ -162,9 +165,9 @@ export const Presets = () => {
   return (
     <div className="relative flex flex-col">
       <Text id="presets" variant="button">
-        {'Presets'}
+        {t('presets')}
       </Text>
-      <Explanation title={explanations.presets.main} />
+      <Explanation translationKey="presetsMainExplanation" />
       <div className="flex flex-col w-full space-y-2 divide-y divide-gray-500 divide-dashed">
         {presets.map((preset) => (
           <Preset preset={preset} key={preset.name} />
@@ -175,7 +178,7 @@ export const Presets = () => {
       </div>
       <div className="flex flex-col mt-4 space-y-2">
         <Button onClick={saveCurrentStateAsPreset}>
-          {'Save Current State'}
+          {t('saveCurrentState')}
         </Button>
         <input
           type="file"
@@ -185,10 +188,10 @@ export const Presets = () => {
           className="hidden"
         />
         <Button onClick={() => fileInputRef.current?.click()}>
-          Import CSV
+          {t('importCsv')}
         </Button>
         <Text className="text-xs text-gray-500 mt-1 text-center">
-          Format: word, category, definition
+          {t('csvFormat')}
         </Text>
       </div>
     </div>

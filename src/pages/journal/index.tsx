@@ -5,8 +5,9 @@ import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import { JournalEntryType, useStore } from 'store'
 import { findLastId } from 'utils'
-import Explanation from './explanation.mdx'
+import { JournalExplanation } from './explanation'
 import produce from 'immer'
+import { useI18n } from 'i18n'
 
 export const Entry = ({
   entry,
@@ -15,9 +16,11 @@ export const Entry = ({
   entry: JournalEntryType
   index: number
 }) => {
+  const { t } = useI18n()
+  
   const onDelete = () => {
     const confirmation = window.confirm(
-      `Are you sure you want to delete "${entry.title}"?`
+      `${t('areYouSureDeleteEntry')} "${entry.title}"?`
     )
     if (!confirmation) return
 
@@ -47,7 +50,7 @@ export const Entry = ({
       index={index}
       ellipsis
       actions={[
-        { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
+        { title: t('delete'), icon: RiCloseFill, onClick: onDelete, color: 'red' }
       ]}
     />
   )
@@ -64,7 +67,7 @@ export const Entries = () => {
         ))}
         {journal.length === 0 && (
           <ProseDiv>
-            <Explanation />
+            <JournalExplanation />
           </ProseDiv>
         )}
       </div>
@@ -73,10 +76,11 @@ export const Entries = () => {
 }
 
 export const JournalPage = () => {
+  const { t } = useI18n()
   const navigate = useNavigate()
 
   const createNewEntry = () => {
-    const title = window.prompt('Title of the entry')
+    const title = window.prompt(t('titleOfEntry'))
     if (!title) return
 
     const id = findLastId(useStore.getState().journal) + 1
@@ -101,7 +105,7 @@ export const JournalPage = () => {
 
   const clearJournal = () => {
     const confirmation = window.confirm(
-      'Are you sure you want to clear journal?'
+      t('areYouSureClearJournal')
     )
     if (!confirmation) return
 
@@ -110,16 +114,16 @@ export const JournalPage = () => {
 
   return (
     <PageContainer>
-      <Text variant="h5">{'Journal'}</Text>
+      <Text variant="h5">{t('journal')}</Text>
       <SeparatorFull className="my-4" />
       <Entries />
       <SeparatorFull className="my-4" />
       <div className="flex justify-between mt-4">
         <Button color="grayPrimary" size="md" onClick={clearJournal}>
-          {'Clear Journal'}
+          {t('clearJournal')}
         </Button>
         <Button size="md" onClick={createNewEntry}>
-          {'New Entry'}
+          {t('newEntry')}
         </Button>
       </div>
     </PageContainer>

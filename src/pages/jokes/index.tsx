@@ -3,17 +3,19 @@ import { Row, PageContainer, ScrollableContainer } from 'components'
 import { useStore, JokeType } from 'store'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useNavigate } from 'react-router-dom'
-import Explanation from './explanation.mdx'
-import ExplanationEmpty from './explanation-empty.mdx'
+import { JokesExplanation } from './explanation'
+import { JokesExplanationEmpty } from './explanation-empty'
+import { useI18n } from 'i18n'
 
 export const Joke = ({ joke, index }: { joke: JokeType; index: number }) => {
   const words = useStore((state) => state.words)
   const jokeWords = joke?.wordIds?.map((id) => words.find((w) => w.id === id))
   const text = jokeWords?.flatMap((w) => w?.text).join(', ')
+  const { t } = useI18n()
 
   const onDelete = () => {
     const confirmation = window.confirm(
-      `Are you sure you want to delete category "${text}"?`
+      `${t('deleteConfirmation')} "${text}"?`
     )
     if (!confirmation) return
 
@@ -30,7 +32,7 @@ export const Joke = ({ joke, index }: { joke: JokeType; index: number }) => {
       onClick={() => navigate(`/joke/${joke.id}`)}
       index={index}
       actions={[
-        { title: 'Delete', icon: RiCloseFill, onClick: onDelete, color: 'red' }
+        { title: t('delete'), icon: RiCloseFill, onClick: onDelete, color: 'red' }
       ]}
     />
   )
@@ -46,7 +48,7 @@ export const Jokes = () => {
         ))}
         {jokes.length === 0 && (
           <ProseDiv>
-            <Explanation />
+            <JokesExplanation />
           </ProseDiv>
         )}
       </div>
@@ -58,13 +60,14 @@ export const JokesPage = () => {
   const navigate = useNavigate()
   const words = useStore((state) => state.words)
   const categories = useStore((state) => state.categories)
+  const { t } = useI18n()
 
   if (words.length < 3 || !categories.length)
     return (
       <PageContainer>
         <ProseDiv>
           <SeparatorFull className="my-4" />
-          <ExplanationEmpty />
+          <JokesExplanationEmpty />
           <SeparatorFull className="my-4" />
         </ProseDiv>
       </PageContainer>
@@ -76,7 +79,7 @@ export const JokesPage = () => {
       <Jokes />
       <SeparatorFull className="my-4" />
       <div className="flex justify-end mt-4">
-        <Button onClick={() => navigate('/jokes/new')}>{'New Joke'}</Button>
+        <Button onClick={() => navigate('/jokes/new')}>{t('newJoke')}</Button>
       </div>
     </PageContainer>
   )

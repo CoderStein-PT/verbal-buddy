@@ -4,10 +4,12 @@ import { findLastId } from 'utils'
 import { toast } from 'react-toastify'
 import { RiCloseFill } from '@react-icons/all-files/ri/RiCloseFill'
 import { useRef, useState } from 'react'
+import { useI18n } from 'i18n'
 
 export const Word = ({ word }: { word: WordType }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const { t } = useI18n()
 
   const onDeleteWord = () => {
     useStore.setState((state) => ({
@@ -27,7 +29,7 @@ export const Word = ({ word }: { word: WordType }) => {
     const newWord = inputRef?.current?.value
 
     if (!newWord) {
-      toast.error('Word cannot be empty')
+      toast.error(t('wordCannotBeEmpty'))
       return
     }
 
@@ -36,7 +38,7 @@ export const Word = ({ word }: { word: WordType }) => {
         .getState()
         .words.find((w) => w.text === newWord && w.id !== word.id)
     ) {
-      toast.error('Word already exists')
+      toast.error(t('wordAlreadyExists'))
       return
     }
 
@@ -86,16 +88,18 @@ export const Words = () => {
 }
 
 export const WordsPage = () => {
+  const { t } = useI18n()
+  
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       const newWord = event.currentTarget.value
       if (!newWord) {
-        toast.error('Word cannot be empty')
+        toast.error(t('wordCannotBeEmpty'))
         return
       }
 
       if (useStore.getState().words.find((w) => w.text === newWord)) {
-        toast.error('Word already exists')
+        toast.error(t('wordAlreadyExists'))
         return
       }
 
@@ -115,7 +119,7 @@ export const WordsPage = () => {
       <Input
         onKeyDown={onKeyDown}
         type="text"
-        placeholder="New word..."
+        placeholder={t('newWord')}
         className="w-full mt-2"
       />
     </div>

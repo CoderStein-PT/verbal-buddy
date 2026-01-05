@@ -19,8 +19,10 @@ import { useState } from 'react'
 import React from 'react'
 import isHotkey from 'is-hotkey'
 import { Categories } from './categories'
+import { useI18n } from 'i18n'
 
 export const CategoriesPage = () => {
+  const { t } = useI18n()
   const scrollableContainer = useScrollableContainer({})
   const [newCategoryText, setNewCategoryText] = useState('')
   const categories = useStore((state) => state.categories)
@@ -30,7 +32,7 @@ export const CategoriesPage = () => {
 
   const onDelete = (category: CategoryType) => {
     const confirmation = window.confirm(
-      `Are you sure you want to delete category "${category.name}"?`
+      `${t('deleteCategoryConfirm')} "${category.name}"?`
     )
     if (!confirmation) return
 
@@ -84,12 +86,12 @@ export const CategoriesPage = () => {
 
   const createInNormalMode = (result = newCategoryText) => {
     if (!result) {
-      toast.error('Category cannot be empty')
+      toast.error(t('categoryCannotBeEmpty'))
       return
     }
 
     if (categories.find((c) => c.name === result)) {
-      toast.error('Category already exists')
+      toast.error(t('categoryAlreadyExists'))
       inputRef.current?.select()
       return
     }
@@ -118,10 +120,10 @@ export const CategoriesPage = () => {
     <PageContainer>
       <ControllableListContext.Provider value={controllableList}>
         <div className="flex items-center justify-between">
-          <Text variant="button">{'Categories'}</Text>
+          <Text variant="button">{t('categories')}</Text>
           <Link to="/settings#presets" data-test="btn-use-presets">
             <Button color="grayPrimary" size="md">
-              {'Use presets'}
+              {t('usePresets')}
             </Button>
           </Link>
         </div>
@@ -135,7 +137,7 @@ export const CategoriesPage = () => {
           onKeyDown={onKeyDown}
           data-test="input-new-category"
           type="text"
-          placeholder="New category..."
+          placeholder={t('createNewCategory')}
           value={newCategoryText}
           onChange={onChange}
           autoFocus
@@ -144,7 +146,7 @@ export const CategoriesPage = () => {
           icon={
             <InputIcons
               onClick={() => onCreateCategory()}
-              title={'Send (Enter key)'}
+              title={t('sendEnterKey')}
               showAi={false}
               showMic={false}
               showMode={false}

@@ -8,6 +8,7 @@ import {
 } from 'utils'
 import moment from 'moment'
 import { BarChart, Bar, ResponsiveContainer } from 'recharts'
+import { useI18n } from 'i18n'
 
 const DelayGraph = ({ delays }: { delays: number[] }) => {
   const data = capGraphPointsFrequency(delays, 12).map((d, idx) => ({
@@ -119,18 +120,19 @@ const StatsTable = ({ stats }: { stats: PracticeStatsType[] }) => {
 }
 
 export const Stats = ({ categoryId }: { categoryId: number }) => {
+  const { t } = useI18n()
   const stats = useStore((state) =>
     state.practiceStats.filter((s) => s.categoryId === categoryId)
   )
 
   return (
     <div className="flex flex-col">
-      <Text variant="button">{'Stats'}</Text>
+      <Text variant="button">{t('stats')}</Text>
       <SeparatorFull className="my-2" />
       <StatsTable stats={stats} />
       {!stats?.length && (
         <Text variant="button" color="gray-light" className="mt-4 text-center">
-          {'No stats yet 🙂'}
+          {t('noStatsYet')}
         </Text>
       )}
     </div>

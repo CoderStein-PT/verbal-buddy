@@ -9,6 +9,7 @@ import { Text } from 'ui'
 import { Links } from './links'
 import { BackButton } from './back-button'
 import { isMobile } from 'utils'
+import { useI18n } from 'i18n'
 
 export const LinkGlow = tw.div`absolute w-[100px] h-0.5 left-0 transition origin-left ease-cool bg-gradient-to-r from-transparent via-primary-500 to-transparent`
 
@@ -23,6 +24,7 @@ const noBackButtonPaths = [
 
 export const Navbar = () => {
   const location = useLocation()
+  const { t } = useI18n()
 
   const route = useMemo(() => {
     const key = Object.keys(routes).find((key) => {
@@ -42,7 +44,7 @@ export const Navbar = () => {
 
   const openSidebar = useUiStore((state) => state.openSidebar)
 
-  const currentPageName = route?.name || ''
+  const currentPageName = route ? t(route.nameKey) : ''
 
   return (
     <div className="fixed top-0 left-0 right-0 z-40">

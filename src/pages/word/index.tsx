@@ -6,8 +6,10 @@ import { TooltipWrapper } from 'react-tooltip'
 import { useWordNavigation } from './use-word-navigation'
 import { useCallback, useEffect, useMemo } from 'react'
 import isHotkey from 'is-hotkey'
+import { useI18n } from 'i18n'
 
 export const WordPageCore = ({ word }: { word: WordType }) => {
+  const { t } = useI18n()
   const wordEditor = useWordEditor({ length: 3 })
   const navigate = useNavigate()
 
@@ -80,7 +82,7 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
                 onClick={() => goToWord(prevWord)}
                 data-test="btn-prev-word"
               >
-                {'Previous Word'}
+                {t('previousWord')}
               </Button>
             </TooltipWrapper>
           )}
@@ -94,7 +96,7 @@ export const WordPageCore = ({ word }: { word: WordType }) => {
                 onClick={() => goToWord(nextWord)}
                 data-test="btn-next-word"
               >
-                {'Next Word'}
+                {t('nextWord')}
               </Button>
             </TooltipWrapper>
           )}

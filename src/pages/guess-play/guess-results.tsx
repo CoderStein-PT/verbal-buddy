@@ -3,6 +3,7 @@ import { Text, SeparatorFull } from 'ui'
 import moment from 'moment'
 import { GuessWordType, useStore, WordType } from 'store'
 import { convertDelays } from 'utils'
+import { useI18n } from 'i18n'
 
 const ResultRow = ({
   delay,
@@ -27,20 +28,25 @@ const ResultRow = ({
   )
 }
 
-const Header = () => (
-  <thead className="border-b border-slate-500">
-    <tr>
-      <th className="text-left">
-        <Text variant="subtitle2">{'Word'}</Text>
-      </th>
-      <th className="text-right">
-        <Text variant="subtitle2">{'Delay'}</Text>
-      </th>
-    </tr>
-  </thead>
-)
+const Header = () => {
+  const { t } = useI18n()
+  
+  return (
+    <thead className="border-b border-slate-500">
+      <tr>
+        <th className="text-left">
+          <Text variant="subtitle2">{t('word')}</Text>
+        </th>
+        <th className="text-right">
+          <Text variant="subtitle2">{t('delay')}</Text>
+        </th>
+      </tr>
+    </thead>
+  )
+}
 
 export const GuessResults = ({ delays }: { delays: GuessWordType[] }) => {
+  const { t } = useI18n()
   const flattenedDelays = delays.map((d) => d.delay)
   const words = useStore((state) => state.words)
 
@@ -53,7 +59,7 @@ export const GuessResults = ({ delays }: { delays: GuessWordType[] }) => {
 
   return (
     <div className="flex flex-col">
-      <Text variant="button">{'Results'}</Text>
+      <Text variant="button">{t('results')}</Text>
       <SeparatorFull className="my-2" />
       <ScrollableContainer>
         <table className="w-full h-px">

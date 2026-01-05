@@ -6,7 +6,8 @@ import {
   SeparatorFull,
   Switch,
   OptionType,
-  inputModeHtml
+  inputModeHtml,
+  Button
 } from 'ui'
 import { PageContainer } from 'components'
 import { useStore } from 'store'
@@ -16,56 +17,24 @@ import { TooltipWrapper } from 'react-tooltip'
 import { useVoiceStore } from 'voice-store'
 import { Presets } from './presets'
 import { LanguagePresets } from './language-presets'
-
-export const explanations = {
-  jokes: {
-    randomWords:
-      'Number of random words to select from the list to create random jokes.'
-  },
-  voice: {
-    pronunciation: 'Voice to use for pronunciation.',
-    speechRate: 'Speed of the voice pronunciation (0.5 to 2).',
-    recognition: 'Language to use for speech recognition.',
-    useSpeechRecognition:
-      'Whether to use speech recognition. If you have a microphone, you can use it to practice/guess words faster.'
-  },
-  guess: {
-    maxWords:
-      "Maximum number of words to play in Guess Games. Avoid practicing too many words at once if you're not ready.",
-    pronounceDefinitions: 'Pronounces definitions when new words are shown.'
-  },
-  practice: {
-    maxWords:
-      "Maximum number of words to practice. Avoid practicing too many words at once if you're not ready.",
-    delayTolerance:
-      'Stops the timer when you type for this amount of seconds so stats are not affected by typing pauses',
-    startRightAway:
-      'Starts the timer right away when you start a practice session if ON',
-    countdown: 'Gives you a bit of time to prepare (in seconds)',
-    voiceFeedback:
-      'Whenever the word is entered correctly, the voice will say "correct" or "incorrect". When you guess all the words, the voice will say "finished"'
-  },
-  presets: {
-    main: 'Presets are a set of words and categories that you can apply to your current session. Resets all your stats.'
-  },
-  ai: {
-    token: 'Google AI API Token (Gemini). Required for AI features.',
-    model: 'Google AI Model to use.'
-  }
-}
+import { useUiStore } from 'ui-store'
+import { useI18n } from 'i18n'
 
 export const googleAiModels = [
   { name: 'Gemini 3.0 Flash', value: 'gemini-3-flash-preview' },
   { name: 'Gemini 2.5 Flash', value: 'gemini-2.5-flash' },
 ]
 
-export const Explanation = ({ title }: { title: string }) => (
-  <div className="absolute top-0 right-0 cursor-pointer">
-    <TooltipWrapper html={title} place="right">
-      <FaQuestionCircle className="text-gray-400" />
-    </TooltipWrapper>
-  </div>
-)
+export const Explanation = ({ translationKey }: { translationKey: string }) => {
+  const { t } = useI18n()
+  return (
+    <div className="absolute top-0 right-0 cursor-pointer">
+      <TooltipWrapper html={t(translationKey as any)} place="right">
+        <FaQuestionCircle className="text-gray-400" />
+      </TooltipWrapper>
+    </div>
+  )
+}
 
 const voiceGreetingsByLanguage = {
   en: 'Hello, this is your new voice',
@@ -92,6 +61,7 @@ const voiceGreetingsByLanguage = {
 }
 
 export const SettingsPage = () => {
+  const { t } = useI18n()
   const settings = useStore((state) => state.settings)
   const voices = useVoiceStore((state) => state.voices)
   const recognition = useVoiceStore((state) => state.recognition)
@@ -217,9 +187,9 @@ export const SettingsPage = () => {
         <SeparatorFull />
         <LanguagePresets />
         <SeparatorFull />
-        <Text variant="button">{'Guess Games'}</Text>
+        <Text variant="button">{t('guessGames')}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Guess max words'}</Label>
+          <Label>{t('guessMaxWords')}</Label>
           <Input
             min={10}
             max={10000}
@@ -227,20 +197,20 @@ export const SettingsPage = () => {
             value={settings.guessMaxWords}
             onChange={onChangeGuessMaxWords}
           />
-          <Explanation title={explanations.guess.maxWords} />
+          <Explanation translationKey="maxWordsGuessExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Pronounce definitions'}</Label>
+          <Label>{t('pronounceDefinitionsLabel')}</Label>
           <Switch
             checked={settings.guessPronounceDefinitions}
             onChange={onChangePronounceDefinitions}
           />
-          <Explanation title={explanations.guess.pronounceDefinitions} />
+          <Explanation translationKey="pronounceDefinitionsExplanation" />
         </div>
         <SeparatorFull />
-        <Text variant="button">{'Voice'}</Text>
+        <Text variant="button">{t('voice')}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Pronunciation Voice'}</Label>
+          <Label>{t('pronunciationVoice')}</Label>
           {voices ? (
             <Select
               options={voices.map((voice) => ({
@@ -256,12 +226,12 @@ export const SettingsPage = () => {
               onChange={onChangeVoice}
             />
           ) : (
-            <Text color="gray-light">{'Loading voices...'}</Text>
+            <Text color="gray-light">{t('loadingVoices')}</Text>
           )}
-          <Explanation title={explanations.voice.pronunciation} />
+          <Explanation translationKey="pronunciationExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Speech Rate'}</Label>
+          <Label>{t('speechRate')}</Label>
           <Input
             min={0.5}
             max={2}
@@ -270,18 +240,18 @@ export const SettingsPage = () => {
             value={settings.speechRate || 1}
             onChange={onChangeSpeechRate}
           />
-          <Explanation title={explanations.voice.speechRate} />
+          <Explanation translationKey="speechRateExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Use Speech Recognition'}</Label>
+          <Label>{t('useSpeechRecognitionLabel')}</Label>
           <Switch
             checked={settings.useSpeechRecognition}
             onChange={onChangeUseSpeechRecognition}
           />
-          <Explanation title={explanations.voice.useSpeechRecognition} />
+          <Explanation translationKey="useSpeechRecognitionExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Recognition Voice'}</Label>
+          <Label>{t('recognitionVoice')}</Label>
           <Select
             options={recognitionLangs.map((lang) => ({
               ...lang,
@@ -290,12 +260,12 @@ export const SettingsPage = () => {
             value={settings.speechRecognitionLang}
             onChange={onChangeSpeechRecognitionLang}
           />
-          <Explanation title={explanations.voice.recognition} />
+          <Explanation translationKey="recognitionExplanation" />
         </div>
         <SeparatorFull />
-        <Text variant="button">{'Practice'}</Text>
+        <Text variant="button">{t('practice')}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Practice max words'}</Label>
+          <Label>{t('practiceMaxWordsLabel')}</Label>
           <Input
             min={10}
             max={10000}
@@ -303,10 +273,10 @@ export const SettingsPage = () => {
             value={settings.practiceMaxWords}
             onChange={onChangePracticeMaxWords}
           />
-          <Explanation title={explanations.practice.maxWords} />
+          <Explanation translationKey="maxWordsPracticeExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Practice typing delay tolerance'}</Label>
+          <Label>{t('practiceTypingDelay')}</Label>
           <Input
             min={0}
             max={10}
@@ -315,26 +285,26 @@ export const SettingsPage = () => {
             value={settings.practiceDelayTolerance || 1}
             onChange={onChangePracticeDelayTolerance}
           />
-          <Explanation title={explanations.practice.delayTolerance} />
+          <Explanation translationKey="delayToleranceExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Voice feedback'}</Label>
+          <Label>{t('voiceFeedbackLabel')}</Label>
           <Switch
             checked={settings.practiceVoiceFeedback}
             onChange={onChangePracticeVoiceFeedback}
           />
-          <Explanation title={explanations.practice.voiceFeedback} />
+          <Explanation translationKey="voiceFeedbackExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Start the timer right away'}</Label>
+          <Label>{t('startTimerRightAway')}</Label>
           <Switch
             checked={settings.practiceStartRightAway}
             onChange={onChangeStartRightAway}
           />
-          <Explanation title={explanations.practice.startRightAway} />
+          <Explanation translationKey="startRightAwayExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Practice countdown'}</Label>
+          <Label>{t('practiceCountdownLabel')}</Label>
           <Input
             min={0}
             max={10}
@@ -343,12 +313,12 @@ export const SettingsPage = () => {
             value={settings.practiceCountdown || 3}
             onChange={onChangePracticeCountdown}
           />
-          <Explanation title={explanations.practice.countdown} />
+          <Explanation translationKey="countdownExplanation" />
         </div>
         <SeparatorFull />
-        <Text variant="button">{'Jokes'}</Text>
+        <Text variant="button">{t('jokes')}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Random words selector'}</Label>
+          <Label>{t('randomWordsSelector')}</Label>
           <Input
             min={1}
             max={10}
@@ -356,33 +326,33 @@ export const SettingsPage = () => {
             value={settings.randomWords}
             onChange={onChangeRandomWords}
           />
-          <Explanation title={explanations.jokes.randomWords} />
+          <Explanation translationKey="randomWordsExplanation" />
         </div>
         <SeparatorFull />
-        <Text variant="button">{'AI'}</Text>
+        <Text variant="button">{t('ai')}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Google AI Token'}</Label>
+          <Label>{t('googleAiTokenLabel')}</Label>
           <Input
             type="password"
             value={settings.googleAiToken || ''}
             onChange={onChangeGoogleAiToken}
-            placeholder="Enter your Google AI API Token"
+            placeholder={t('enterGoogleAiToken')}
           />
-          <Explanation title={explanations.ai.token} />
+          <Explanation translationKey="aiTokenExplanation" />
         </div>
         <div className="relative flex flex-col">
-          <Label>{'Google AI Model'}</Label>
+          <Label>{t('googleAiModelLabel')}</Label>
           <Select
             options={googleAiModels}
             value={settings.googleAiModel || googleAiModels[0].value}
             onChange={onChangeGoogleAiModel}
           />
-          <Explanation title={explanations.ai.model} />
+          <Explanation translationKey="aiModelExplanation" />
         </div>
         <SeparatorFull />
-        <Text variant="button">{'Global'}</Text>
+        <Text variant="button">{t('global')}</Text>
         <div className="relative flex flex-col">
-          <Label>{'Input Mode'}</Label>
+          <Label>{t('inputModeLabel')}</Label>
           <Select
             options={[
               { name: 'Normal', value: 'normal' },
@@ -393,6 +363,22 @@ export const SettingsPage = () => {
             onChange={onChangeInputMode}
           />
           <Explanation title={inputModeHtml(settings.inputMode)} />
+        </div>
+        <SeparatorFull />
+        <div className="relative flex flex-col">
+          <Label>{t('onboarding')}</Label>
+          <Button
+            color="grayPrimary"
+            onClick={() => {
+              useUiStore.setState({ hasCompletedOnboarding: false })
+              window.location.reload()
+            }}
+          >
+            {t('resetOnboarding')}
+          </Button>
+          <Text variant="subtitle" color="gray-light" className="mt-2">
+            {t('onboardingDescription')}
+          </Text>
         </div>
       </div>
     </PageContainer>
